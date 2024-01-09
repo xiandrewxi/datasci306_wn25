@@ -1,0 +1,479 @@
+---
+title: "Stats 306: Lab 9"
+author: "Your Name"
+output: 
+  learnr::tutorial:
+    progressive: true
+runtime: shiny_prerendered
+---
+
+## Set up
+
+```{r installPackages, echo=FALSE, include=FALSE, message=FALSE}
+# This just checks if students need to install some packages that they might 
+# not have.
+if (!require(nycflights13)) install.packages("nycflights13", repos = "http://cran.us.r-project.org")
+if (!packageVersion("learnr") == "0.11.1") install.packages("learnr", repos = "http://cran.us.r-project.org")
+```
+
+```{r setup, eval=TRUE, include=FALSE, message=FALSE, echo=FALSE}
+library(learnr)     # For interactive exercises
+library(lubridate)
+library(tidyverse)  # For ggplot2, dplyr, readr
+library(nycflights13)
+
+tutorial_options(exercise.reveal_solution=FALSE)
+```
+
+```{r fake_setup, echo=TRUE, eval=FALSE}
+library(learnr)     # For interactive exercises
+library(lubridate)
+library(tidyverse)  # For ggplot2, dplyr, readr
+library(nycflights13)
+```
+
+
+## Today's Content
+
+- Strings
+- EDA and Data Imports
+- Tidy Data and Dates
+- Table and Relational Data
+
+
+
+## Strings and Regular Expressions
+
+### Strings
+
+Recall that a string is character data enclosed in double `"` or single `'` quotes. In R, strings exist in character vectors.
+```{r}
+words[1:5]
+```
+
+The `stringr` package contains many useful functions for working with strings. In lecture, we went over some commonly used `stringr` functions.
+
+`str_c()` is used to concatenate strings. These strings can be given in separate vectors, in which case the `sep` argument should be used to control what goes between consecutive strings.
+```{r}
+str_c("lions", "tigers", "bears", "oh my!", sep = ", ")
+```
+
+`str_c()` can also be given a single vector of strings. In this case, the `collapse` argument should be used to control what goes between consecutive strings.
+```{r}
+parts <- c("lions", "tigers", "bears", "oh my!")
+str_c(parts, collapse = ", ")
+```
+
+`str_length()` essentially returns the number of characters in a string.
+```{r}
+str_length("My favorite colors are maize and blue.")
+```
+
+`str_sub()` extracts a substring of a string. `start` and `end` are the indices of the starting and ending characters of the substring.
+```{r}
+str_sub("November", start = 3, end = 6)
+```
+
+`str_split()` splits a string into substrings given a separator. Note that it returns a list.
+```{r}
+str_split("lions, tigers, bears, oh my!", pattern = ", ")
+```
+
+**Exercise:** Using the vector `base::LETTERS`, make a vector with 25 strings in which the first string is `"A precedes B"`, the second string is `"B precedes C"`, etc.
+
+```{r str_c, exercise=TRUE}
+
+```
+
+```{r str_c-hint}
+# Note that LETTERS[-1] contains B through Z
+LETTERS[-1]
+```
+
+```{r str_c-solution}
+str_c(LETTERS[-26], "precedes", LETTERS[-1], sep = " ")
+```
+
+### Regular Expressions
+
+A *regular expression* is a string specifying a pattern that other strings may or may not match. Regular expressions can be used to
+
+  - find strings matching a pattern
+  - modify substrings matching a pattern
+  - delete substrings matching a pattern
+
+**Exercise:** Write a regex that matches `"this"` and `"the"` but not `"third"`. Use it to extract all instances of the two words from the paragraph below, which is stored in `baseball`.
+
+```
+According to Baseball Reference’s wins above average, The Red Sox had the best 
+outfield in baseball— one-tenth of a win ahead of the Milwaukee Brewers, 11.5 to 11.4. And 
+that’s despite, I’d argue, the two best position players in the NL this year (Christian 
+Yelich and Lorenzo Cain) being Brewers outfielders. More importantly, the distance from 
+Boston and Milwaukee to the third-place Yankees is about five wins. Two-thirds of the Los 
+Angeles Angels’ outfield is Mike Trout (the best player in baseball) and Justin Upton (a 
+four-time All-Star who hit 30 home runs and posted a 122 OPS+ and .348 wOba this year), 
+and in order to get to 11.5 WAA, the Angels’ outfield would have had to replace right 
+fielder Kole Calhoun with one of the three best outfielders in baseball this year by WAA.
+```
+
+```{r regex-setup, include=TRUE}
+baseball <- "According to Baseball Reference’s wins above average, The Red Sox had the best 
+outfield in baseball— one-tenth of a win ahead of the Milwaukee Brewers, 11.5 to 11.4. And 
+that’s despite, I’d argue, the two best position players in the NL this year (Christian 
+Yelich and Lorenzo Cain) being Brewers outfielders. More importantly, the distance from 
+Boston and Milwaukee to the third-place Yankees is about five wins. Two-thirds of the Los 
+Angeles Angels’ outfield is Mike Trout (the best player in baseball) and Justin Upton (a 
+four-time All-Star who hit 30 home runs and posted a 122 OPS+ and .348 wOba this year), 
+and in order to get to 11.5 WAA, the Angels’ outfield would have had to replace right 
+fielder Kole Calhoun with one of the three best outfielders in baseball this year by WAA."
+```
+
+```{r regex, exercise=TRUE, exercise.setup="regex-setup"}
+
+```
+
+```{r regex-hint}
+str_extract_all(...)
+```
+
+```{r regex-solution}
+str_extract_all(baseball, "th(e|is)")
+str_extract_all(baseball, "(t|T)h(e|is)") # including capitalized T
+```
+
+## EDA
+- In the previous labs, we learned about variation (for a single variable) and covariation (for two or more variables)
+
+- We learned how to visualize univariate distributions depending on the type of variable:
+  + Categorical/Discrete Variables - `geom_bar()`, `geom_col()` and pie charts
+  + Continuous - `geom_histogram()`, `geom_density()`, `geom_freqpoly()`
+  
+- For bivariate distributions we looked at a combination of variable types:
+  + Continuous-continuous - `geom_point()`, `geom_contour()`
+  + Continuous-Discrete (also known as conditional distributions) - `geom_boxplot()`, `geom_violin()`
+  + Discrete-discrete - `geom_count()`, `geom_tile()`
+  
+Let us answer the following question   
+
+
+**Exercise** Using the `iris` dataset, use an appropriate plot to explore the relationship between `Sepal.Length` and `Sepal.Width`. What do you learn about this plot for the various `Species`?
+```{r iris, exercise = TRUE}
+## YOUR CODE HERE
+```
+
+```{r iris-hint}
+# (a) What variable types are we exploring?
+# (b) What would be an appropriate plot to visualize the relationship
+# (c) How do you condition on `species`?
+```
+
+```{r iris-solution}
+iris %>%
+  ggplot(aes(x = Sepal.Length, y = Sepal.Width, col = Species)) +
+  geom_point() +
+  theme_bw()
+
+#%%%%%%%%%%%%%% Observations %%%%%%%%%%
+# From the above plot, we can infer that:
+
+# (1) Species Setosa has smaller sepal lengths but larger sepal widths.
+# (2) Versicolor Species lies in the middle of the other two species in terms of sepal length and width
+# (3) Species Virginica has larger sepal lengths but smaller sepal widths.
+```
+
+
+    
+## Data Imports
+- We have previously discussed that data may be available to us for analysis in two major forms: creating them ourselves and importing them from other sources.   
+- The major sources of data for importation are summarized in the figure below.
+
+<center>
+
+![Types of Data Imports](images/data_imports.png){width=100%}
+
+</center>
+
+- For the purpose of this class, we narrowed our focus on flat files from the `readr` package.
+- Specifically, we have explored using some functions as:
+  + `read_csv` - for comma separated values
+  + `read_tsv` - for tab separated values
+  + `read_delim` - for general delimiters (could be comma, semi-colon, tab, pipe or any delimiter)
+  
+- Let us answer the following questions based on what we have learned about these functions.
+
+### Question 1 {.tabset}
+
+#### Question 
+What function would you use to read a file where fields were separated with
+"|"?
+
+#### Answer
+
+Use the `read_delim()` function with the argument `delim="|"`
+```
+Use the read_delim() function with the argument delim="|"
+```
+
+
+
+### Question 2 {.tabset}
+
+#### Question 
+Apart from `file`, `skip`, and `comment`, what other arguments do `read_csv()` and `read_tsv()` have in common?
+
+#### Answer
+They have the following arguments in common:
+```{r DIQ2, exercise = TRUE}
+intersect(names(formals(read_csv)), names(formals(read_tsv)))
+```
+
+
+
+### Question 3 {.tabset}
+
+#### Question 
+Sometimes strings in a CSV file contain commas. To prevent them from causing problems they need to be surrounded by a quoting character, like `"` or `'`. By default, `read_csv()` assumes that the quoting character will be `"`. What argument do you need to specify to read the following text into a data frame using `read_delim()`?
+
+```
+"x,y\n1,'a,b'"
+```
+
+
+#### Answer
+For `read_delim()`, we will will need to specify a delimiter, in this case `","`, and a `quote` argument.
+
+```{r DIQ3, exercise = TRUE}
+x <- "x,y\n1,'a,b'"
+read_delim(x, ",", quote = "'")
+```
+
+
+
+### Question 4 {.tabset}
+
+#### Question 
+Identify what is wrong with each of the following inline CSV files. What happens when you run the code?
+
+```
+read_csv("a,b\n1,2,3\n4,5,6")
+read_csv("a,b,c\n1,2\n1,2,3,4")
+read_csv("a,b\n1,2\na,b")
+read_csv("a;b\n1;3")
+```
+
+#### Answer
+1. Only two columns are specified in the header “a” and “b”, but the rows have three columns, so the last column is dropped.
+```{r DIQ4a}
+read_csv("a,b\n1,2,3\n4,5,6")
+```
+
+2. The numbers of columns in the data do not match the number of columns in the header (three). In row one, there are only two values, so column `c` is set to missing. In row two, there is an extra value, and that value is dropped.
+```{r DIQ4b}
+read_csv("a,b,c\n1,2\n1,2,3,4")
+```
+
+3. Both “a” and “b” are treated as character vectors since they contain non-numeric strings. This may have been intentional, or the author may have intended the values of the columns to be “1,2” and “a,b”.
+```{r DIQ4c}
+read_csv("a,b\n1,2\na,b")
+```
+
+4. The values are separated by “;” rather than “,”. Use read_csv2() instead:
+```{r DIQ4d}
+read_csv("a;b\n1;3")
+
+read_csv2("a;b\n1;3")
+```
+
+
+
+## Tidy Data
+
+Remember that often we have data that is already "tidy". This means that every row corresponds to an observation, every column is a variable, and every cell is a value (see table below).
+
+<center>
+
+![Illustration of tidy data, from the R for Data Science book book](images/tidyData.png){width=100%}
+
+</center>
+
+It's possible, however, that we have untidy data. This happens when 
+
+**Exercise:** Why are we interested in having `tidy` data? (There are several possible solutions to this very open-ended question). 
+
+```{r tidyQ, exercise=TRUE}
+# You don't need to put anything here, it's just a placeholder for the solution
+```
+
+```{r tidyQ-solution}
+# There are many reasons why we might want to have tidy data, but according to Hadley Whickam (R4DS textbook):
+# 
+# 1. There’s a general advantage to picking one consistent way of storing data. If you have a consistent data structure, it’s easier to learn the tools that work with it because they have an underlying uniformity.
+
+# 2. There’s a specific advantage to placing variables in columns because it allows R’s vectorised nature to shine. As you learned in mutate and summary functions, most built-in R functions work with vectors of values. That makes transforming tidy data feel particularly natural.
+```
+
+**Exercise:** Is the dataset below in `tidy` format? If not, how can we fix it? 
+
+```{r huronLevel, exercise=TRUE}
+huron_level <- read_csv("data/huron_level.csv", comment = "#")
+head(huron_level)
+```
+
+```{r huronLevel-hint-1}
+# Look at the names of the columns. Are these names really variables of an observation, or are they instead times when observations are obtained? 
+```
+
+```{r huronLevel-hint-2}
+# The data here seems like they are too "wide": each column really identifies a month and not a new variable! Maybe we should make the data "longer"... 
+```
+
+```{r huronLevel-solution}
+huron_level %>%
+  pivot_longer(
+    cols = -year, 
+    names_to = "month_abb",
+    values_to = "water_level"
+  )
+```
+
+## Dates 
+
+Dates are a common and tricky data type that we need to deal with often. Here are some things that we need to consider when working with dates: 
+
+- Time intervals between dates are not always constant! For example, if I add 365 days to `2016-01-01`, I get `2016-12-31`!:
+
+```{r}
+as.Date("2016-01-01") + lubridate::days(365)
+```
+
+- Dates and times can usually be considered as continuous data types, but they are usually stored in files as strings or characters. 
+
+- There is no standard way to store Dates and times. For example: `"2012-03-21"` vs `"03/21/12"`. 
+
+**Exercise:** Convert the following strings into date objects. 
+
+```{r convertDates, exercise=TRUE}
+d1 <- "Jan 01, 2019"
+d2 <- "11-28-95"
+d3 <- "Nov 7, 7:49 PM"
+```
+
+```{r convertDates-hint}
+# There were several functions that we used to "parse" dates:
+
+# lubridate::ymd
+# lubridate::mdy
+# lubridate::ydm_hms
+# readr::parse_date
+# readr::parse_datetime
+# and more! 
+
+# Which do you think will be useful? 
+```
+
+```{r convertDates-solution}
+d1 <- "Jan 01, 2019"
+d2 <- "11-28-95"
+d3 <- "November 07, '04, 10:04 PM"
+
+# One possbile solution
+readr::parse_date(d1, format = "%b %d, %Y")
+lubridate::mdy(d2)
+readr::parse_datetime(d3, "%B %d, '%y, %H:%M %p")
+```
+
+
+
+
+## Tables
+
+We introduced our **model of rectangular data** as **lists of vectors**. 
+
+There are several R classes that implement this idea:
+
+>* `matrix`: all vectors of same type
+>* `data.frame`: vectors of different types, fewer ammenities
+>* `tibble`: vectros of different types, more features
+>* `data.table`: for data too large to fit in memory
+
+
+## Relational Data
+
+### Inner Join
+
+![](images/join-inner.png){width=90%}
+
+
+The simplest type of join is the inner join. An inner join matches pairs of observations whenever their keys are equal. The output of an inner join is a new data frame that contains the key, the x values, and the y values. 
+
+### Outer Joins
+
+An inner join keeps observations that appear in both tables. An outer join keeps observations that appear in at least one of the tables. There are three types of outer joins:
+
+* A left join keeps all observations in x.
+* A right join keeps all observations in y.
+* A full join keeps all observations in x and y.
+
+These joins work by adding an additional “virtual” observation to each table. This observation has a key that always matches (if no other key matches), and a value filled with NA.
+
+Graphically, that looks like:
+
+![](images/join-outer.png){width=90%}
+
+### Semi-join
+
+`semi_join(x, y)` keeps all the observations in `x` that are also in `y`.
+
+![](images/join-semi.png){width=90%}
+
+
+### Anti-join
+
+The opposite of a semi-join is an anti-join: keeps all the observations in `x` that are not in `y`.
+
+![](images/join-anti.png){width=90%}
+
+## Keys
+
+The variables used to connect each pair of tables are called keys. A key is a variable (or set of variables) that uniquely identifies an observation.
+
+There are two types of keys:
+
+* A primary key uniquely identifies an observation in its own table. For example, planes$tailnum is a primary key because it uniquely identifies each plane in the planes table.
+
+* A foreign key uniquely identifies an observation in another table. For example, flights$tailnum is a foreign key because it appears in the flights table where it matches each flight to a unique plane.
+
+A variable can be both a primary key and a foreign key. For example, origin is part of the weather primary key, and is also a foreign key for the airports table.
+
+If a table lacks a primary key, it’s sometimes useful to add one with mutate() and row_number(). That makes it easier to match observations if you’ve done some filtering and want to check back in with the original data. This is called a surrogate key.
+
+A primary key and the corresponding foreign key in another table form a relation. Relations are typically one-to-many. For example, each flight has one plane, but each plane has many flights. In other data, you’ll occasionally see a 1-to-1 relationship. You can think of this as a special case of 1-to-many. 
+
+### Exercises
+
+What’s the primary key in the flights table? You might think it would be the date plus the flight or tail number. Check the two assumptions by the function `count()`
+
+```{r primaryKey, exercise=TRUE}
+
+```
+
+```{r primaryKey-hint}
+flights %>% 
+  count(...) %>% 
+  filter(n > 1)
+```
+
+```{r primaryKey-solution}
+flights %>% 
+  count(year, month, day, flight) %>% 
+  filter(n > 1)
+
+flights %>% 
+  count(year, month, day, tailnum) %>% 
+  filter(n > 1)
+```
+
+### Solution
+
+Neither of those variable combinations are unique. The table `flights` doesn’t have an explicit primary key: each row is an observation, but no combination of variables reliably identifies it.
+

@@ -1,0 +1,305 @@
+---
+title: "Stats 306: Lecture 12"
+subtitle: "Loading Data, Dates"
+author: "Mark Fredrickson"
+output:
+  learnr::tutorial:
+    progressive: true
+    css: css/lecture.css
+runtime: shiny_prerendered
+---
+
+
+```{r setup, include=FALSE}
+library(learnr)
+library(tidyverse)
+library(lubridate) # install.packages("lubridate") if you don't have this
+library(nycflights13) # install.packages("nycflights13")
+set.seed(2939394)
+```
+
+
+## Review
+
+* Covariation
+* Stratification and mixture distributions
+* Lowess/smoothing
+* Tables: matrix, tibbles, data frames
+
+## Data Files
+
+How do we share data?
+
+* Plain text formats
+* Proprietary formats
+* Database applications
+
+## Plain text delimited formats
+
+* **Plain text** files are the easiest format to share across platforms, software.
+* Somewhat less efficient for file size.
+* We often **compress** the files using zip (`.zip`) or (`.gz`), but still basically plain text
+* Organizing tabular data:
+  * Each **line** of the file is a row of a table
+  * Separate columns using a **delimiter**
+  * Often need to **escape** strings if they contain delimiter
+  
+## Example, comma separated values (CSV)
+
+```
+-82.9,42.4,3043540,1703280231,Gratiot Ave & Mapleridge St,"ACCIDENT, HIT & RUN",OUIL,5422,54001,"ACCIDENT, HIT & RUN",2017/03/28 22:00:00+00
+```
+
+>* Columns separated by `,`
+>* Numeric values interpreted as given
+>* Both unescaped (`Gratiot Ave & Mapleridge St`) and escaped (`"ACCIDENT, HIT & RUN"`) strings.
+>* Other kinds of data (e.g. date-times like `2017/03/28 22:00:00+00`) just represented as strings.
+
+## Header rows
+
+Most files will include a **header row** that gives column names, but not all!
+
+Some files also have instructional text at the top which needs to be trimmed before loading.
+
+## Loading delimited files
+
+* R has a set of built in functions `read.EXTENSION` like `read.csv` and `read.table` (any white space as separator, "tab" is common).
+* The built in functions return `data.frames`
+* Tidyverse (in the )`readr` package) has `read_*` instead. Returns `tibbles` (has a few other features: faster, progress bars for big files, less data transformation initially)
+
+## Example
+
+(White space not important)
+```{r}
+ex_csv <-'
+column1,column2,column3
+7.1,sometext,01/02/2022
+,"has,comma",07/15/2022
+'
+read_csv(ex_csv)
+```
+
+## Exercise
+
+Use the `delim` argument to [`read_delim`](https://readr.tidyverse.org/reference/read_delim.html) to read this data into a table:
+```{r doubledash, exercise = TRUE}
+d <- '
+col1--col2
+7--8
+--9
+10--11
+'
+```
+
+## Common issues
+
+* Extra stuff at top of file, use `skip = NUMBER` to skip lines
+* We assume column names by default, can indicate no names with `col_names = FALSE`
+* Missing values: usually cells without values, but you can override with `na = "."`
+
+## Investigating results
+
+```{r}
+ex_tib <- read_csv(ex_csv)
+spec(ex_tib)
+```
+
+## Selecting column types
+
+The `col_types` argument allows setting type of some or all columns. 
+```{r}
+read_csv(ex_csv, col_types = cols(column3 = col_date("%m/%d/%Y")))
+```
+
+See the help for the `cols` function for more. `col_skip` allows not importing column.
+
+## Exercise
+
+Read in the following table using `read_csv`. Make the first column be logical/boolean values. Make any "NONE" values be missing in R.
+
+```{r settingcols, exercise = TRUE}
+csv <- '
+1,hello,NONE
+0,goodbye,-3
+1,NONE,1.111111
+'
+```
+>* [`read_csv`](https://readr.tidyverse.org/reference/read_delim.html)
+>* [`cols`](https://readr.tidyverse.org/reference/cols.html)
+
+## Saving data
+
+
+There are complementary `write_csv` and `write_delim` functions.
+
+R has a proprietary format called "RDS". You can use `write_rds` to write a single table or the `save` function to write more than just one variable to a file. Useful for processing data in a file and then saving it for later use.
+
+## Dates
+
+One of the most common data-as-strings we need to deal with are **dates**, **times**, and **date-times**. 
+
+There are lots of different formats, timezones, leapyears to deal with. The `lubridate` package helps:
+
+```{r}
+library(lubridate)
+```
+
+## Dates and date-times
+
+```{r}
+today()
+now()
+today() |> class()
+now() |> class()
+```
+
+## The `mdy`, `ymd`, and `dmy` functions
+
+If the dates are in one of the three most common conventions we have:
+```{r}
+mdy("10/01/2022") # Oct. 1
+ymd("2022-10-01")
+dmy("01.10.2022")
+```
+
+Can also read month names and abbreviations.
+
+## Extensions to date-times
+
+If we also have times, the `_hms` version will parse `HOURS:MINUTES:SECONDS` while `_hm` will just be `HOURS:MINTUES`. AM/PM can be included, otherwise 24 clock assumed. 
+
+```{r}
+mdy_hms("10/01/2022 12:01:37")
+mdy_hm("10/01/2022 12:01am")
+```
+
+The UTC stands for "Coordinated Universal Time" (was Greenwich Mean Time)
+
+We can select timezone using the nearest major city:
+```{r}
+mdy_hms("10/01/2022 12:01:37", tz = "America/Detroit")
+mdy_hms("12/01/2022 12:01:37", tz = "America/Detroit")
+```
+
+## Exercise
+
+Parse the following into dates or date times:
+```{r parsedt, exercise = TRUE}
+dt1 <- "31/10/89"
+dt2 <- c("2022-07-01 3:10am",
+         "1852-01-15 7:00pm")
+```
+
+## Parsing dates in files
+
+We saw earlier the use of `cols(colname = col_date("EXPRESSION"))`. There is also `col_datetime` and `col_time`.
+
+For these we need to give a pattern to match using various keys:
+
+>* Year: four digit `"%Y"`, two digit `"%y"`
+>* Month: number `"%m"`, abbreviation `%b`, full name `%B`
+>* Day: number in month `"%d"`
+>* Hours:minutes:seconds: `"%H:%M:%S"`
+>* See `parse_datetime` for more
+
+```{r}
+parse_datetime("22/10/1, 10:01:00", 
+               format = "%y/%m/%d, %H:%M:%S")
+```
+
+## Extracting components
+
+```{r}
+right_now <- now()
+day(right_now) # same as mday()
+month(right_now)
+year(right_now)
+yday(right_now) # day within year ("Julian date")
+wday(right_now) # day within week, starting with Sunday
+hour(right_now)
+minute(right_now)
+second(right_now)
+```
+
+## Time Math 
+
+```{r}
+ymd("2023/01/04") - mdy("12/16/2022")
+```
+
+The `seconds`, `minutes`, `hours`, `days`, `weeks` can be used to get offsets:
+```{r}
+right_now <- now()
+right_now
+right_now + minutes(10)
+right_now + weeks(7)
+```
+
+## Durations
+
+After doing math, you might want to convert the units.
+
+```{r}
+semester_end <- dmy_hms("23062023 23:59:59") - now()
+
+(sed <- as.duration(semester_end))
+
+as.numeric(sed, "days")
+as.numeric(sed, "minutes")
+
+```
+
+There are equivalent `d*` functions (`dyears`, etc) for constructing durations directly.
+
+
+## Difftimes vs. durations vs. periods
+
+In the previous we did not really distinguish between three different classes of "time differences"
+
+>* Difftime: R's built in method
+>* Durations: differences in seconds
+>* Periods: differences that are more human readble ("two months", which months?)
+
+We'll leave them for further personal exploration.
+
+## Exercise
+
+Parse these dates.
+
+* What's the range of the dates? 
+* What is the mean date?
+* What is the median date? 
+* Suppose you want reminders of the anniversary of these dates in the coming year one month in advance. Find the dates of the reminders.
+
+```{r diffex, exercise = TRUE}
+ds <- c("1981-09-25", "1982-03-06", "2010-12-14", "2012-10-18", "2019-04-03")
+```
+
+```{r diffex-solution}
+ds <- c("1981-09-25", "1982-03-06", "2010-12-14", "2012-10-18", "2019-04-03")
+
+# parse as year-month-day format
+ds_parsed <- ymd(ds)
+
+# range
+range(ds_parsed)
+# or
+min(ds_parsed)
+max(ds_parsed)
+
+# mean and median
+mean(ds_parsed)
+median(ds_parsed)
+
+# setting reminders
+## method 1
+year_diff <- year(today()) - year(ds_parsed)
+ds_this_year <- ds_parsed + years(year_diff) - months(1)
+if_else(ds_this_year < today(), ds_this_year + years(1), ds_this_year) 
+
+## method 2
+ds_parsed_2 <- ds_parsed - months(1)
+year(ds_parsed_2) <- year(today())
+ds_parsed_2 + if_else(ds_parsed_2 < today(), years(1),  years(0))
+```
+

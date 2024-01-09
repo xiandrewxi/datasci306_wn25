@@ -1,0 +1,182 @@
+---
+title: "Stats 306: Lecture 0"
+subtitle: "Introduction to Stats 306"
+author: "Mark Fredrickson"
+output: 
+  learnr::tutorial:
+    progressive: true
+    css: css/lecture.css
+runtime: shiny_prerendered
+---
+
+
+```{r setup, include=FALSE}
+library(learnr)
+```
+
+## Stats 306: Introduction to Statistical Computing
+
+This course introduces basic concepts in computer programming and statistical computing techniques as they are applied to data extraction and manipulation, statistical processing and visualization. It is aimed primarily at undergraduate majors and minors in Statistics.
+
+*Enforced Pre-requisite: [DATASCI 101 or STATS 206 or STATS 250 OR STATS 280 OR STATS 412 or ECON 451 or IOE 265] AND prior or concurrent enrollment in [MATH 116 or MATH 121 or MATH 156 or MATH 176 or MATH 186 or any 200+ level math credit except for MATH 201].*
+
+## Learning Objectives
+
+By the end of this course, you will
+
+* have a rigorous understanding of the structure of computer programs including
+  * variables
+  * functions
+  * iteration
+  * input/output
+* have thorough familiarity with the R programming language and RStudio development environment
+* be able to load, manipulate, and present data
+* manage development projects using the Git version control package
+
+## Overview of Course
+
+
+## Grading
+
+
+## Working in Groups
+
+You are encouraged to work together on **all class material** to discuss
+solutions and debug. Each student must submit own work. Ask yourself, "Am I
+avoiding learning something in my actions?" If yes, don't do it.
+
+## Materials
+
+All books are freely available through our library system or online:
+
+* Our main text book is [R for Data Science (2ed)](https://r4ds.hadley.nz/) by Hadley Wickham, Mine Çetinkaya-Rundel, and Garett Grolemund
+* Later in the semester, we will pull additional material from
+    * [Advanced R](https://adv-r.hadley.nz/index.html)
+    * [Mastering Shiny](https://mastering-shiny.org/)
+* For learning git, we will use [Beginning Git and GitHub](https://search.lib.umich.edu/catalog/record/99187305231206381) by
+Mariot Tsitoara.
+* For statistical background, we suggest [Practical Statistics for Data Scientists](https://search.lib.umich.edu/catalog/record/99187344801606381)
+
+
+## Student Hours and Help
+
+* Instructor zoom student hours: 
+* GSI office hours: 
+* Piazza on Canvas
+
+## Other policies
+
+Canvas includes more detailed policies on
+
+>* Academic Misconduct
+>* Classroom Culture of Care
+>* Course Recordings
+>* Disability Statement
+>* Mental Health and Well-Being
+>* Sexual Misconduct Policy
+
+## Canvas
+
+
+## Software
+
+* R: A statistical programming language
+* RStudio (Cloud): A development environment for R
+* Git: Version control and collaboration for software projects
+
+  
+## R, a statistical programming language
+
+R is a *statistical programming language*:
+
+* Statistical: designed for the manipulation and analysis of data
+* Programming: perform analysis through collection of instructions
+* Language: text based, as opposed to graphical, instructions
+
+## Why use R?
+
+* Purpose built for statistical analysis
+* Large collection of add-on libraries containing cutting edge resources
+* Being adopted by research, industry, government
+* Language of choice for statistical teaching (courses, books)
+
+## What is Git?
+
+* A **version control system** manages changes from multiple sources simultaneously.
+* A reasonable analogy: Google Docs with track changes turned on
+* Useful for groups working together to track changes to the software package and document why changes were made
+* We will use it to disseminate homework assignments, labs, and lecture materials.
+
+## Using our Posit Cloud
+
+....
+
+## How does git work?
+
+* Creates a **repository** (a hidden directory/folder) to information about the history of files
+* When you make changes, you may **add** them to a **staging area**
+* When you like your staging area, you **commit** your changes.
+* Git stores the **differences** ("diffs") from the previous version to your new version.
+* You can **push** your changes to a shared repository for others to use
+* You can **pull** from a shared repository and **merge** the changes of others.
+* If there are **conflicts**, git will let you know and make you resolve them.
+* If you ever need to see what changed, you have the entire **history** of all changes to look at.
+
+## Command line interfaces
+
+While git has graphical interfaces, we will teach use a **command line interface** (CLI) for git.
+
+In an CLI you have an **interactive** prompt where you type a command. It might look something like this:
+
+```
+$ command -o --options argument1 argument2
+```
+
+* `$` is the prompt
+* `command` is what we want to do (e.g., `git`)
+* Optional flags have `-` or `--` in front and change behavior
+* We can tell what do with `argument1` and `argument2`. Some commands have no arguments.
+
+## Some basic CLI commands
+
+* `cd`: Change directory. 
+* `ls`: List files in current directory
+* `pwd`: Print working directory
+* `mkdir`: Make a new directory (folder)
+* `rm -r`: Recursively delete directories and everything inside (use carefully!)
+
+## Git and the CLI
+
+When interacting with git, we will use commands like this:
+
+```
+$ git SUBCOMMAND -o --options ARG1 ARG2 ...
+```
+
+Some example subcommands will be `pull` to get updates, `log` to see the history, `add` to stage files, and `commit` to commit changes.
+
+## Let git know who you are
+
+```
+$ git config --global user.name "YOUR NAME"
+$ git config --global user.email "YOUR EMAIL"
+```
+
+## Getting a copy of the Stats 306 Repository
+
+Materials for this course are hosted at **GitHub**, a popular website front end for git. 
+
+To get a copy of them, **clone** the repository:
+
+```
+$ cd LOCATION_YOU_WANT_TO_STORE_REPO
+$ git clone https://github.com/markmfredrickson/stats306_spring_2023.git
+```
+
+## Getting future updates
+
+```
+$ cd PATH/TO/REPO
+$ git pull
+```
+
