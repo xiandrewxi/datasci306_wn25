@@ -64,6 +64,15 @@ Add the values two and three:
 
 ## Grading
 
+The course will be based on the following structure:
+
+* Homework Assignments (40%) (9 assignments, no drops)
+* Quizzes (20%) (13 quizzes, two lowest  dropped)
+* Labs (5%) (two allowed absences)
+* Project 1 (10%)
+* Project 2 (25%) 
+
+Late homework will not be accepted. Please email your GSI if you have circumstances requiring an extension.
 
 ## Working in Groups
 
