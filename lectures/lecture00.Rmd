@@ -35,6 +35,32 @@ By the end of this course, you will
 
 ## Overview of Course
 
+* Lecture: introduce concepts and key R programming tools, frequent exercises
+* Lab: Hands on programming experience with GSI assistance
+* Homework: Independent learning in structured format
+* Projects: Open ended opportunities to demonstrate abilities
+* Quizzes: Quick checks of comprehension, maintain pace
+
+## Example Exercise
+
+Bring a laptop (or even a tablet!) to class:
+
+We will frequently stop an engage in exercises. For example,
+
+Add the values two and three:
+
+```{r add23, exercise = TRUE}
+
+```
+
+```{r add23-hint}
+2  + ...
+```
+
+```{r add23-solution}
+2 + 3
+```
+
 
 ## Grading
 
@@ -60,8 +86,8 @@ Mariot Tsitoara.
 
 ## Student Hours and Help
 
-* Instructor zoom student hours: 
-* GSI office hours: 
+* Instructor Zoom student hours TBA 
+* GSI office hours: You may attend any GSI's hours
 * Piazza on Canvas
 
 ## Other policies
@@ -77,6 +103,7 @@ Canvas includes more detailed policies on
 
 ## Canvas
 
+Visit Canvas....
 
 ## Software
 
@@ -100,16 +127,21 @@ R is a *statistical programming language*:
 * Being adopted by research, industry, government
 * Language of choice for statistical teaching (courses, books)
 
+
+## Using our Posit Cloud
+
+* There is a main module: `stats306_winter_2024`. If you load this it will be a *temporary* copy. If you wish to retain any notes, you must **make it permanent**.
+* If you make it permanent, you will need to update using `git` (more on this shortly)
+* Labs and homeworks will be distributed as weekly modules. There is an example. This will automatically be made permanent.
+
+Let's visit [Posit Cloud](https://posit.cloud/spaces/462616/content/all?sort=name_asc)
+
 ## What is Git?
 
 * A **version control system** manages changes from multiple sources simultaneously.
 * A reasonable analogy: Google Docs with track changes turned on
 * Useful for groups working together to track changes to the software package and document why changes were made
 * We will use it to disseminate homework assignments, labs, and lecture materials.
-
-## Using our Posit Cloud
-
-....
 
 ## How does git work?
 
@@ -124,7 +156,7 @@ R is a *statistical programming language*:
 
 ## Command line interfaces
 
-While git has graphical interfaces, we will teach use a **command line interface** (CLI) for git.
+While git has graphical interfaces, we will teach using a **command line interface** (CLI) for git.
 
 In an CLI you have an **interactive** prompt where you type a command. It might look something like this:
 
@@ -164,19 +196,58 @@ $ git config --global user.email "YOUR EMAIL"
 
 ## Getting a copy of the Stats 306 Repository
 
-Materials for this course are hosted at **GitHub**, a popular website front end for git. 
+Materials for this course are hosted at **GitHub**, a popular website front end for git. Our materials are stored in repository on github.
 
-To get a copy of them, **clone** the repository:
+If you want to get a copy (outside of Posit cloud) **clone** the repository:
 
 ```
 $ cd LOCATION_YOU_WANT_TO_STORE_REPO
-$ git clone https://github.com/markmfredrickson/stats306_spring_2023.git
+$ git clone https://github.com/markmfredrickson/stats306_spring_2024.git
 ```
 
 ## Getting future updates
 
+When we make changes to the course materials (this will be frequent! We like to tinker!), you can get updates:
+
 ```
-$ cd PATH/TO/REPO
 $ git pull
 ```
+
+## Saving changes to our local repo
+
+If you have made changes to your repository, you will be prompted to commit them before pullling:
+
+```
+$ git status
+$ git add FILENAME
+$ ... perhaps other files ...
+$ git commit -m "a note explaining changes"
+```
+
+## Graphical interface
+
+We teach the command line interface for git because
+
+* It is convenient to show in slides
+* It is transferable to any environment where you would use git
+* It matches our recommended text book
+* It exposes the full power of git
+
+But, you can also use a graphical interface in Posit Cloud
+
+## Posit Cloud and RStudio
+
+You may encounter the name **RStudio**. 
+
+This is the name a desktop version of the editor we are using (formerly it was called RStudio Cloud).
+
+If you wish, you can [install R and RStudio](https://posit.co/download/rstudio-desktop/) on your own computer. 
+
+You can get the materials using `git` as described above. You will need to download labs and HW from the assignments on Posit cloud.
+
+## Final notes
+
+**No lab this week**. Next activity is lecture on Tuesday.
+
+Join the Stats 306 workspace on Posit (see Canvas). Try out the example module.
 
