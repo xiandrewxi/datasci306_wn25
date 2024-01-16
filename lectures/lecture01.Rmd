@@ -20,12 +20,11 @@ library(tidyverse)
 * Course overview, objectives, policies
 * Software: R, RStudio, Git
 * Command line interface (CLI)
-* Getting our materials using git
+* Getting our materials using Posit Cloud and git
 
 ## What's in our repository
 
 >* Data sets will we use
->* Homework assignments
 >* Lab notebooks 
 >* Lecture notes (like these)
 
@@ -71,18 +70,9 @@ it were an R chunk, even though it is not really one. -->
 * The `key = value` controls the behavior of the chunk (optional). Example, `include = FALSE` to hide chunk.
 * `CTRL-ALT-I` inserts a new chunk your RMarkdown document.
 
-## `homework/example-homework.Rmd`
+## Example 
 
 Using an example homework file, we'll answer a few questions and prepare our HW for submission.
-
-## Saving changes to our local repo
-
-```
-$ git status
-$ git add FILENAME
-$ ... perhaps other files ...
-$ git commit -m "a note explaining changes"
-```
 
 ## R's Read-Evaluate-Print-Loop (REPL)
 
@@ -99,6 +89,11 @@ We will use exercises in the slides like a REPL. Use the math operations `*`, `\
 ```{r repl, exercise = TRUE, exercise.lines = 1}
 
 ```
+
+```{r repl-solution}
+(100 - 18) * 2
+```
+
 The "Start Over" button will give you a fresh environment.
 
 ## Expressions and Statements
@@ -116,6 +111,10 @@ Commands that change the **state** of the program are called **statements**, suc
 ```{r}
 a <- 3 + 4
 ```
+
+R runs statements one at time (each line is a statement) from top to bottom of the program or RMarkdown document.
+
+(Technically `3 + 4` on a line is a statement because R will print out the value, but we will think of it as an expression.)
 
 ## Variables and Assignment
 
@@ -209,17 +208,24 @@ R has several different **data types**. Some common types:
 ## Exercise: Using variables
 
 Find the difference between 193 and 7. What is this value divided by two? What is this value divided by three? (Only compute the difference once.)
+
 ```{r using-variables, exercise = TRUE, exercise.lines = 5}
 
 ```
+
+```{r using-variables-solution}
+d <- 193 - 7
+d / 2 # will automatically print out
+d / 3
+```
+
 
 ## Style point: descriptive variable names
 
 * So far we have used names like `a` and `b`.
 * For large programs, having variable names that describe what they hold is much better
 * Compare `a` to `number_of_seconds_in_a_day`
-* In RStudio, it's just as easy to type with `TAB` completion
-* On HW assignments, we will be awarding points for *style* (readable code)
+* In RStudio/Posit, it's just as easy to type with `TAB` completion
 
 ## Functions 
 A key tool in any programming language is a **function**.
@@ -257,6 +263,11 @@ Exercise: compute the radian equivalent of 45 degrees (use a good variable name!
 
 ```{r sin45, exercise = TRUE}
 
+```
+
+```{r sin45-solution}
+rad45 <- (45 / 360) * 2 * pi
+sin(rad45)
 ```
 
 ## Math operations are functions too
@@ -323,6 +334,7 @@ class(123)
 class(sin)
 ```
 
+We will see some really great uses of this later to **delay computation**.
 
 ## Side effects
 
