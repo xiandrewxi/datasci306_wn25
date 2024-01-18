@@ -320,8 +320,13 @@ glwl <- read_csv("data/GLHYD_data_english_cleaned.csv.gz") |>
 ```
 
 ```{r glwl-plot, exercise = TRUE}
-
 ```
+
+```{r glwl-solution}
+ggplot(glwl, aes(x = year, y = ht, color = body)) + geom_point()
+ggplot(glwl, aes(x = year, y = ht, color = body)) + geom_line()
+```
+
 
 Improve your plot by changing it to a `geom_line()`
 
