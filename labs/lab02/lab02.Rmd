@@ -1,7 +1,8 @@
 ---
-title: "STATS306 Lab2"
-author: "Your Name"
-output: learnr::tutorial
+title: "STATS 306 Lab2"
+output: 
+  learnr::tutorial:
+    progressive: true
 runtime: shiny_prerendered
 ---
 
