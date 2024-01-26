@@ -116,6 +116,32 @@ R runs statements one at time (each line is a statement) from top to bottom of t
 
 (Technically `3 + 4` on a line is a statement because R will print out the value, but we will think of it as an expression.)
 
+## Including Expresssions in Markdown
+
+Suppose you need to calculate a value like $99 \times 87$. You could use R to help you calculate it
+
+```{r}
+99 * 87
+```
+Then copy it into a some text:
+
+> The size of a rectangle with length 99 and width 87 is 8613.
+
+Better way: Put the calculation right into your document!
+
+
+> The size of a rectangle is &#96;r 99 * 87&#96;.
+
+
+Results in:
+
+> The size of a rectangle is `r 99 * 87`.
+
+See the `lecture01.Rmd` file to see this in action.
+
+
+
+
 ## Variables and Assignment
 
 A **variable** is a box to store data. We put the results of expressions into variables using **assignment**.
@@ -126,7 +152,16 @@ c <- a + b
 print(c)
 ```
 
-Rules for variable names: start with a letter then letters, numbers, `.`, `_`. 
+Rules for variable names: 
+
+* start with a letter,  `.`, or `_`. 
+* followed by letters, numbers, `.`, `_`
+
+You can include variables in your markdown to get their values.
+
+> The value of &#96;c&#96; is &#96;r c&#96;.
+
+> The value of `c` is `r c`.
 
 ## REPL and State
 
