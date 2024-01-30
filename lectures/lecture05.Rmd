@@ -234,6 +234,18 @@ d <- data.frame(x = c(-0.19, 1.35, 1.21, -0.11, -0.99,
 
 ```
 
+```{r topcoding-solution}
+d <- data.frame(x = c(-0.19, 1.35, 1.21, -0.11, -0.99, 
+                      -0.4, -0.04, -0.4, 0.82, -1.55))
+
+mutate(d,
+  tmp = if_else(x < -1, -1, x),
+  top = if_else(x > 1, 1, tmp),
+  tmp = NULL # remove from table
+)
+```
+
+
 ## `transmute`: `mutate` + `select`
 
 If you only want the new column(s), you can use `transmute`:
