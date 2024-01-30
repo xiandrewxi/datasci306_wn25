@@ -1,10 +1,16 @@
 ---
-title: "Stats 306: Lab 3"
-subtitle: "Working with tables"
-author: "Your Name"
-
+title: "STATS 306 Lab3"
+output: 
+  learnr::tutorial:
+    progressive: true
 runtime: shiny_prerendered
 ---
+
+<style type="text/css">
+  body{
+  font-size: 14pt;
+}
+</style>
 
 ## Set up
 
@@ -14,6 +20,7 @@ runtime: shiny_prerendered
 ```
 
 ```{r setup, echo=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)  # For ggplot2, dplyr
 library(learnr)
 ```
@@ -56,6 +63,9 @@ It you might like to have the help file for the select function open. Run
 
 in the Console tab.
 
+### Exercise 1 {-}
+
+#### (a) {-}
 
 Use `select` to pick the columns that are related to population counts:
 
@@ -73,6 +83,8 @@ select(midwest, poptotal, popdensity, popwhite, popblack, popamerindian,
          popasian, popother, popadults, poppovertyknown) 
 ```
 
+#### (b) {-}
+
 Select everything **except** `PID` and `poptotal`:
 
 ```{r midwestSelect2, exercise=TRUE}
@@ -81,6 +93,8 @@ Select everything **except** `PID` and `poptotal`:
 midwest %>%
   select(-PID, -poptotal) 
 ```
+
+##### (c) {-}
 
 Use the `where` and `is.character` function to select only columns containing strings/character vectors.
 
@@ -103,27 +117,33 @@ Observe the following way to tell if a county is in Michigan:
 midwest$state == "MI"
 ```
 
+#### Exercise 2 {-}
+
+##### (a) {-}
+
 Use code similar (but not the same as) the above to find all rows for counties in MI
 
 ```{r midwestFilter1, exercise=TRUE}
 ```
-```{r midwestFilter1-solution}
-midwest %>%
-  filter(state == 'MI')
-```
 
-You can include more than one condition at a time by adding additional qualifications. Select all counties in Michigan with a `percollege` value greater than 17 (approximately the median in the entire data set)
 
-```{r midwestFilter2, exercise=TRUE}
+You can include more than one condition at a time by adding additional qualifications. 
+
+```{r}
 midwest %>%
   filter(state == "MI", county == 'WASHTENAW')
 ```
 
-```{r midwestFilter2-solution}
-midwest %>%
-  filter(state == "MI", percollege > 16)
+##### (b) {-}
+
+Select all counties in Michigan with a `percollege` value greater than 17 (approximately the median in the entire data set).
+
+```{r midwestFilter2, exercise=TRUE}
 ```
 
+```{r midwestFilter2-solution}
+  filter(state == "MI", percollege > 16)
+```
 Another way to do this filter is to use the "and" operator `&`
 
 ```{r}
@@ -131,14 +151,13 @@ midwest %>%
   filter(state == "MI" & percollege > 16)
 ```
 
-There is also an "or" operator `|`. Use the `|` operator to find rows in either Wisconsin or Ohio.
+There is also an "or" operator `|`.
+
+##### (c) {-}
+
+Use the `|` operator to find rows in either Wisconsin or Ohio.
 
 ```{r midwestOrOperator, exercise=TRUE}
-```
-
-```{r midwestOrOperator-solution}
-midwest |>
-  filter(state == "WI" | state == "OH")
 ```
 
 When filtering rows for many values in the same column, the `%in%` operator can be useful. Here's an example of it's usage
@@ -146,6 +165,8 @@ When filtering rows for many values in the same column, the `%in%` operator can 
 ```{r}
 c("WI", "MI", "OH", "OH", "IA") %in% c("WI", "OH")
 ```
+
+##### (d) {-}
 
 Use the `%in%` operator to repeat the previous selection of counties in Wisconsin or Ohio.
 
@@ -158,6 +179,8 @@ midwest |>
 ```
 
 ### Putting `filter` and `select` together
+
+##### (e) {-}
 
 Make a table using all the rows from Wisconsin and Ohio but only the columns `PID` and `area`
 
@@ -184,6 +207,10 @@ midwest %>%
   tail()
 ```
 
+#### Exercise 3 {-}
+
+##### (a) {-}
+
 Create a new column finds the number of non-adults per county (i.e., the difference between `poptotal` and `popadults`):
 
 ```{r mutate2, exercise=TRUE}
@@ -194,9 +221,9 @@ midwest |>
   mutate(children = poptotal - popadults) |>
   select(children)
 ```
+##### (b) {-}
 
 Mutate can make more than one column. Using only one call to `mutate`, create a `childrendensity` by dividing the number of children by area.
-
 
 ```{r mutate3, exercise=TRUE}
 ```
@@ -216,6 +243,8 @@ midwest %>%
   arrange(desc(state), county) %>%
   head()
 ```
+
+##### (c) {-}
 
 Find the county with the highest population (`poptotal`) in the data set:
 
@@ -249,6 +278,10 @@ midwest %>%
   slice_max(poptotal)
 ```
 
+#### Exercise 4 {-}
+
+##### (a) {-}
+
 Use `group_by` and `slice_max` to find the largest metro and non-metro counties (`inmetro`):
 
 ```{r groupbymetro, exercise=TRUE}
@@ -270,10 +303,9 @@ midwest %>%
   arrange(-n_counties)
 ```
 
+##### (b) {-}
 
-Use `group_by()` and `summarize()` to get the total population in each state (hint, we want to *sum* up the `poptotal` column)
-. 
-Then, arrange the states so that states with the smallest population comes first.
+Use `group_by()` and `summarize()` to get the total population in each state (hint, we want to *sum* up the `poptotal` column). Then, arrange the states so that states with the smallest population comes first.
 
 ```{r groupExercise, exercise=TRUE}
 ```
@@ -284,6 +316,8 @@ midwest |>
   summarize(state_pop = sum(poptotal)) |>
   arrange(desc(state_pop))
 ```
+##### (c) {-}
+
 **BONUS** Modify your previous solution to also calculate the percentage of the population that is White, Black, and Asian. 
 
 ```{r groupExercisebonus, exercise=TRUE}
@@ -297,6 +331,6 @@ midwest %>%
             percet_white = sum(popwhite) / state_population,
             percent_asian = sum(popasian) / state_population) %>%
   arrange(state_population)
-```
+
 
 
