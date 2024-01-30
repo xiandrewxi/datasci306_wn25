@@ -1,6 +1,6 @@
 ---
 title: "Stats 306: Lecture 6"
-subtitle: "More Grouping and Summaries; Functions"
+subtitle: "Grouping and Summaries"
 author: "Mark Fredrickson"
 output: 
   learnr::tutorial:
@@ -17,6 +17,8 @@ library(lubridate) # install.packages("lubridate") if you don't have this
 aatemp <- read_csv("data/ann_arbor_weather.csv.gz")
 ```
 
+## TODO: Review on filter/select
+
 ## Review: `mutate`
 
 * `mutate`: Takes a table and returns a new table with columns added and/or subtracted
@@ -24,14 +26,6 @@ aatemp <- read_csv("data/ann_arbor_weather.csv.gz")
 * `mutate(d, new_col = f(x, y), new_col2 = new_col1 + 1, old_col = NULL)`
 * `if_else(cond, true, false)` (all are vectors of same length or single values): used `TRUE` and `FALSE` values in `cond` to pick value from `true` and `false` (respectively)
 * Can use functions that summarize, e.g., `mutate(d, x_centered = x - mean(x))`
-
-## Review: `groups and summaries`
-
-* We often want to **partition** our data into smaller groups
-* Things like finding **conditional means** or **conditional medians**
-* `group_by` takes one or more grouping factors and creates a grouped table
-* `summarize` computes group level summaries
-* We'll see that `mutate` operates within groups, which can be quite helpful
 
 ## Temperature data for Ann Arbor, MI
 
@@ -46,6 +40,114 @@ aatemp
 aatemp_cel <- mutate(aatemp, TMAX_celsius = (TMAX - 32) * 5/9) |>
   select(TMAX, TMAX_celsius)
 ```
+
+## `summary` and `summarize`
+
+R has a built in a function called `summary` that gives a distilled look at a table:
+```{r}
+aat_4col <- select(aatemp, c("STATION", "DATE", "TMAX", "SNOW"))
+summary(aat_4col)
+```
+
+The `summarize` function is from `dplyr` (part of `tidyverse`) and allows computing arbitrary summaries.
+
+```{r}
+summarize(aat_4col, avg_TMAX = mean(TMAX), days_of_snow = sum(!is.na(SNOW)))
+```
+
+## Summarize variations: `_if`, `_at`, `_all`
+
+```{r}
+select(aatemp, where(is.numeric)) |> summarize_all(mean, na.rm = TRUE)
+summarize_if(aatemp, is.numeric, var, na.rm = TRUE)
+summarize_at(aatemp, c("TMAX", "TMIN"), c(maximum = max, minimum = min))
+```
+
+## Exercise
+
+For the `mpg` data set, compute the mean `hwy` mileage and median `cty` mileage. Compute the variance of the ratio of `hwy` to `city`.
+```{r summary, exercise = TRUE}
+
+```
+
+## Grouping
+
+Often we want to break data out across categories and compute summaries within each.
+
+```{r}
+group_by(aatemp, year(DATE)) |> summarize(avg_TMAX = mean(TMAX), days_of_snow = sum(!is.na(SNOW)))
+```
+
+## Inspecting group data
+
+```{r}
+
+aat_year <- group_by(aatemp, year(DATE))
+nrow(aat_year) == nrow(aatemp)
+colnames(aat_year)[18]
+group_vars(aat_year)
+```
+
+## Grouping by year and month
+```{r}
+aat_year_month <- group_by(aat_year, month(DATE), .add = TRUE)
+group_vars(aat_year_month)
+```
+
+```{r}
+aat_year_month <- group_by(aatemp, year(DATE), month(DATE))
+group_vars(aat_year_month)
+```
+
+## Aggregating up with `summarize`
+
+```{r}
+summarize(aat_year_month, avg_TMAX = mean(TMAX)) |>
+  ggplot(aes(x = `year(DATE)` + `month(DATE)` / 12, avg_TMAX)) +
+  geom_line()
+
+```
+
+## Aggregating up two levels
+
+```{r}
+summarize(aat_year_month, monthly_avg_tmax = mean(TMAX)) |>
+  summarize(yearly_median_monthy_mean = median(monthly_avg_tmax))
+```
+
+## Exercise
+
+Using the `mpg` data set, find the manufacturer (`manufacturer`) with the highest mean highway efficiency (`hwy`)
+```{r manufacturer-hwy, exercise = TRUE}
+
+```
+
+## Arranging output
+
+Sometimes we want to choose the ordering of rows in a table. I don't use this a lot for raw data, but it can be quite helpful for summaries:
+
+```{r}
+group_by(aatemp, year(DATE)) |> 
+  summarize(yearly_maxT = max(TMAX)) |> 
+  arrange(yearly_maxT)
+```
+
+## Descending order, multiple columns
+
+
+```{r}
+group_by(aatemp, year(DATE)) |> 
+  summarize(yearly_maxT = max(TMAX), yearly_minT = min(TMAX)) |> 
+  arrange(desc(yearly_maxT), yearly_minT)
+```
+
+## Exercise
+
+Group by both `manufacturer` and `class`. What manufacturer has the highest `cty` efficiency in the sense of the median of mean `cty` within class?
+
+```{r manufacturer-hwy, exercise = TRUE}
+```
+
 
 ## Grouping by year
 ```{r}
