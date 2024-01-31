@@ -331,6 +331,36 @@ midwest %>%
             percet_white = sum(popwhite) / state_population,
             percent_asian = sum(popasian) / state_population) %>%
   arrange(state_population)
+```
+
+## `group_by()` and `mutate()` to normalize column values 
+You can also use `group_by()` and `mutate()` sequentially to normalize columns for just that groupings. Let's say you want to see the relative county level percent with highschool diploma compared to their state average. You can then use `group_by()` and `mutate()` as follows. Notice that we include `mean_perch_sd` and the `select()` for ease of viewing the results.
+
+```{r}
+midwest |>
+  group_by(state) |>
+  mutate(normalized_perch_sd = perchsd - mean(perchsd),
+         mean_perch_sd = mean(perchsd)) |>
+  ungroup() |>
+  select(county, state, perchsd, normalized_perch_sd, mean_perch_sd)
+```
+
+
+#### Exercise 5 {-}
+
+Use `group_by()` and `mutate()` to normalize county values of percent of population is college educated (`percollege`) based on if the county is considered in a metro area (`inmetro`)
+
+```{r groupNormalize, exercise=TRUE}
+```
+
+```{r groupNormalize-solution}
+midwest |>
+  group_by(inmetro) |>
+  mutate(normalized_percollege = percollege - mean(percollege),
+         mean_percollege = mean(percollege)) |>
+  ungroup() |>
+  select(county, state, percollege, normalized_percollege, mean_percollege)
+```
 
 
 
