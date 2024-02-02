@@ -126,6 +126,10 @@ Use code similar (but not the same as) the above to find all rows for counties i
 ```{r midwestFilter1, exercise=TRUE}
 ```
 
+```{r midwestFilter1-solution}
+midwest %>%
+  filter(state == "MI")
+```
 
 You can include more than one condition at a time by adding additional qualifications. 
 
@@ -159,6 +163,12 @@ Use the `|` operator to find rows in either Wisconsin or Ohio.
 
 ```{r midwestOrOperator, exercise=TRUE}
 ```
+
+```{r midwestOrOperator-solution, exercise=TRUE}
+midwest |>
+  filter(state == "MI" | state == "OH")
+```
+
 
 When filtering rows for many values in the same column, the `%in%` operator can be useful. Here's an example of it's usage
 
