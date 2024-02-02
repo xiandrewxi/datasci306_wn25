@@ -164,7 +164,7 @@ Use the `|` operator to find rows in either Wisconsin or Ohio.
 ```{r midwestOrOperator, exercise=TRUE}
 ```
 
-```{r midwestOrOperator-solution, exercise=TRUE}
+```{r midwestOrOperator-solution}
 midwest |>
   filter(state == "MI" | state == "OH")
 ```
