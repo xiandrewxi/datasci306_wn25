@@ -99,7 +99,7 @@ aat_year_month <- group_by(aatemp, year(DATE), month(DATE))
 group_vars(aat_year_month)
 ```
 
-## Aggregating up with `summarize`
+## Aggregating up with `summarize` function
 
 ```{r}
 summarize(aat_year_month, avg_TMAX = mean(TMAX)) |>
