@@ -26,6 +26,7 @@ library(gapminder)
 > -   mutate, transmute, rename
 > -   group_by, summarize
 > -   pipe operator
+> -   writing custom
 
 ## Mutate
 
@@ -122,7 +123,7 @@ iris1 <- mutate(iris, Size = case_when(
 head(iris1)
 ```
 
-\~ indicates the start of the formula (which needs to return a value) to be executed if the preceding condition is `TRUE`, in this case a simple string.
+\~ indicates the start of the formula - anonymous function - (which needs to return a value) to be executed if the preceding condition is `TRUE`, in this case a simple string.
 
 Like an if statement, the arguments are evaluated in order, so you must proceed from the most specific to the most general.
 For example, this won't work:
@@ -400,4 +401,63 @@ df %>% ggplot(mapping = aes(x = 1, y = counts, fill = continent)) +
   ) +
   theme_void() +                            ## clears backgrond
   theme(legend.position = "bottom")         ## move legend to bottom
+```
+
+## Writing custom functions
+
+### Predicates
+
+Let's write a *predicate* function that evaluates whether the country's GDP is in the bottom quantile, with 20% as the default value:
+
+```{r}
+bottom.quantile <- function(x, q=0.2) {
+  return(x < quantile(x, q))
+}
+```
+
+Now use it to filter the gapminder dataset for countries with GDP in the bottom **10%**, after averaging the GDP over the years, and order in ascending order of averaged GDP:
+
+```{r gpd-bottom-quantile, exercise=TRUE}
+```
+
+```{r gpd-bottom-quantile-solution}
+gapminder %>%
+  group_by(country) %>%
+  summarize(meangdp = mean(gdpPercap)) %>% 
+  filter(bottom.quantile(meangdp, 0.1)) %>% 
+  arrange(meangdp)
+```
+
+### Anonymous functions
+
+Now let's compute the GDP **growth rate** for a country and display the top 10 countries by their average GDP growth:
+
+```{r gdpgrowth, exercise=TRUE}
+
+```
+
+```{r gdpgrowth-solution}
+gapminder %>%
+  group_by(country) %>%
+  summarize(meangdpgrowthrate = mean((gdpPercap - lag(gdpPercap)) / lag(gdpPercap),
+                                 na.rm = TRUE)) %>%
+  arrange(desc(meangdpgrowthrate)) %>%
+  head(10)
+```
+
+Now, let's find all the (country, year) pairs that had a *negative* average *nominal GDP* growth, using `filter` and an anonymous function, then count and display the occurrences of such per each country, starting with the country with the most:
+
+```{r negativegrowth, exercise=TRUE}
+
+```
+
+```{r negativegrowth-solution}
+gapminder %>%
+  select(country, gdpPercap) %>%
+  mutate(gdpgrowth = gdpPercap - lag(gdpPercap)) %>% 
+  filter(gdpgrowth < 0.0) %>% 
+  group_by(country) %>% 
+  summarize(neg_years = n()) %>% 
+  arrange(desc(neg_years))
+
 ```
