@@ -138,6 +138,29 @@ case_when(
 )
 ```
 
+Let's try replicating the above with our own function:
+
+```{r custom_function}
+eval.sepal.length <- function(sepal_length, mean_length) {
+  if (sepal_length < mean_length) {
+    return("small")
+  } else if (sepal_length > mean_length) {
+    return("large")
+  } else {
+    return("medium")
+  }
+}
+```
+
+```{r}
+  iris1 %>% 
+  mutate(mean = mean(Sepal.Length)) %>% 
+  rowwise() %>% 
+  mutate(Size = eval.sepal.length(Sepal.Length, mean))
+```
+
+We needed to use `rowwise` for this example since such simple functions can only be evaluated one row at the time, unlike `dplyr`'s `case_when`.
+
 ## Mutate Multiple Columns
 
 ```{r}
@@ -423,12 +446,12 @@ Now use it to filter the gapminder dataset for countries with GDP in the bottom 
 ```{r gpd-bottom-quantile-solution}
 gapminder %>%
   group_by(country) %>%
-  summarize(meangdp = mean(gdpPercap)) %>% 
-  filter(bottom.quantile(meangdp, 0.1)) %>% 
+  summarize(meangdp = mean(gdpPercap)) %>%
+  filter(bottom.quantile(meangdp, 0.1)) %>%
   arrange(meangdp)
 ```
 
-### Anonymous functions
+### Inline and anonymous functions
 
 Now let's compute the GDP **growth rate** for a country and display the top 10 countries by their average GDP growth:
 
@@ -440,12 +463,14 @@ Now let's compute the GDP **growth rate** for a country and display the top 10 c
 gapminder %>%
   group_by(country) %>%
   summarize(meangdpgrowthrate = mean((gdpPercap - lag(gdpPercap)) / lag(gdpPercap),
-                                 na.rm = TRUE)) %>%
+                                     na.rm = TRUE)) %>%
   arrange(desc(meangdpgrowthrate)) %>%
   head(10)
 ```
 
-Now, let's find all the (country, year) pairs that had a *negative* average *nominal GDP* growth, using `filter` and an anonymous function, then count and display the occurrences of such per each country, starting with the country with the most:
+Now, let's find all the (country, year) pairs that had a *negative* average *nominal GDP* growth, using `filter`, then count and display the occurrences of such per each country, starting with the country with the most:
+
+*Tip: make sure you group in the correct order so you're not comparing GDP's across different countries.*
 
 ```{r negativegrowth, exercise=TRUE}
 
@@ -454,10 +479,36 @@ Now, let's find all the (country, year) pairs that had a *negative* average *nom
 ```{r negativegrowth-solution}
 gapminder %>%
   select(country, gdpPercap) %>%
-  mutate(gdpgrowth = gdpPercap - lag(gdpPercap)) %>% 
-  filter(gdpgrowth < 0.0) %>% 
-  group_by(country) %>% 
-  summarize(neg_years = n()) %>% 
+  group_by(country) %>%
+  mutate(gdpgrowth = gdpPercap - lag(gdpPercap, default = 0)) %>%
+  filter(gdpgrowth < 0.0) %>%
+  summarize(neg_years = n()) %>%
   arrange(desc(neg_years))
 
 ```
+
+Using an *anonymous function*, let's ignore any rows with negative growth.
+
+*Tip: The above GDP growth is the only possible negative value in a row, after selecting the numeric columns:*
+
+```{r negativegrowthanonymous, exercise=TRUE}
+
+```
+
+```{r negativegrowthanonymous-solution}
+gapminder %>%
+  mutate(gdpgrowth = gdpPercap - lag(gdpPercap)) %>%
+  select(where(is.numeric)) %>%
+  select(where( ~ !any(. < 0.0)))
+
+```
+
+Where `~` is, again, the shorthand for anonymous functions:
+
+```         
+~ <=> function(x) { ... return something}
+```
+
+and `.` stands for the argument of the function, in this case the row passed by `select` as a vector.
+
+Note that we only need an anonymous function when it is wrapped *inside* another function such as `where`; for example, we are able to compute the GDP growth inside `mutate` without them.
