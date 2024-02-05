@@ -24,7 +24,7 @@ library(gapminder)
 ## Today's Content
 
 > -   mutate, transmute, rename
-> -   group_by, summarise
+> -   group_by, summarize
 > -   pipe operator
 
 ## Mutate
@@ -204,11 +204,11 @@ head(iris2)
 > -   For all the columns in iris, we apply the function `str_replace()`.
 > -   \~ again indicates the start of a formula which needs to return a calue
 > -   the `.` inside `str_replace` is, again, a *placeholder* standing for whatever is passed to it by `rename_with`
-> -   We use "\\\\" to escape.
+> -   We use "\\\\" to escape the `.` since `str_replace` expects a regular expression by default, where `.` stands in for any character.
 
-## summarize and group_by
+## Summarize and group_by
 
-`summarise` is used to compute a new dataset (tibble) by using aggregation functions.
+`summarize` is used to compute a new dataset (tibble) by using aggregation functions.
 It is usually useful when used with `group_by`, as this helps to compute summaries for each category of a column of a dataset.
 
 Some useful aggregation functions include:
@@ -220,9 +220,9 @@ Some useful aggregation functions include:
 > -   Count: n(), n_distinct()
 > -   Logical: any(), all()
 
-## Summarise for entire dataset
+## Summarize for entire dataset
 
-To find the mean of Sepal Width and Sepla Length for the iris dataset:
+To find the mean of Sepal Width and Sepia Length for the iris dataset:
 
 ```{r}
 summarise(iris, mean_sep_width = mean(Sepal.Width), 
@@ -238,10 +238,10 @@ summarise(iris, n = n(),
              unique= n_distinct(Species),
              first = first(Species), 
              last = last(Species),
-             `30st` = nth(Species, 30))
+             `30th` = nth(Species, 30))
 ```
 
-## Summarise by groups
+## Summarize by groups
 
 We first group the iris dataset by Species.
 
@@ -260,9 +260,9 @@ summarise(by_group, mean_sep_length = mean(Sepal.Length),
 ## The Pipe Operator
 
 As you probably saw from the previous example, it is extraneous to be storing intermediate steps while completing a chain of tasks.
-The pipe operator (%\>%) helps up eliminate this hassle.
+The pipe operator (`%>%`) helps up eliminate this hassle.
 
-Consider how the pipe (%\>%) can help eliminate such hassle in the following sequence (chain) of tasks:
+Consider how the pipe (`%>%`)can help eliminate such hassle in the following sequence (chain) of tasks:
 
 > -   Filter the iris dataset for Petal Length greater than 1 and Sepal Width less than 3.3
 > -   Select Sepal Length, Sepal Width and Species
@@ -281,7 +281,7 @@ iris %>%                                                ## then
            sepal_width = Sepal.Width,) %>%              ## and then
     mutate(Species = toupper(Species)) %>%              ## and then
     group_by(Species) %>%                               ## and then
-    summarise(mean_sep_length = mean(sepal_length),
+    summarize(mean_sep_length = mean(sepal_length),
               mean_sep_width = mean(sepal_width),
               `50th_tile_sep_len` = quantile(sepal_length, 0.5),
               `50th_tile_sep_width` = quantile(sepal_width, 0.5)
@@ -372,7 +372,7 @@ Complete the following tasks:
 ```{r solution2, exercise = T}
 gapminder %>%
    group_by(year, continent) %>%
-   summarise(total_pop = sum(pop),
+   summarize(total_pop = sum(pop),
              mean_life_expt = mean(lifeExp),
              counts = n()) %>%
    ggplot(aes(x = year, y = total_pop, color = continent)) +
@@ -397,7 +397,7 @@ Question 3:
 df <- gapminder %>%
         filter(year == 2007) %>%
         group_by(continent) %>%
-        summarise(mean_life_expt = mean(lifeExp),
+        summarize(mean_life_expt = mean(lifeExp),
                   counts = n())
 
 ## (1) making the bar chart
