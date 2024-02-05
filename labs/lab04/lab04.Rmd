@@ -261,18 +261,20 @@ summarise(by_group, mean_sep_length = mean(Sepal.Length),
 
 As you probably saw from the previous example, it is extraneous to be storing intermediate steps while completing a chain of tasks.
 The pipe operator (`%>%`) helps up eliminate this hassle.
-
-Consider how the pipe (`%>%`)can help eliminate such hassle in the following sequence (chain) of tasks:
-
-> -   Filter the iris dataset for Petal Length greater than 1 and Sepal Width less than 3.3
-> -   Select Sepal Length, Sepal Width and Species
-> -   Rename the columns of Sepal Width and Sepal Length by replacing dot(.) with underscore(\_)
-> -   Convert the Species column to uppercase
-> -   Group the resulting dataset by species and compute the 50th percentile and the mean for each group
-
 Note: An easier way to understand the pipe (%\>%) operator is reading it as "and then"
 
-```{r}
+Consider how the pipe (`%>%`) can help eliminate such hassle in the following sequence (chain) of tasks:
+
+> 1.  Filter the iris dataset for Petal Length greater than 1 and Sepal Width less than 3.3
+> 2.  Select Sepal Length, Sepal Width and Species
+> 3.  Rename the columns of Sepal Width and Sepal Length by replacing dot(.) with underscore(\_)
+> 4.  Convert the Species column to uppercase
+> 5.  Group the resulting dataset by species and compute the 50th percentile and the mean for each group
+
+```{r piping, exercise=TRUE}
+```
+
+```{r piping-solution}
 ## Using piping to accomplish the above task:
 iris %>%                                                ## then
     filter(Petal.Length > 1 & Sepal.Width < 3.3) %>%    ## and then
@@ -296,6 +298,8 @@ We use the dataset `gapminder` for the exercises:
 head(gapminder)
 ```
 
+It contains demographic/economic information (population, GDP per capita, life expectancy) for many of the countries in the world every five years, provided by the Gapminder project.
+
 ## Question 1
 
 Complete the following tasks:
@@ -306,10 +310,20 @@ Complete the following tasks:
 > -   sort the resulting tibble by continent ascending and gdp per capita in descending order
 > -   Retain only rows 5 to 20
 
-What is the frist row in the resulting dataset?
+What is the first row in the resulting dataset?
 
 ```{r question1, exercise = T}
 
+```
+
+```{r question1-solution}
+gapminder %>%
+  filter(continent %in% c("Europe", "Asia"),
+         !country %in% c("Japan", "Norway", "Israel")) %>%
+  mutate(scaled_pop = pop / 1e3) %>%
+  select(!ends_with("y")) %>%
+  arrange(continent, desc(gdpPercap)) %>%
+  slice(5:20)
 ```
 
 ## Question 2
@@ -322,6 +336,20 @@ Complete the following tasks:
 
 ```{r question2, exercise = T}
 
+```
+
+```{r question2-solution}
+gapminder %>%
+  group_by(year, continent) %>%
+  summarize(
+    total_pop = sum(pop),
+    mean_life_expt = mean(lifeExp),
+    counts = n()
+  ) %>%
+  ggplot(aes(x = year, y = total_pop, color = continent)) +
+  geom_point() +
+  facet_wrap(~ continent) +
+  theme_bw() ## add black and white background
 ```
 
 ## Question 3
@@ -340,81 +368,36 @@ Complete the following tasks:
 
 ```
 
-## Solutions
-
-Question 1:
-
-> -   subset for European and Asian countries excluding Japan, Norway and Israel
-> -   scale the population by dividing by 1000
-> -   select all columns aside from those ending with "y"
-> -   sort the resulting tibble by continent ascending and gdp per capita in descending order
-> -   Retain only rows 5 to 20
-
-What is the frist row in the resulting dataset?
-
-```{r solution1, exercise = T}
-gapminder %>% ## then
-    filter(continent %in% c("Europe", "Asia"), !country %in% c("Japan", "Norway", "Israel")) %>%
-    mutate(`scaled pop` = pop/1e3) %>%
-    select(!ends_with("y")) %>%
-    arrange(continent, desc(gdpPercap)) %>%
-    slice(5:20)
-```
-
-Question 2:
-
-Complete the following tasks:
-
-> -   group the dataset by year and continent
-> -   compute the total population (hint: use sum()), mean life expectancy and count the number of cases for each group
-> -   make a scatterplot of year by total population continent. The plots should be separate for each continent.
-
-```{r solution2, exercise = T}
-gapminder %>%
-   group_by(year, continent) %>%
-   summarize(total_pop = sum(pop),
-             mean_life_expt = mean(lifeExp),
-             counts = n()) %>%
-   ggplot(aes(x = year, y = total_pop, color = continent)) +
-   geom_point() +
-   facet_wrap(~ continent) +
-   theme_bw() ## add black and white background
-```
-
-Question 3:
-
--   subset for only the year 2007
--   group by continent
--   compute the mean life expectancy and count the number of cases for each group
--   create:
-    -   a bar chart for continent, where the bars are horizontal than vertical
-    -   create a pie chart for the counting variable
-        -   fill by continent
-        -   add texts superimposing the counts of each continent on the pie chart [hint]: geom_text or geom_label
-        -   move the legend to the bottom position than the right position
-
-```{r solution3, exercise = T}
+```{r question3-solution}
 df <- gapminder %>%
-        filter(year == 2007) %>%
-        group_by(continent) %>%
-        summarize(mean_life_expt = mean(lifeExp),
-                  counts = n())
+  filter(year == 2007) %>%
+  group_by(continent) %>%
+  summarize(mean_life_expt = mean(lifeExp),
+            counts = n())
+print(df)
 
 ## (1) making the bar chart
 df %>% ggplot() +
-         geom_col(mapping = aes(x = continent, y = mean_life_expt, fill = continent)) +
-         coord_flip() + ## making bars horizontal 
-         theme_bw()  ## black and white theme
+  geom_col(mapping = aes(x = continent, y = mean_life_expt, fill = continent)) +
+  coord_flip() + ## making bars horizontal
+  theme_bw()  ## black and white theme
 
+```
+
+```{r question3-solutionc}
 ## (2) making pie chart
 df %>% ggplot(mapping = aes(x = 1, y = counts, fill = continent)) +
-         geom_col(width = 1, color = "white") +
-         coord_polar(theta = "y") +
-         ## adding labels
-         geom_label(mapping = aes(label = counts), ## alternatively use geom_text which has no border around the labels
-                    color = "black",               ## border colr
-                    position = position_stack(vjust = 0.5), 
-                    show.legend = FALSE) +
-         theme_void() +                            ## clears backgrond
-         theme(legend.position = "bottom")         ## move legend to bottom
+  geom_col(width = 1, color = "white") +
+  coord_polar(theta = "y") +
+  ## adding labels
+  geom_label(
+    mapping = aes(label = counts),
+    ## alternatively use geom_text which has no border around the labels
+    color = "black",
+    ## border colr
+    position = position_stack(vjust = 0.5),
+    show.legend = FALSE
+  ) +
+  theme_void() +                            ## clears backgrond
+  theme(legend.position = "bottom")         ## move legend to bottom
 ```
