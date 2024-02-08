@@ -212,7 +212,7 @@ If there is only one unit in the sample, this estimator is undefined. Instead, l
 
 Write a function to estimate variance in this way. Demonstrate on a vector of size 1 and a longer vector. Use `var` in the case where $n > 1$.
 
-```{r} safevar, exercise = TRUE}
+```{r safevar, exercise = TRUE}
 
 ```
 
