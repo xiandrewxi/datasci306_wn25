@@ -38,7 +38,7 @@ library(Lahman) # install.packages("Lahman") if you don't have this
 
 EDA is about looking at a particular data set.
 
-**Inference** is about making informed guesses about data we **do not* observe.
+**Inference** is about making informed guesses about data we **do not** observe.
 
 Inference includes **estimating**, **testing hypotheses** or **performing prediction** with the aid of a statistical model.
 
@@ -256,9 +256,23 @@ Why must the point (100, 1.0) be on the line of the ECDF?
 
 ```{r}
 ggplot(People_clean, aes(x = weight)) + 
-  geom_histogram(bins = k - 1, aes(y = stat(count / sum(count))))
+  geom_histogram(bins = k - 1, aes(y = after_stat(count / sum(count))))
 ```
 
+## Exercise
+
+Use an ECDF plot to investigate how like it is that players have a lifetime batting average greater than 0.250. Then calculate this quantity exactly.
+
+Batting average is (approximately), given by 
+
+$$\frac{\text{H}}{\text{AB}}$$
+
+```{r lifetimeba, exercise = TRUE}
+# Batting |> group_by(playerID) |> ...
+```
+
+
 ## Next time
+
 
 >* R for Data Science: 7.3 - 7.5
