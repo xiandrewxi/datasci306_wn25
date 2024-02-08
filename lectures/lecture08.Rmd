@@ -42,7 +42,7 @@ colnames(Batting)
 
 We can look up the description of the columns using `?Batting` or the help menu.
 
-## Getting in the Lahmand data
+## Getting in the Lahman data
 
 ```{r}
 summarize(Batting, range(yearID))
@@ -276,43 +276,56 @@ f <- function(y) {
 }
 f(2)
 ```
+## Small aside: `drop = TRUE`
 
-## Why is this useful?
+Sometimes we get tables, but we actually just want a value.
+
+```{r}
+## we want to get the memory for the laptop:
+tbl <- tibble(computer = c("Desktop", "Laptop"), RAM = c(16, 8))
+(lap_mem <- filter(tbl, computer == "Laptop") |> select(RAM))
+```
+
+When pulling out values setting the `drop = TRUE` argument strips away the table, if possible:
+
+
+```{r}
+lap_mem[1, 1, drop = TRUE]
+```
+
+## Using lexical scope in a function
 
 This can be convenient if we want to calculate a quantity and then re-use it when summarizing or mutating.
 
 Barry Bonds has hit the most homeruns. 
 ```{r}
 filter(Batting, playerID == "bondsba01") |>
-  group_by(playerID) |>
   summarize(sum(HR)) |> 
-  select(`sum(HR)`) |> first() -> bb_hr
-bb_hr
+  select(`sum(HR)`)  -> tmp 
+(bb_hr <- tmp[1, 1, drop = TRUE])
+```
+```{r}
+
+at_least_bb <- function(x) { 
+  x > bb_hr # x is argument, bb_hr is from environment
+}
 ```
 
-How many players hit at least as many triples or doubles as Bonds hit HRs?
+
+How many players hit at least as many hits, doubles, or triples as Bonds hit HRs?
 ```{r}
 group_by(Batting, playerID) |>
-  summarize_at(c("X2B", "X3B"), sum) |>
-  transmute_at(c("X2B", "X3B"), ~(.x > bb_hr)) |>
-  summarize_all(mean)
-```
-
-How many players had at least as many hits as Bonds had HRs?
-
-```{r}
-group_by(Batting, playerID) |>
-  summarize(H = sum(H)) |>
-  transmute_at(c("H"), ~(.x > bb_hr)) |>
-  summarize_all(mean)
+  summarize_at(c("H", "X2B", "X3B"), sum) |>
+  transmute_at(c("H", "X2B", "X3B"), at_least_bb) |>
+  summarize_all(sum)
 ```
 
 ## Plotting hits
 
 ```{r}
-tmp <- group_by(Batting, playerID) |>
-  summarize_at(c("H"), sum) 
-ggplot(tmp, aes(x = H)) + geom_histogram() + geom_vline(xintercept = bb_hr)
+group_by(Batting, playerID) |>
+  summarize(H = sum(H)) |>
+  ggplot(aes(x = H)) + geom_histogram() + geom_vline(xintercept = bb_hr)
 ```
 
 ## Exercise
