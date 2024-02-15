@@ -15,8 +15,6 @@ runtime: shiny_prerendered
 
 
 ```{r installPackages, echo=FALSE, include=FALSE, message=FALSE}
-# This just checks if students need to install some packages that they might
-# not have.
 if (!require(gapminder)) install.packages("gapminder", repos = "http://cran.us.r-project.org")
 
 if (!require(nycflights13)) install.packages("nycflights13")
