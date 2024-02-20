@@ -303,3 +303,38 @@ year(ds_parsed_2) <- year(today())
 ds_parsed_2 + if_else(ds_parsed_2 < today(), years(1),  years(0))
 ```
 
+## Reminders of some common operations on Date columns
+
+```{r}
+aatemp <- read_csv("data/ann_arbor_weather.csv.gz")
+class(aatemp$DATE)
+
+## range of Dates in number of days
+summarize(aatemp, as.numeric(max(DATE) - min(DATE), "days")) 
+
+## Finding maximum TMAX per year-month 
+aatemp |> group_by(year(DATE), month(DATE)) |> 
+  summarize(m = max(TMAX, na.rm = TRUE)) |>
+  arrange(desc(m)) |> head(5)
+
+## limiting to a specific date range
+aatemp |> filter(DATE >= "2018-01-01", DATE <= "2018-03-31") |>
+  nrow() # 31 + 28 + 31
+```
+
+## Exercise
+
+Using the `weather` table in the `nycfights13` package, compute the average temperature at each airport (`origin`) between 9am and 15pm on September 1, 2013 (see the `time_hour` column).
+
+```{r nyc0901temp, exercise = TRUE}
+
+```
+
+
+```{r nyc0901temp-solution}
+
+filter(weather, time_hour >= "2013-09-01 09:00:00", time_hour <= "2013-09-01 17:00:00") |>
+  group_by(origin) |> summarize(mean(temp))
+```
+
+
