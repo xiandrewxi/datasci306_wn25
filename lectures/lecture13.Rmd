@@ -65,18 +65,38 @@ In this class we have focused on **tabular data**. Data organized as **rows** an
 
 If we have a sample of $n$ items and have measured $k$ features of each item, our usual representation is:
 
-- $k$ columns, one for each measurment
+- $k$ columns, one for each measurement
 - $n$ rows, one for each unit
 
-Our book calls this data "tidy." Our perspectives label this as "wide" data -- as we add more measurements, the table becomes wider.
+Our book calls this data "tidy." We could also call "wide" data -- as we add more measurements, the table becomes wider.
 
 ## Tall formats
 
+In wide formats, each cell is a **value**.
+
 How else could we arrange data?
 
-- One row per **value**
-- Minimum two columns: "name" and "value"
+- One row per value in the "value" column
+- A column to indicate which variable is being recorded in the value column.
 - Additional columns to identify units
+
+```{r}
+(wide <- tribble(
+  ~ var1, ~ var2,
+  123, 1.2,
+  456, -3.5
+))
+
+(tall <- tribble(
+  ~ name, ~ value,
+  "var1", 123,
+  "var2", 1.2,
+  "var1", 456,
+  "var2", -3.5
+))
+
+```
+
 
 ## Relational data
 
@@ -100,7 +120,7 @@ table1
 ```
 
 
-What are the units? What are the measurments?
+What are the units? What are the measurements?
 
 ## Example: Tall table
 ```{r echo = FALSE}
@@ -153,6 +173,12 @@ table2
 ```{r summaryex, exercise = TRUE}
 
 ```
+
+```{r summaryex-solution}
+group_by(table2, name) |> summarize_at("value", c(mean = mean, med = median, max = max))
+
+```
+
 
 ## Pivoting
 
@@ -235,7 +261,7 @@ population
 
 ## Exercise
 
-Pivot the following table to a tall format (what columns would make sense to go in `value`?). Would it make sense to use the `names_to` argument?
+Pivot the following table to a tall format (what columns would make sense to go in `value`?). Would it make sense to use the `names_to` argument? Use the result to get the average city population in the two censuses.
 
 ```{r}
 mi_population 
@@ -243,6 +269,11 @@ mi_population
 
 ```{r pivot_longer_ex, exercise = TRUE}
 
+```
+
+```{r pivot_longer_ex-solution}
+pivot_longer(mi_population, c("2010", "2000"), names_to = "year", values_to = "population") |>
+  group_by(name, county) |> summarize(mean(population))
 ```
 
 ## Setting type of `name` column
@@ -328,11 +359,28 @@ mi_pop_tall
 
 ```
 
+```{r pwex-solution}
+mi_pop_tall |> pivot_wider(names_from = "measurement")
+
+
+```
+
+
 ## Exercise continued
 
 Continuing with `mi_pop_tall`, after moving population and area to own columns, use `pivot_longer` to get city-year measurements
 
 ```{r bigex1, exercise = TRUE}
 
+```
+
+```{r bigex1-solution}
+mi_pop_tall |> pivot_wider(names_from = "measurement")
+
+mi_pop_tall |> pivot_wider(names_from = "measurement") |> 
+  pivot_longer(c("population_2010", "population_2000"), 
+               names_to = "population",
+               names_prefix = "population_",
+               names_transform = as.integer)
 ```
 
