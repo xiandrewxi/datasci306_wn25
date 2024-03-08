@@ -1,412 +1,363 @@
 ---
 title: "Stats 306: Lab 6"
-subtitle: "Exploratory Data Analysis"
-author: "Your Name"
+author:
 output: 
-  slidy_presentation:
-    incremental: true
+  learnr::tutorial:
+    progressive: true
 runtime: shiny_prerendered
 ---
 
-```{r installPackages, echo=FALSE, include=FALSE, message=FALSE}
-# This just checks if students need to install some packages that they might
-# not have.
-if (!require(gapminder)) install.packages("gapminder", repos = "http://cran.us.r-project.org")
+## Set up
 
-if (!require(nycflights13)) install.packages("nycflights13")
+```{r installPackages, echo=FALSE, include=FALSE, message=FALSE}
+# This just checks if students need to install some packages that they might 
+# not have.
+
+if (!require(nycflights13)) install.packages("nycflights13", repos = "http://cran.us.r-project.org")
+if (!packageVersion("learnr") == "0.11.1") install.packages("learnr", repos = "http://cran.us.r-project.org")
 ```
 
-```{r setup, echo=FALSE, include=FALSE}
-library(learnr) # For interactive exercises
-library(tidyverse) # For ggplot2, dplyr
-library(gapminder)
-library(ggmap)
+```{r setup, eval=TRUE, include=FALSE, message=FALSE, echo=FALSE}
+library(learnr)     # For interactive exercises
+library(tidyverse)  # For ggplot2, dplyr, readr
+library(lubridate)  # For some functions involving dates
 library(nycflights13)
 ```
 
 
-## Exploratory Data Analysis
 
-**Exploratory data analysis (EDA)** can be thought of as a cycle:
+## Today's Content
 
-> - Generate questions about your data.
-> - Search for answers by visualizing, transforming, and modelling your data.
-> - Use what you learn to refine your questions and/or generate new questions.
+* Dates in R 
+* Pivoting 
+* Dealing with Missing Data
 
-## Variation
+## Dates in `R`
 
-**Variation** refers to a variable's tendency to change in value from measurement to measurement.
+Dates and times are common types of data that are often tricky to deal with. 
+Consider, for example, the number of days in a year, number of hours in a day, and the number of seconds in a minute.
 
-How variation is visualized depends on the type of the variable
+* On leap years the number of days in a year changes.
+* While normally 24, the number of hours in a day changes due to daylight savings. 
+* The number of seconds in a minute even sometimes changes (leap seconds, which are rare events used to adjust for the slowing of earth's rotation)!
 
-> - Continuous variables
-  >    - Can take any value in an infinite set of ordered values
-  >    - Typically visualized using histograms and boxplots
-> - Categorical variables
-  >    - Can take any value in a finite set of categories/levels
-  >    - Typically visualized using barplots
-> - Aspects of variation frequently focused on:
-  >    - Typical/atypical values
-  >    - Unusual values
-  >    - Missing values
+To help us deal with the complex nature of time, we will use the `lubridate` package, which includes a lot of nice functionality for dates and times. 
+We will also use the functions `readr::parse_date` and `readr::parse_datetime` (note that `readr` is part of the `tidyverse` and is already loaded.)
 
-## Typical/Atypical Values
+## Creating Dates in `R`
 
-In both barplots and histograms,
+In lecture, we saw various ways to create date objects in `R`. 
+For example: 
 
-  > - Tall bars indicate the most typical/common values
-  > - Short bars indicate the most atypical/least common values
+* We could use `lubridate::now()` to get a `date-time` object (called a  `POSIXct` in `R`)
+* We could use `lubridate::today()` to get a `date` object.
+* We can "parse" strings in `R` using functions like `lubridate::mdy("10/01/2022")` and `lubridate::ymd("2022-10-01)`,
 
-Questions regarding typical and atypical values that should be considered:
+**Exercise** Parse the following strings into `Date` or `date-time` objects in `R`:
 
-  > - Which values are the most common?
-  > - Which values are the least common?
-  > - Are there any weird patterns?
-  > - Does what we're seeing make sense?
+```{r dates1, exercise=TRUE}
+d1 <- "January 1, 2021"
+d2 <- "11-21-1986"
+d3 <- "01/24, '11 2:01 PM EST"
+```
+```{r dates1-solution}
+d1 <- "January 1, 2021"
+d2 <- "11-21-1986"
+d3 <- "01/24, '11 2:01 PM EST"
 
-## Typical/Atypical Values
-
-`storms` has data on tropical storms. Each row has measurements on a particular storm made at a particular time.
-
-```{r}
-head(storms)
+out1 <- parse_date(d1, format = "%B %d, %Y")
+out2 <- parse_date(d2, format = "%m-%d-%Y")  # or lubridate::mdy(d2)
+out3 <- parse_datetime(d3, format = "%m/%d, '%y %H:%M %p %Z")
 ```
 
-The most common category is 0; the next most common is -1. From weather reports, you might expect 1-5 to be the only categories. The documentation on `storms` says that -1 represents a tropical depression and 0 represents a tropical storm. Also, going from 0 to 5, the count declines, which makes sense, since the higher the category, the higher the severity.
+## Creating dates from individual components
+
+In the previous examples, we took a string that represents a date and converted that into a `Date` or `date-time` object. 
+Another form of data that we might see includes individual components of the date, such as having a column for `year`, a column for `month`, and a column for `day`.
+
+* In this case, we can still create a `Date` object using the function: ` lubridate::make_date`:
 
 ```{r}
-storms %>% ggplot() + geom_bar(aes(category))
+make_date(year = 2022, month = 2, day = 8)
 ```
 
-The histogram of `wind`, the maximum windspeed (in knots), looks how we'd expect it to. Most windspeeds are at the low end; a few are at the high end.
+**Exercise**: 
 
-```{r}
-storms %>% ggplot(aes(wind)) + geom_histogram(binwidth = 10)
-```
+a. Create a date object that represents your birthday using `make_date`. Then, subtract that day from today's date (you can get this using `today()`) to see how old you are.  
+b. What happens if you input a non-existent date, like using `year = 2020` `month = 2`, `day = 31`?
+c. What happens if you use only a `month` and `day`, but not a `year`? 
 
-It can be helpful to make histograms with different bin widths, as a bin width that's too small can cause important detail to be obscured. Setting the bin width to 1 reveals that the wind speed is measured to the nearest multiple of 5 knots.
-
-```{r}
-storms %>% ggplot(aes(wind)) + geom_histogram(binwidth = 1)
-```
-
-## Unusual Values
-
-Unusual values are values that don't seem to fit any pattern the other values fit.
-
-> - Outliers, values that are unusually high or low, are unusual values
-> - Sometimes unusual values are errors, sometimes they aren't
-
-`diamonds` has data on 54,000 diamonds. `y` represents the width of a diamond in millimeters.
-```{r}
-head(diamonds)
-```
-
-The histogram below reveals the presence of an unusually wide diamond, as the width scale goes all the way to 60 mm, but it looks like no diamonds are wider than 10 mm.
-```{r}
-ggplot(diamonds) + geom_histogram(mapping = aes(x = y), binwidth = 0.5)
-```
-
-We can use `coord_cartesian()` to zoom in on an area of a plot. Zooming in a little, just enough that the vertical axis scale only goes to 50 instead of over 12,000, we see that there's a diamond that's a little under 60 mm wide and another that's a little over 30 mm wide. It turns out that there are also several diamonds that are 0 mm wide.
-```{r}
-ggplot(diamonds) + 
-  geom_histogram(mapping = aes(x = y), binwidth = 0.5) +
-  geom_hline(yintercept = 1, linetype = "dashed") +
-  coord_cartesian(ylim = c(0, 50))
-```
-
-The prices in the tibble below suggest that the 0 mm widths are probably mistakes.
-```{r}
-slice_min(diamonds, y)
-```
-
-However, based on the data, there doesn't seem to be any reason to think that the widths of the two unusually wide diamonds are mistakes.
-```{r}
-filter(diamonds, y > 30)
-```
-
-## Problem 1
-
-Explore the distribution of `price` in the `diamonds` data frame. What's unusual about it? (Hint: Play with `binwidth`)
-```{r problem1, exercise = T}
+```{r dates2, exercise=TRUE}
 
 ```
 
-## Solution 
+```{r dates2-solution}
+# Part (a)
+my_bd <- make_date(year = 2003, month = 3, day = 8)
+today() - my_bd
 
-This is how the histogram with the bin defaults looks:
-```{r}
-diamonds %>%
-  ggplot(aes(price)) +
-  geom_histogram()
+# Part (b)
+my_bd <- make_date(year = 2020, month = 2, day = 31)
+today() - my_bd
+
+# Part (c)
+my_bd <- make_date(month = 3, day = 8)
+today() - my_bd
 ```
 
-There's a bar to the left of $2000 that's unusually short
-```{r}
-diamonds %>%
-  ggplot(aes(price)) +
-  geom_histogram(binwidth = 100)
+## Difftimes vs. durations vs. periods
+
+We could often be interested in performing basic arithmetic with `Date` objects, such as adding days/hours to a `Date` or subtracting two dates from each other.
+Because of challenges in working with dates and times, this is more difficult than it may initially appear. 
+For example, consider adding one year to the date `"2016-01-01"`. 
+Because 2016 was a leap year, if you add 365 days, you will get `"2016-12-31"`, which may be unexpected and undesirable behavior. 
+Because of this, we need to think carefully about adding and subtracting dates. 
+
+With date arithmetic, we will use what we call *Time Spans*. Time Spans in `R` have four main classes in `R`: 
+
+* `difftimes`: Part of Base `R`, and is the default result of subtracting two dates from each other. These can be hard to work with, so `lubridate` provides the next options for us.
+* `durations`: Total time span in seconds. There are some useful constructor functions that we can us, such as `dseconds()`, `dminutes()`, `dhours()`, etc. 
+* `periods`: Human friendly time spans. For example, if you want to add a year to `"2016-01-01"`, adding a period of `years(1)` would add 366 days since 2016 is a leap year, and the output would be `"2017-01-01"`. The useful constructor functions for this includes `seconds()`, `minutes()`, `hours()`, etc. 
+* `intervals`: These are used because periods are sometimes ambiguous (as noted above, `years(1)` could mean 366 or 365 days, depending on the year).
+Therefore intervals is a duration with a starting point, that allows you to determine exactly how long the interval is. These are created using the following syntax: `start_date %--% end_date`. 
+
+Some advice from our `R` for Data Science textbook: 
+
+> How do you pick between duration, periods, and intervals? As always, pick the simplest data structure that solves your problem. If you only care about physical time, use a duration; if you need to add human times, use a period; if you need to figure out how long a span is in human units, use an interval.
+
+**Exercise**: Add one week to the datetime object below using both a `durations` and a `period`. For this particular case, why would one of these methods be preferred over the other? In what cases might the other function be preferred? 
+
+```{r dates3, exercise=TRUE, exercise.eval=TRUE}
+future_lab_date <- ymd_hms("2024-03-08 08:30:00", tz = "America/Detroit")
 ```
 
-Zooming in on the plot over the range $0 to $2000, the unusually short bar
-appears to be at $1500.
-```{r}
-diamonds %>%
-  ggplot(aes(price)) +
-  geom_histogram(binwidth = 100) +
-  coord_cartesian(xlim = c(0, 2000))
+```{r dates3-solution}
+# using durations: 
+future_lab_date + dweeks(1)
+
+# using periods: 
+future_lab_date + weeks(1)
 ```
 
-## Missing Values
+Why is the behavior different?
 
-> - Missing values are represented as `NA`'s
-> - In R, missing values never silently go missing - when missing values have been removed, a warning is generated
-> - Setting `na.rm = TRUE` in a geom function suppresses the warning
-
-This code changes `y` so that it equals `NA` when the width is 0 mm or more than 30 mm.
-```{r}
-diamonds2 <- diamonds %>% 
-  mutate(y = ifelse(near(y, 0) | y > 30, NA, y))
+```{r dates_dst, exercise=TRUE, exercise.eval=TRUE}
 ```
 
-When we make a histogram of `y`, we now get a warning that missing values have been removed:
-```{r}
-ggplot(diamonds2, aes(x = y)) + geom_histogram(binwidth = 0.5)
+```{r dates_dst-solution}
+# If you use dweeks, the hour changes!
+# This is because there is a daylight savings time change between these lab dates, 
+# so March 9th has 25 hours instead of 24.
+# In this case, this behavior is undesirable because we would expect
+# that the time class start doesn't change. This behavior is more useful in
+# situations where the exact interval of time between observations is important,
+# like taking scientific measurements of something
+# every hour over a long period of time.
 ```
 
-Set `na.rm = TRUE` in `geom_histogram()` to suppress the warning:
-```{r}
-ggplot(diamonds2, aes(x = y)) + geom_histogram(binwidth = 0.5, na.rm = TRUE)
+
+
+## Plotting Dates in `ggplot`
+
+For this slide we will be using the `weather` data from the `nycflights13` package. 
+
+```{r weatherdata}
+data(weather)
+head(weather)
 ```
 
-Sometimes missing values give us important information. In `flights`, the flight dataset, missing values in `dep_time` indicate that the flight was cancelled:
+Once a column is a stored as a `Date` object in `R`, it's relatively simple to plot the data using `ggplot`.
+
+**Exercise**: Use `mutate` to create a new dataset called `weather_dates` that contains a `datetime` column called `time` that represents the year, month, day and hour of each observation in the weather dataset (note that a similar column called `time_hour` already exists in the dataset, so this is just for practice). 
+
+```{r weatherDates, exercise=TRUE, exercise.blanks = "\\.\\.\\.+"}
+weather_dates <- weather |> ...
+```
+
+```{r weatherDates-solution}
+weather_dates <- weather |> 
+  mutate(time = make_datetime(year = year, month = month, day = day, hour = hour))
+```
+
+**Exercise**: Plot the temperature of each location, over time, using `geom_line`
+
+```{r weatherPlot, exercise=TRUE, exercise.setup="weatherDates-solution"}
+
+```
+
+```{r weatherPlot-solution}
+weather_dates |>
+  ggplot(aes(x = time, y = temp)) + 
+  geom_line(aes(group = origin, col = origin)) + 
+  theme_bw() +  # Looks better than default (in my opinion)
+  ylab("Temperature (F)") + 
+  theme(axis.title.x = element_blank(),
+        legend.title = element_blank())  # The name of X-axis is obvious, not needed. Same with the legend title. 
+```
+
+## Modifying the appearance of dates on the x-axis. 
+
+In the previous figure, the text on the x-axis displayed abbreviated months and the year. 
+What if we wanted to change that default behavior? 
+For example, suppose that we only have data from a single year. 
+In this case, we wouldn't need to display the year for each break.
+
+**Exercise**: Suppose that we are only interested in plotting the temperatures in July, 2013. Use `filter` to remove all observations that aren't in 2013.
+Then, recreate the figure from the previous slide, but this time make breaks come every month and don't display the year. 
+Also, add a plot title so that people know what they data are. 
+
+```{r changeDates, exercise=TRUE, exercise.setup="weatherDates-solution"}
+weather_dates
+```
+
+```{r changeDates-solution}
+weather_dates |>
+  filter(year(time) == 2013) |> 
+  ggplot(aes(x = time, y = temp)) + 
+  geom_line(aes(group = origin, col = origin)) + 
+  theme_bw() +  # Looks better than default (in my opinion)
+  ylab("Temperature (F)") + 
+  theme(axis.title.x = element_blank(),
+        legend.title = element_blank()) + 
+  scale_x_datetime(date_breaks = "1 month", date_labels = "%b") + 
+  ggtitle("Data from NYC airports starting in 2013")
+```
+
+## Pivoting
+
+We often work with data that are "tidy", meaning that each row corresponds to an observation, each column corresponds to a variable, and each cell has a single value. (See the picture below)
+
+<center>
+
+![Illustration of tidy data, from the R for Data Science book book](images/tidyData.png){width=100%}
+
+</center>
+
+A common problem is a dataset where some of the column names are not names of variables, but *values* of a variable. 
+For example, let's consider the `table4a` dataset, which contains the number of Tuberculosis cases for 3 different countries: 
+
 ```{r}
-flights %>% 
+table4a
+```
+
+Here we notice that there are two columns, `1999` and `2000`, that aren't variables but instead are values of a particular variable. 
+We can fix this using the `pivot_longer` function. 
+
+`pivot_longer`: this function "lengthens" data, increasing the number of rows and decreasing the number of columns.
+For more detailed examples and exercises, I recommend looking at `vignette("pivot")`. For now, here are the most important arguments for this function: 
+
+* `data`: The dataset we want to *pivot* longer.
+* `cols`: The columns that need to be pivoted. This can be given as a vector of strings, or we could use any type of function we would select columns with using the `select` function. 
+* `names_to`: The name of the column that will store the long variable names.  
+* `values_to`: The name of the column that will store the values.
+
+Here's what it would look like for the `table4a` dataset: 
+
+```{r table4a, exercise = TRUE}
+table4a |>
+  pivot_longer(
+    cols = -country, # Get everything except first column,
+    names_to = "year",
+    values_to = "TB_count"
+  ) |> 
+  mutate(year = as.integer(year))
+```
+
+`pivot_longer` is often useful for plotting with `ggplot`, because it allows us to use colors and facets based on the created variables. 
+For example, you could color `TB_count` by `year` now that we have made the data "longer". 
+
+Sometimes we can see the opposite problem: a single observation is scattered across multiple rows. To fix this issue, we would use the `pivot_wider` function. 
+This issue is not as common, so we won't go into much detail on this for now. 
+
+*Pivoting* (both longer and wider) can be a tricky idea, and it can take some practice to fully understand how to use these really powerful functions correctly. 
+For more resources, we strongly recommend looking at `vignette("pivot")`. 
+
+## Missing Data
+
+Missing data is a common issue in data analysis projects. 
+Surprisingly, data can be missing in one of two possible ways: 
+
+* *Explicity*, which means that the missing data has been flagged using `NA`
+* *Implicitly*, which means that the data simply aren't present in the data (this is perhaps most easily noticed in datasets that are collected over regularly intervaled times). 
+
+We will see examples of each type of missing data using the following dataset containing monthly measurements of the average water level (in meters) of lake Huron over time. 
+
+```{r loadHuron, exercise=T}
+huron_level <- read.csv("https://raw.githubusercontent.com/markmfredrickson/stats306_winter_2024/stats306_100_wn24/data/huron_level.csv", comment = "#")
+```
+
+How can we identify missing data in this dataset? The most obvious missing data are the explicit missing values, which are marked with `NA`s.
+
+**Exercise**: Are there other types of missing data in this dataset? How can we identify these observations? 
+
+```{r checkMissing, exercise=TRUE, exercise.setup="loadHuron"}
+
+```
+
+```{r checkMissing-solution}
+# We can find all of the explicit missing values using something like: 
+sum(is.na(huron_level))  # Counts the number of missing values
+which(is.na(huron_level))  # Finds (vector) location of missing values.
+
+# Implicit missing values are harder. Look at the unique values 
+# of year and see if you can notice missing values. 
+unique(huron_level$year)
+
+# Implicit missing values are harder. Look at the unique values 
+# of year and see if you can notice missing values. 
+
+strange_diff <- which(diff(huron_level$year) != 1)
+huron_level$year[strange_diff]
+huron_level$year[strange_diff + 1]
+
+# There are some years skipped: 1897 and 1973. While these aren't 
+# explicitly listed as missing values, they are indeed missing! 
+```
+
+**Exercise**: If you found any missing observations, add them to the dataset as `NA`s so that they will be explicitly missing.
+
+```{r fixMissing, exercise=TRUE, exercise.setup="loadHuron"}
+
+```
+
+```{r fixMissing-solution}
+# POSSIBLE SOLUTION: 
+missing_df <- matrix(nrow = 2, ncol = 13)
+colnames(missing_df) <- c('year', tolower(month.abb))
+missing_df[, 'year'] <- c(1897, 1973)
+huron_level <- bind_rows(huron_level, as.data.frame(missing_df))
+```
+
+**Exercise**: Let's use some of the skills that we learned with *Dates* and *pivoting* to create a *long* version of this dataset, with a column `time` containing a `Date` object for the first day of the specified month, and a `level` column representing the water level in meters. 
+
+```{r cleanHuron, exercise=TRUE, exercise.blanks = "\\.\\.\\.+",  exercise.setup="loadHuron"}
+cleanHuron <- huron_level |> ...
+```
+
+```{r cleanHuron-solution}
+cleanHuron <- huron_level |> 
+  pivot_longer(
+    cols = -year,
+    names_to = "month_name",
+    values_to = "level"
+  ) |>
   mutate(
-    cancelled = is.na(dep_time),
-    sched_hour = sched_dep_time %/% 100,
-    sched_min = sched_dep_time %% 100,
-    sched_dep_time = sched_hour + sched_min / 60
-  ) %>% 
-  ggplot(mapping = aes(sched_dep_time)) +
-  geom_freqpoly(mapping = aes(colour = cancelled), binwidth = 1 / 4)
+    month_number = match(month_name, tolower(month.abb)),
+    time = make_date(year = year, month = month_number)
+  ) |> 
+  select(time, year, level)
 ```
 
-## Problem 2
+**Exercise**: Finally, let's plot the data over time. Once you've been able to plot the data, experiment with modifying the appearance of the `x-axis` using `scale_x_datetime` to something that you think looks good. 
+You may want to consider looking at the help page `?strptime` for ideas. 
 
-What happens to missing values in a histogram and what happens to them in a barchart? Why is there a difference?
-
-## Solution
-
-A barchart shows the distribution of a categorical variable. If the category is missing for an observation, then it can still be represented in the plot. An NA bar whose height reflects the number of observations with a missing value can be included.
-```{r}
-starwars %>%
-  group_by(species) %>%
-  filter(n() > 1) %>%
-  ggplot() +
-  geom_bar(mapping = aes(y = species))
-```
-
-A histogram shows the distribution of a numerical variable. If the value is missing for an observation, then it can't be included. There's no way to tell which bin it should be included in since its value isn't known. By default, observations with a missing value are removed.
-```{r}
-ggplot(starwars, aes(height)) + geom_histogram()
-```
-
-## Covariation
-
-**Covariation** refers to how the value of one variable changes as the value of another variable changes. How to visualize covariation depends on the types of the two variables.
-
-## One Categorical Variable, One Continuous Variable
-
-> - `geom_freqpoly()` plots one line for each level of a categorical variable
-> - The height of a line over a value of the continuous variable reflects the frequency of that value
-> - Not that useful when there are many levels - the plot gets too cluttered
-
-The plot below shows the `price` frequency for each quality (`cut`) level for the `diamonds` dataset. The frequencies are quite different for different quality levels, making it hard to see the pattern for the quality level at the bottom.
-```{r}
-ggplot(data = diamonds, mapping = aes(x = price)) + 
-  geom_freqpoly(mapping = aes(colour = cut), binwidth = 500) +
-  theme_bw()
-```
-
-Plotting densities instead of frequencies can help in a situation like this:
-```{r}
-ggplot(data = diamonds, mapping = aes(x = price, y = after_stat(density))) + 
-  geom_freqpoly(mapping = aes(colour = cut), binwidth = 500) +
-  theme_bw()
-```
-
-For each level of the categorical variable, `geom_boxplot()` gives a concise summary of the distribution of the continuous variable.
-
-> - Information provided by a boxplot:
-  >    - The minimum
-  >    - The first quartile
-  >    - The median 
-  >    - The third quartile
-  >    - The maximum
-  >    - Outliers
-> - Because of their simplicity, boxplots can be compared quickly
-
-The boxplot of price below shows that there are many diamonds with very large prices. In a model using `price`, it might be a good idea to take its log.
-```{r}
-ggplot(data = diamonds, mapping = aes(x = cut, y = price)) + geom_boxplot()
-```
-
-## Two Categorical Variables
-
-> - The only way to compare two categorical variables is to count how many observations are in the intersection of each pair of levels
-> - `geom_count()` makes a plot with one circle for each pair of levels
-> - The size of the circle represents the number of observations for the pair
-> - Potential downside: might imply an ordering where none exists
-
-In the plot below, `cut` has an ordering, but `color` doesn't. We might see different patterns if we ordered the colors in a different way.
-```{r}
-ggplot(data = diamonds) + geom_count(mapping = aes(x = cut, y = color))
-```
-
-A non-graphical alternative is to make a table with the count for each pair. The downside is that the table can be so large that patterns are hard to see.
-```{r}
-count(diamonds, color, cut)
-```
-
-`geom_tile()` can be useful when a variable doesn't have an ordering, but it can be hard to compare any tiles if their shades are close.
-```{r}
-diamonds %>% 
-  count(color, cut) %>%  
-  ggplot(mapping = aes(x = color, y = cut)) +
-  geom_tile(mapping = aes(fill = n))
-```
-
-## Two Continuous Variables
-
-> - `geom_point()` can make it easy to see relationships.
-> - However, the more data you have, the harder it can be to see the trend. There are several ways to address this problem:
-  >    - Changing the point transparency (`alpha`)
-  >    - Binning
-  >    - Discretizing
-
-The plot below shows the relationship between carat and price. Since there are tens of thousands of points, overplotting may be a problem.
-```{r}
-ggplot(data = diamonds) +
-  geom_point(mapping = aes(x = carat, y = price)) +
-  theme_bw()
-```
-
-If we reduce the transparency (`alpha`), overplotting becomes less of a problem since we can see more clearly which pairs of carat and price are more common than others. We see that many pairs are concentrated along vertical lines, where carat is constant.
-```{r}
-ggplot(data = diamonds) + 
-  geom_point(mapping = aes(x = carat, y = price), alpha = 1 / 100) +
-  theme_bw()
-```
-
-We could try binning the data - dividing the plot into polygons and coloring each according to the number of points it contains. Squares are used below:
-```{r}
-ggplot(data = diamonds) +
-  geom_bin2d(mapping = aes(x = carat, y = price)) +
-  theme_bw()
-```
-
-We could discretize `carat` - turn it into a categorical variable. Below `carat` is discretized by turning each range of length 0.1 into a category.
-```{r}
-ggplot(data = diamonds, mapping = aes(x = carat, y = price)) + 
-  geom_boxplot(mapping = aes(group = cut_width(carat, 0.1)))
-```
-
-We could instead create categories for `carat` that have the same number of values. Below, each category has 20 values:
-```{r}
-ggplot(data = diamonds, mapping = aes(x = carat, y = price)) + 
-  geom_boxplot(mapping = aes(group = cut_number(carat, 20)))
-```
-
-## Challenge 1
-
->- Subset the `gapminder` data for only the year 2007
->- Make a histogram for GDP per capita
->- Superimpose your plot with a density plot. [Hint: To make this work, go back to step two change the y axis of the histogram to density]
-
-How many modes do you see?
-
-```{r}
-head(gapminder)
-```
-
-
-```{r challenge1, exercise = T}
+```{r plotHuron, exercise=TRUE,  exercise.setup="loadHuron"}
 
 ```
 
-
-## Solution
-
-There are two modes.
-
-```{r}
-gapminder %>%
-  filter(year == 2007) %>%
-  ggplot() +
-  geom_histogram(aes(x = gdpPercap, y = stat(density)), alpha = 0.3) +
-  geom_density(aes(x = gdpPercap), color = "darkorange", size = 2)
-```
-
-
-```{r}
-colnames(gp2007)
-ggplot(gp2007, aes(x = gdpPercap)) + geom_histogram() + facet_wrap(~ continent) 
-```
-```{r}
-mutate(gp2007, pop_grp = cut(pop, breaks = quantile(pop, c(0.25, 0.5, 0.75, 1)))) |>
-  ggplot(aes(y = gdpPercap, x = pop_grp)) + geom_boxplot()
-```
-
-## Challenge 2
-
-The goal of this task is to use visualization to inspect the distribution of a continuous variable in the `gapminder` dataset. While this may look challenging, you are encouraged to follow the instructions to help complete the task.
-
->- Make a histogram for GDP per capita
->- Superimpose your plot with a density plot
-
-
-We know that a distribution is positively skewed (skewed to the right) when the mean is greater than the median. We wish to visualize the mean and median as lineplots superimposed on our previous plot:
-
->- Create a new tibble containing the mean and median from the `gapminder` data
->- Superimpose vertical-dashed line plots (see `geom_vline`) for both the mean and median onto the previous plot; differentiating these two lines by your choice of color:
-  >    - You can create a color tibble and map the vertical line plots to each color.
-  >    - With the help of `scale_color_manual`, you can then obtain a legend matching those colors
-  
-```{r challenge2, exercise = T}
-
-```
-
-## Solution
-
-```{r}
-##### tibble for the averages #####
-averages = gapminder %>% 
-               summarise(mean_gdppcap = mean(gdpPercap, na.rm = TRUE),
-                         median_gdppcap = median(gdpPercap, na.rm = TRUE)
-               )
-
-
-##### tibble for colors #####
-plt_colors = tibble(mean = "red",
-                    median = "dodgerblue")
-
-
-##### plot ######
-gapminder %>%
-  ggplot() +
-  geom_histogram(aes(x = gdpPercap, y = stat(density)), alpha = 0.3) +
-  geom_density(aes(x = gdpPercap), color = "darkorange", size = 2) +
-  ## adding mean and median marks; use the averages dataset
-  geom_vline(data = averages,
-             mapping = aes(xintercept = mean_gdppcap, color = "mean"),
-             linetype = "dashed",
-             size = 2) +
-  geom_vline(data = averages,
-             mapping = aes(xintercept = median_gdppcap, color = "median"),
-             linetype = "dashed", 
-             size = 2) +
-  ## make the color tibbles map to the specified colors in the geom_line aesthetics
-  scale_color_manual(values = plt_colors) +
+```{r plotHuron-solution}
+cleanHuron |> 
+  ggplot(aes(x = time, y = level)) + 
+  geom_line() + 
   theme_bw()
 ```
