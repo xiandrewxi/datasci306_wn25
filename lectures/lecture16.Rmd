@@ -178,28 +178,28 @@ A regex is just a string, albeit one that looks rather strange.
 Alphanumeric characters (a-z, A-Z, 0-9) match directly, most other characters with some later exceptions.
 
 ```{r}
-str_view_all(sonnet18_lines, "thee")
+str_view(sonnet18_lines, "thee", html = TRUE)
 ```
 
-`.` will match exactly character (not newline)
+`.` will match exactly one character (not newline)
 
 ```{r}
-str_view_all(sonnet18_lines, "th..")
+str_view(sonnet18_lines, "th..", html = TRUE)
 ```
 
 Limited choices with `[]`
 ```{r}
-str_view_all(sonnet18_lines, "th[aeiou][aeiou]")
+str_view(sonnet18_lines, "th[aeiou][aeiou]", html = TRUE)
 ```
 
 Or classes of characters
 ```{r}
-str_view_all(sonnet18_lines, "[A-Z]")
+str_view(sonnet18_lines, "[A-Z]", html = TRUE)
 ```
 
 Negation choices with `[^]`
 ```{r}
-str_view_all(sonnet18_lines, "th[aeiou][^aeiou ]")
+str_view(sonnet18_lines, "th[aeiou][^aeiou ]", html = TRUE)
 ```
 
 ## Other specials
@@ -207,18 +207,18 @@ str_view_all(sonnet18_lines, "th[aeiou][^aeiou ]")
 To match periods we need to escape with `\\`
 
 ```{r}
-str_view_all(sonnet18_lines[14], "\\.")
+str_view(sonnet18_lines[14], "\\.", html = TRUE)
 ```
 
 Beginning of string is "^", end of string is "$" (can get literals with escapes):
 
 ```{r}
-str_view_all(sonnet18_lines, "^.. ")
+str_view(sonnet18_lines, "^.. ", html = TRUE)
 ```
 
 Any white space (`\\s`) and make it optional `?`
 ```{r}
-str_view_all(sonnet18_lines, "^\\s?.. ")
+str_view(sonnet18_lines, "^\\s?.. ", html = TRUE)
 ```
 
 `\\d` matches digits.
@@ -230,7 +230,7 @@ str_view_all(sonnet18_lines, "^\\s?.. ")
 * `+`: one or more
 
 ```{r}
-str_view_all(sonnet18_lines, "m+")
+str_view(sonnet18_lines, "m+", html = TRUE)
 ```
 
 ## Groups and Alternation
@@ -238,22 +238,22 @@ str_view_all(sonnet18_lines, "m+")
 To select between alternates use a vertical bar `|`. We often combine this with groups based on `()`:
 
 ```{r}
-str_view_all(sonnet18_lines, "Thou|thou")
+str_view(sonnet18_lines, "Thou|thou", html = TRUE)
 ```
 
 ```{r}
-str_view_all(sonnet18_lines, "fa(ir|de)")
+str_view_all(sonnet18_lines, "fa(ir|de)", html = TRUE)
 ```
 
 Repeat patterns in `( )` using `\\NUMBER` (**backreferences**). Contiguous words with same letter: 
 ```{r}
-str_view_all(sonnet18_lines, "(\\s|^)(.)[^ ]* \\2")
+str_view(sonnet18_lines, "(\\s|^)(.)[^ ]* \\2", html = TRUE)
 ```
 (notice "from fair" does not match because "fair from" already matched)
 
 ## Exercise
 
-Find all contractions (words with "'" in them, but not possessive) in `sonnet18_lines` using `str_view_all`.
+Find all contractions (words with "'" in them, but not possessive) in `sonnet18_lines` using `str_view`.
 
 ```{r contractions, exercise=TRUE}
 
