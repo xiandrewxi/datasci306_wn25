@@ -1,0 +1,19 @@
+---
+title: "Stats 306: Lab 9"
+output: 
+  learnr::tutorial:
+    progressive: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.reveal_solution=T)
+```
+
+
+## Today's Content
+
+- Factors
