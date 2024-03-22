@@ -1,5 +1,5 @@
 ---
-title: "Stats 306: Lab 11"
+title: "Stats 306: Lab 9"
 author: "Your Name"
 output: 
   learnr::tutorial:
@@ -34,7 +34,7 @@ library(gapminder)
 ```
 
 ```{r, include=FALSE, message=FALSE, echo=FALSE}
-tutorial_options(exercise.reveal_solution=FALSE)
+tutorial_options(exercise.reveal_solution=TRUE)
 ```
 
 
@@ -156,7 +156,25 @@ for(i in seq_along(x)) {
 How would you use a `for` loop and our `min_max_scaler()` function to accomplish our transformation task?     
 Please use the dataset `df3` 
 
-```{r mx_scaler_for, exercise=TRUE}
+```{r test1, echo = FALSE}
+df3 <- tibble(
+  a = rnorm(10, 3, 3),
+  b = rnorm(10, 8, 2),
+  c = rnorm(10, 50, 10),
+  d = rnorm(10, 75, 25)
+)
+
+## Make copies if raw tibble for future use
+df4 <- df3
+
+min_max_scaler <- function(x) {
+  rng <- range(x, na.rm = TRUE)
+  (x - rng[1]) / (rng[2] - rng[1])
+}
+
+```
+
+```{r mx_scaler_for, exercise=TRUE, exercise.setup = "test1"}
 ## Your code here
 
 
