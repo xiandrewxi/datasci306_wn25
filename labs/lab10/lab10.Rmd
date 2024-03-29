@@ -173,7 +173,7 @@ cat("x[i] = ", x[i])
 
 Save this exercise for the end, if there is time. 
 
-Open the file `lab12/plotMin_bug.R`, and use any debugging tool to identify potetential bug(s) in the file and fix them. 
+Open the file `lab10/plotMin_bug.R`, and use any debugging tool to identify potetential bug(s) in the file and fix them. 
 This script will plot a function and it's minimum value.
 
 ## Performance Evaluation in `R`
