@@ -1,5 +1,5 @@
 ---
-title: "Stats 306: Lab 13"
+title: "Stats 306: Lab 11"
 author: "Your Name"
 output: 
   learnr::tutorial:
