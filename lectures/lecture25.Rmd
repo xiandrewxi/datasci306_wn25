@@ -1,0 +1,219 @@
+---
+subtitle: "Stats 306: Lecture 24"
+title: "More Reactive Programming"
+author: "Mark Fredrickson"
+output: 
+  learnr::tutorial:
+    progressive: true
+    css: css/lecture.css
+runtime: shiny_prerendered
+---
+
+
+```{r setup, include=FALSE}
+library(learnr)
+library(tidyverse)
+library(lubridate)
+library(shiny)
+```
+
+## Review
+
+* `outputXYZ` and `renderXYZ`
+* Events
+* Reactive programming
+
+## Events
+
+Recall, when users interact with elements contained in the `input` list, we can get notifications via **events**. 
+
+```
+observeEvent(input$element, { code })
+```
+
+This can be useful if we need to shape or validate input across UI features.
+
+## Events exercise
+
+Open `exercise_dynamic_radios.R`
+
+ 
+
+## Reactive programming
+
+We already saw **event driven programming** where we could respond to changes to UI.
+
+In **reactive programming** we also allow variables to react to changes in other variables.
+
+Downside: we have to use a few more tools than just regular R variables.
+
+## Reactive variables: function like objects
+
+Variables (boxes to hold data) in Shiny's reactive framework look and behave much like functions.
+
+```{r}
+reactiveConsole(TRUE) # use this for interactive testing
+
+rv <- reactiveVal(999) # initial value
+rv() # get the value
+rv(1) # set the value
+rv()
+```
+
+## Reactive contexts
+
+You may recall that when we use `render*` functions or `update*` functions we executed code inside of `{...}`. This formed a **reactive context**. A wrapper around code that connects reactive variables.
+
+```{r}
+rv2 <- reactive({
+  message("updating rv2")
+  rv() - 10
+})
+
+# get inital value
+rv2()
+
+# now value is stored
+rv2() + 1
+
+# does not immediately update rv2
+rv(123)
+
+# only runs code when needed
+rv2()
+```
+## Example (courtesy "Mastering Shiny" by Hadley Wickham)
+
+In R when we run the various `rDIST` functions (like `rnorm` or `rpois`) we get *pseudorandom variables*: numbers that look like random numbers but are actually deterministicly generated.
+
+For example:
+
+```{r}
+rnorm(5)
+rnorm(5)
+rpois(5, lambda = 3)
+rpois(5, lambda = 3)
+```
+
+## Two sample problems
+
+In statistics, "two sample problems" are when we have samples from two populations and to test if the populations are the same (perhaps just on certain parameters, like the population mean).
+
+Here is a function to plot the two samples and a function to test (using a t-test) if the populations have the same mean.
+
+```{r}
+
+freqpoly <- function(x1, x2, binwidth = 0.1, xlim = c(-3, 3)) {
+  df <- data.frame(
+    x = c(x1, x2),
+    g = c(rep("x1", length(x1)), rep("x2", length(x2)))
+  )
+
+  ggplot(df, aes(x, colour = g)) +
+    geom_freqpoly(binwidth = binwidth, linewidth = 1) +
+    coord_cartesian(xlim = xlim)
+}
+
+t_test <- function(x1, x2) {
+  test <- t.test(x1, x2)
+  
+  # use sprintf() to format t.test() results compactly
+  sprintf(
+    "p value: %0.3f\n[%0.2f, %0.2f]",
+    test$p.value, test$conf.int[1], test$conf.int[2]
+  )
+}
+```
+
+In action:
+
+```{r}
+
+x1 <- rnorm(100, mean = 0, sd = 0.5)
+x2 <- rnorm(200, mean = 0.15, sd = 0.9)
+
+freqpoly(x1, x2)
+cat(t_test(x1, x2))
+```
+
+## Naive attempt to use in Shiny app
+
+See `two_sample_01.R`.
+
+## Saving results in reactive variable.
+
+We want both the graph and the t-test to use the same values, so we need for both plots to have access to the same data. We can do that by population a **reactive variable**.
+
+Also, it would be nice if the data did not change if we only manipulate the characteristics.
+
+See `two_sample_02.R`
+
+## Additional reactive dependencies
+
+It might be nice to refresh the graph with a button press. We can do this by adding a button to the UI and adding a dependency in the `reactive()` function call on the `input$button` value.
+
+See `two_sample_03.R`
+
+## Exercise
+
+Open `exercise_reactive.R`
+
+## Multiple comparisons/multiple testing
+
+![XKCD 882](images/significant.png)
+
+## Hypothesis Testing
+
+In the previous comic, the scientists were reporting that they (mostly) failed to reject the null hypothesis of zero correlation at the **$\alpha = 0.05$ significance level** by noting that the $p$-value of the test was greater than 0.05.
+
+This works for a single test because when the null hypothesis is true, the $p$-value has a 5% probability of being less than 0.05, which makes sure we don't commit a Type I error (reject true null hypothesis) in more than 5% of samples.
+
+More generally, this holds for any signficance level $\alpha$.
+
+## Bonferroni Corrections
+
+But when we perform multiple tests, this logic no longer holds.
+
+If we perform $k$ (independent tests), the probability that we make at least one Type I error becomes $1 - (1 - \alpha)^k$.
+
+```{r}
+1 - (1 - 0.05)^5
+```
+ 
+With a Bonferroni correction, we simply divide $\alpha$ by $k$ (which can be slightly conservative):
+```{r}
+1 - (1 - 0.05/5)^5
+```
+
+Now it is harder to reject each individual hypothesis, but overall our **family-wise error rate** is (strongly) protected.
+
+## Example
+
+```{r}
+set.seed(39422200)
+
+n <- 100
+k <- 1000
+y <- rnorm(n)
+x <- matrix(rnorm(n * k), ncol = k) |> as.data.frame()
+
+pvs <- map_dbl(x, ~ cor.test(y, .x)$p.value)
+mean(pvs < 0.05)
+
+```
+
+## `reactiveEvent`
+
+In order to get access to user actions, we can use the `reactiveEvent` function.
+
+See `bonferroni.R`
+
+## Shiny Next Steps
+
+Lots more to learn!
+
+- More reactive programming tools
+- Tabs/multipage apps
+- Add on packages
+- Deployment to the web
+
