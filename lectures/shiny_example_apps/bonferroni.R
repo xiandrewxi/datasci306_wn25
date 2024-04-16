@@ -23,15 +23,21 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
     tests <- reactiveVal(0)
+    rejections <- reactiveVal(0)
+    
     text <- eventReactive(input$test_button, {
       tests(tests() + 1)
       x <- rnorm(100)
       y <- rnorm(100)
       pv <- cor.test(x, y)$p.value
+      reject <- pv < 0.05
+      rejections(rejections() + reject)
+      
       paste("Pvalue:", pv, "\n",
-            "Reject at the 5% level:", pv < 0.05, "\n",
+            "Reject at the 5% level:", reject, "\n",
             "Bonnferroni correct:", 0.05/tests(), "\n",
-            "Bonferroni reject:", pv < 0.05/tests())
+            "Bonferroni reject:", pv < 0.05/tests(), "\n",
+            "Number of (tests, rejections): (", tests(), rejections(), ")")
     })
     output$pvalue <- renderPrint({
       cat(text())
