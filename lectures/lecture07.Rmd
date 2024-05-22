@@ -176,32 +176,79 @@ mutate(aatemp, TMAX_scale_IQR = scale_IQR(TMAX),
   temp_summary()
 ```
 
-## Even better: `mutate_at`
+## `mutate` helper functions
 
-We're still calling the function twice. `mutate_at` lets us pass in a
+We're still calling the function twice. The `across` lets us pass in a
 **function** as an argument!
 
 If we give one function, it uses the original column names:
 
 ```{r}
-mutate_at(aatemp, c("TMAX", "TMIN"), scale_IQR) |>
+mutate(aatemp, across(c(TMAX, TMIN), scale_IQR)) |>
   group_by(abs(TMAX) > 1.5, abs(TMIN) > 1.5) |>
   summarize(n())
 ```
 
 ## More than one function, giving them names
 
-We can give a list of more than one function of the form
+We can give a vector of more than one function of the form
 ```{r eval = FALSE}
-list(name1 = function1, name2 = function2)
+c(name1 = function1, name2 = function2)
 ```
 
 ```{r}
-mutate_at(aatemp, c("TMAX", "TMIN"), 
-          list(scale_IQR = scale_IQR, scale = scale)) |>
+mutate(aatemp, across(c(TMAX, TMIN), 
+                      c(scale_IQR = scale_IQR, scale = scale))) |>
   colnames()
             
 ```
+
+(If we just did `list(scale_IQR, scale))
+
+## Exercise
+
+Previously we convered from degrees F to degrees C.
+
+Compute the average minimum and maximum daily temperatures in degrees C.
+
+```{r convertC, exercise = TRUE}
+F_to_C <- function(x) {
+  (x - 32) * 5 / 9
+}
+
+
+
+```
+
+```{r convertC-solution}
+
+aatemp |>
+  mutate(across(c(TMAX, TMIN), F_to_C)) |>
+  summarize(mean(TMAX), mean(TMIN))
+```
+
+## `across` with `summarize`
+
+In our solution in the previous exercise we called `mean` twice. We can also use `across` for `summarize` in the same way:
+
+```{r}
+F_to_C <- function(x) {
+  (x - 32) * 5 / 9
+}
+
+aatemp |>
+  mutate(across(c(TMAX, TMIN), F_to_C)) |>
+  summarize(across(c(TMAX, TMIN), mean))
+```
+
+Even better (because we could add another column very easily)
+
+```{r}
+aatemp |>
+  transmute(across(c(TMAX, TMIN, TOBS), F_to_C)) |> 
+  summarize(across(everything(), mean))
+```
+
 
 ## Exercise
 
@@ -210,7 +257,7 @@ mutate_at(aatemp, c("TMAX", "TMIN"),
 $$ \frac{(1/n) \sum_{i=1}^n (X_i - \bar X_n)^3}{\hat \sigma^3}$$
 where $\hat \sigma$ is the sample standard deviation.
 
-Write a function to compute the coefficient of skew and use `summarize_at` to compute it for `TMAX` and `TMIN` in the `aatemp` data set.
+Write a function to compute the coefficient of skew and use `summarize` to compute it for `TMAX` and `TMIN` in the `aatemp` data set.
 
 ```{r coefskew, exercise = TRUE}
 
@@ -221,7 +268,7 @@ skew <- function(x) {
    mean((x - mean(x))^3) / sd(x)^3
 }
 
-summarize_at(aatemp, c("TMAX", "TMIN"), skew)
+summarize(aatemp, across(c(TMAX, TMIN), skew))
 ```
 
 ## Return values
