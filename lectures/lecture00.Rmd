@@ -116,11 +116,12 @@ Visit Canvas....
 ## Software
 
 * R: A statistical programming language
-* RStudio (Cloud): A development environment for R
+* Posit Cloud: A development environment for R
 * Git: Version control and collaboration for software projects
+* GitHub Copilo: AI programming assistant
 
   
-## R, a statistical programming language
+## R
 
 R is a *statistical programming language*:
 
@@ -135,123 +136,49 @@ R is a *statistical programming language*:
 * Being adopted by research, industry, government
 * Language of choice for statistical teaching (courses, books)
 
+## Posit Cloud
+
+Posit Cloud is an online *integrated development environment* (IDE) for R (and other languages).
+
+Visit [Posit Cloud](https://posit.cloud) for a walkthrough.
 
 ## Using our Posit Cloud
 
-* There is a main module: `stats306_winter_2024`. If you load this it will be a *temporary* copy. If you wish to retain any notes, you must **make it permanent**.
+* There is a main module: **UPDATE WITH SEMESTER**. If you load this it will be a *temporary* copy. If you wish to retain any notes, you must **make it permanent**.
 * If you make it permanent, you will need to update using `git` (more on this shortly)
-* Labs and homeworks will be distributed as weekly modules. There is an example. This will automatically be made permanent.
+* Homework assignments will be distributed as weekly modules. When opened they will automatically be made permanent.
 
-Let's visit [Posit Cloud](https://posit.cloud/spaces/462616/content/all?sort=name_asc)
+## Git
 
-## What is Git?
-
-* A **version control system** manages changes from multiple sources simultaneously.
+* Git is a **version control system** manages changes from multiple sources simultaneously.
 * A reasonable analogy: Google Docs with track changes turned on
 * Useful for groups working together to track changes to the software package and document why changes were made
-* We will use it to disseminate homework assignments, labs, and lecture materials.
 
-## How does git work?
+## GitHub and Copilot
 
-* Creates a **repository** (a hidden directory/folder) to information about the history of files
-* When you make changes, you may **add** them to a **staging area**
-* When you like your staging area, you **commit** your changes.
-* Git stores the **differences** ("diffs") from the previous version to your new version.
-* You can **push** your changes to a shared repository for others to use
-* You can **pull** from a shared repository and **merge** the changes of others.
-* If there are **conflicts**, git will let you know and make you resolve them.
-* If you ever need to see what changed, you have the entire **history** of all changes to look at.
+* GitHub is a website/company providing hosting for projects using the git version control system. 
+* You don't have to use GitHub if you use git, but it has become very popular (provides free hosting for small projects).
+* Acquired by Microsoft in 2018
+* Released a Large Language Model (LLM) artificial intelligence (AI) assistant Copilot in 2021.
 
-## Command line interfaces
+## GitHub for Education
 
-While git has graphical interfaces, we will teach using a **command line interface** (CLI) for git.
+* Copilot is typically a paid service, but you can sign up for [GitHub Education](https://education.github.com/discount_requests/application) for free.
+* Make sure you use your `umich.edu` email address. You can [link your UM email address in your account settings](https://github.com/settings/emails) if you already have a GitHub account under another email.
 
-In an CLI you have an **interactive** prompt where you type a command. It might look something like this:
+## Connecting Posit Cloud and Copilot
 
-```
-$ command -o --options argument1 argument2
-```
+**INSTRUCTIONS HERE**
 
-* `$` is the prompt
-* `command` is what we want to do (e.g., `git`)
-* Optional flags have `-` or `--` in front and change behavior
-* We can tell what do with `argument1` and `argument2`. Some commands have no arguments.
+## RStudio
 
-## Some basic CLI commands
-
-* `cd`: Change directory. 
-* `ls`: List files in current directory
-* `pwd`: Print working directory
-* `mkdir`: Make a new directory (folder)
-* `rm -r`: Recursively delete directories and everything inside (use carefully!)
-
-## Git and the CLI
-
-When interacting with git, we will use commands like this:
-
-```
-$ git SUBCOMMAND -o --options ARG1 ARG2 ...
-```
-
-Some example subcommands will be `pull` to get updates, `log` to see the history, `add` to stage files, and `commit` to commit changes.
-
-## Let git know who you are
-
-```
-$ git config --global user.name "YOUR NAME"
-$ git config --global user.email "YOUR EMAIL"
-```
-
-## Getting a copy of the Stats 306 Repository
-
-Materials for this course are hosted at **GitHub**, a popular website front end for git. Our materials are stored in repository on github.
-
-If you want to get a copy (outside of Posit cloud) **clone** the repository:
-
-```
-$ cd LOCATION_YOU_WANT_TO_STORE_REPO
-$ git clone https://github.com/markmfredrickson/stats306_spring_2024.git
-```
-
-## Getting future updates
-
-When we make changes to the course materials (this will be frequent! We like to tinker!), you can get updates:
-
-```
-$ git pull
-```
-
-## Saving changes to our local repo
-
-If you have made changes to your repository, you will be prompted to commit them before pullling:
-
-```
-$ git status
-$ git add FILENAME
-$ ... perhaps other files ...
-$ git commit -m "a note explaining changes"
-```
-
-## Graphical interface
-
-We teach the command line interface for git because
-
-* It is convenient to show in slides
-* It is transferable to any environment where you would use git
-* It matches our recommended text book
-* It exposes the full power of git
-
-But, you can also use a graphical interface in Posit Cloud
-
-## Posit Cloud and RStudio
-
-You may encounter the name **RStudio**. 
+You may encounter the name **RStudio** in various online documentation. 
 
 This is the name a desktop version of the editor we are using (formerly it was called RStudio Cloud).
 
 If you wish, you can [install R and RStudio](https://posit.co/download/rstudio-desktop/) on your own computer. 
 
-You can get the materials using `git` as described above. You will need to download labs and HW from the assignments on Posit cloud.
+You can get the materials using `git` as described on Canvas, but this will not be directly supported during the course. You will need to download the assignments on Posit cloud.
 
 ## Final notes
 
