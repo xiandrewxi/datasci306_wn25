@@ -1,7 +1,6 @@
 ---
 title: "Stats 306: Lecture 4"
 subtitle: "Graphics: Facets, Coordinate Systems"
-author: "Mark Fredrickson"
 output: 
   learnr::tutorial:
     progressive: true

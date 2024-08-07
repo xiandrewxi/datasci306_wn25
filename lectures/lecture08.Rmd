@@ -1,7 +1,6 @@
 ---
 title: "Stats 306: Lecture 8"
 subtitle: "Wrapping up functions"
-author: "Mark Fredrickson"
 output: 
   learnr::tutorial:
     progressive: true

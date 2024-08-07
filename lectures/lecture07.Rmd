@@ -1,7 +1,6 @@
 ---
 title: "Stats 306: Lecture 7"
 subtitle: "Writing Functions"
-author: "Mark Fredrickson"
 output: 
   learnr::tutorial:
     progressive: true

@@ -1,7 +1,6 @@
 ---
 title: "Stats 306: Lecture 3"
 subtitle: "More data exploration with ggplot"
-author: "Mark Fredrickson"
 output: 
   learnr::tutorial:
     progressive: true

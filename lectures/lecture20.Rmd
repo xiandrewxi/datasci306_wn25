@@ -1,7 +1,6 @@
 ---
 subtitle: "Stats 306: Lecture 20"
 title: "Debugging Continued; Profiling and Benchmarking"
-author: "Mark Fredrickson"
 output: 
   learnr::tutorial:
     progressive: true

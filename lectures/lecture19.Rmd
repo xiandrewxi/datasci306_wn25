@@ -1,7 +1,6 @@
 ---
 subtitle: "Stats 306: Lecture 19"
 title: "Iteration Continued"
-author: "Mark Fredrickson"
 output: 
   learnr::tutorial:
     progressive: true

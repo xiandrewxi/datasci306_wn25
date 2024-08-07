@@ -1,7 +1,6 @@
 ---
 subtitle: "Stats 306: Lecture 16"
 title: "Strings: Regular Expressions"
-author: "Mark Fredrickson"
 output: 
   learnr::tutorial:
     progressive: true

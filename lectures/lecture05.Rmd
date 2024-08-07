@@ -1,7 +1,6 @@
 ---
 title: "Stats 306: Lecture 5"
 subtitle: "Tables: Selecting, Filtering; Grouping and Summaries"
-author: "Mark Fredrickson"
 output: 
   learnr::tutorial:
     progressive: true

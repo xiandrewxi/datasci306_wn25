@@ -1,7 +1,6 @@
 ---
 title: "Stats 306: Lecture 1"
 subtitle: "Basic R and RMarkdown"
-author: "Mark Fredrickson"
 output: 
   learnr::tutorial:
     progressive: true

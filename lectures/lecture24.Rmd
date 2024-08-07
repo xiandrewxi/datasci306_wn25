@@ -1,7 +1,6 @@
 ---
 subtitle: "Stats 306: Lecture 24"
 title: "Shiny Server Programming"
-author: "Mark Fredrickson"
 output: 
   learnr::tutorial:
     progressive: true
