@@ -14,13 +14,6 @@ library(learnr)
 library(tidyverse)
 ```
 
-## Review 
-
-* Course overview, objectives, policies
-* Software: R, RStudio, Git
-* Command line interface (CLI)
-* Getting our materials using Posit Cloud and git
-
 ## What's in our repository
 
 >* Data sets will we use
@@ -262,9 +255,10 @@ d / 3
 * In RStudio/Posit, it's just as easy to type with `TAB` completion
 
 ## Functions 
+
 A key tool in any programming language is a **function**.
 
-* R functions behave (mostly) like mathematical functions $f(x)$.
+* R functions behave (mostly) like mathematical functions, e.g. $f(x) = x^2$.
 * They take **arguments** and return **values**
 * Encapsulate code (mini-programs)
 * Make it easy to repeat operations
@@ -304,36 +298,19 @@ rad45 <- (45 / 360) * 2 * pi
 sin(rad45)
 ```
 
-## Math operations are functions too
-
-```{r, results='hide'}
-mult <- function(x, y) { x * y }
-div <- function(x, y) { x / y }
-```
-
-Suppose we had `mult(x, y)` and `div(x, y)`.
-
-We could have written the previous calculation as 
-
-```{r}
-mult(2, mult(pi, div(45, 360)))
-```
-Those aren't built in functions, but R transforms `2 * pi * 45/360` into that behind the scenes.
-
-We call functions that do not have explicit function calls **operators**. See help pages for `Arithmetic Operators`, `Relational Operators`, and `Logical Operators` for some of the most common.
 
 ## Function evaluation
 
 In R, when we call a function, first the **arguments** are evaluated, then the function is called.
 
 ```{r}
-sin(mult(2, mult(pi, div(45, 360))))
+sin(360/45 * 2 * pi) 
 ```
 Equivalent to:
 ```{r}
-value1 <- div(45, 360)
-value2 <- mult(pi, value1)
-value3 <- mult(2, value2)
+value1 <- 360/45
+value2 <- value1 * 2
+value3 <- value2 * pi
 sin(value3)
 ```
 
@@ -344,6 +321,9 @@ Sometimes we only need to use something once, so taking the time to come up with
 Instead we can use **pipes** to pass the output of one function to the **first argument** of a second function.
 
 ```{r, eval = FALSE}
+g(f()) # f() evaluates first, then the result goes to g.
+
+# equivalently
 value <- f()
 g(value)
 
@@ -351,58 +331,63 @@ g(value)
 f() |> g()
 ```
 
-Chaining pipes:
-```{r}
-div(45, 360) |>  
-  mult(pi) |>
-  mult(2) |>
-  sin()
-```
+## Average BMI for women
 
-## Functions as variables
-
-In R, **functions are variables** which means that we can use them like would we any other variable.
+The `women` dataset is built into R as an example we can play with. It contains the average weight given height for a sample of women with heights between 58 and 72 inches.
 
 ```{r}
-class(123)
-class(sin)
+head(women) # first 6 rows of the table
 ```
 
-We will see some really great uses of this later to **delay computation**.
-
-## Side effects
-
-Some functions also have **side effects** beyond just returning a value.
-
-* Load or save a file
-* Take input from a mouse
-* Display something on the screen
-
-## The `curve` function
-
-The `curve` function is a useful way to graph out a function:
-```{r, height = 4, width = 7}
-curve(sin)
-```
-
-
-## Changing the bounds of the plot
-
-`curve` can take more than just one argument,
-
-```{r, height = 3, width = 5}
-curve(sin, 0, 2 * pi)
-```
-
-## Optional and named arguments
-
-R allows you to use the name of arguments to pass them in any order:
+Suppose we want to change the units into metric:
 
 ```{r}
-curve(to = 2 * pi, expr = sin, from= 0)
+women2 <- transmute(women, height_m = height * 0.0254, weight_kg = weight * 2.2)
+head(women2)
 ```
 
-By *default* `from = 0` and `to = 1`
+Then we want to compute the average BMI:
+
+$$\text{BMI} = \frac{\text{Weight (kg)}}{(\text{Height (kg)})^2}$$
+
+```{r}
+women3 <- mutate(women2, bmi = weight_kg / (height_m)^2)
+head(women3)
+```
+
+Finally, let's plot BMI as a function of height:
+
+```{r}
+ggplot(women3, aes(x = height_m, y = bmi)) + geom_line()
+```
+
+
+## Using pipes
+
+In the previous example, we didn't use the `women2` variable except to create `women3`. And we only graphed `women3`. Let's use pipes to eliminate those variables.
+
+```{r}
+women |> # style point: create a new line after the pipe character
+  transmute(height_m = height * 0.0254, weight_kg = weight * 2.2) |>
+  mutate(bmi = weight_kg / (height_m)^2) |>
+  ggplot(aes(x = height_m, y = bmi)) + geom_line()
+```
+
+## Pipe exercise
+
+Recall that logarithms answer the question:
+
+$$\log_b(a) = c \text{ such that } b^c = a$$
+As a consequence, 
+
+$$log_b(b^a) = a$$
+Verify that the `log` and `exp` functions are inverses of each other (using base $e \approx 2.71$) using pipes. Rewrite the following to use pipes.
+
+```{r log-exp-ex, exercise = TRUE}
+a <- log(7)
+b <- exp(a)
+print(b)
+```
 
 
 ## R's assignment operators
@@ -423,6 +408,12 @@ pi |> sqrt() -> sqrt_pi
 sqrt_pi
 ```
 
+## Alternative pipe operator
+
+* There is also an alternative pipe operator `%>%`.
+* It is (almost) equivalent to `|>` with `|>` being a little more strict about using parentheses.
+* The choice is mostly a matter of muscle memory.
+
 ## Some special values
 
 In addition to `pi`, R has some other built in variables (see help page for `Constants`).
@@ -433,7 +424,7 @@ Also several special data values
 * `NULL` means "not set yet" and is often used for optional arguments to functions
 * `NaN` means something was divided by zero or other mathematical impossibility.
 
-What will happen with this code?
+What will happen with this code and why?
 
 ```{r na-prop, exercise = TRUE}
 angle_degrees <- NA
@@ -447,4 +438,7 @@ sin(angle_radians)
 * R and the REPL
 * Variables: boxes to hold data
 * Functions: little programs that operate on data
+* Assignment operators
+* Pipes
+
 
