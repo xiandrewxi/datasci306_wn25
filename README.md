@@ -15,7 +15,7 @@ research and industry.
 
 ## Instructors
 
-* Lead Instructor: 
+* Lead Instructor: Mark Fredrickson (mfredric@umich.edu)
 * GSIs: 
 
 ## Software

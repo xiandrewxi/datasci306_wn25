@@ -25,7 +25,61 @@ library(tidyverse)
 * Tables: lists of vectors of the same length (column oriented)
 * Other items: indexing with `[]` and `$`, `dim` and `colnames` for tables
 
-## Plotting: Visual representation of data
+## Vectorized computations in R
+
+In R, since (almost) *everything* is a vector (of length 1 if need be), most computations in R allow the use of **vectorized** computations: computations that apply to **each item in a vector** or **use the entire vector**.
+
+```{r}
+miles_per_gallon_city <- mpg$cty
+sum(miles_per_gallon_city)
+gallons_per_mile_city <- 1 / miles_per_gallon_city
+miles_per_gallon_city[1:3]
+gallons_per_mile_city[1:3]
+total_mpg <- miles_per_gallon_city + mpg$hwy
+mpg$hwy[1:3]
+total_mpg[1:3]
+```
+
+## Vectorized Computations with Logical Values
+
+We saw relational operators in the last lecture (`<`, `>`, `==`, etc.) and that they can apply in a vectorized way.
+
+```{r}
+top_half <- mpg$cty > median(mpg$cty)
+top_half[1:5]
+
+## average highway efficiency of cars in top 50% of city efficiency:
+mpg$hwy[top_half] |> mean()
+```
+
+## Other uses for logicals
+
+R has a convenient convention that `TRUE == 1` and `FALSE == 0`. Notice that if we want to **count** this is equivalent to **summing** a logical vector.
+
+```{r}
+# How many cars get more than 30 miles per gallon in the city?
+sum(mpg$cty > 30)
+```
+
+## Exercise
+
+How many diamonds in the `diamonds` table cost more than $5000? What was the mean carat rating of these diamonds? (Bonus: what *proportion* of diamonds cost more than $5000 -- can you figure it out with one function call?)
+
+```{r expensive-diamonds, exercise = TRUE}
+
+```
+
+
+```{r expensive-diamonds-solution}
+expensive <- diamonds$price > 5000
+sum(expensive) ## how many
+mean(keep(diamonds$price, expensive)) ## could also use [] indexing
+mean(expensive) ## bonus
+```
+
+
+
+## Review: Graphing and Plotting
 
 **Graphing** or **plotting** is the representation of data in a visual form, typically on a 2D plane.
 
