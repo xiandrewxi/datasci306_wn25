@@ -20,14 +20,15 @@ research and industry.
 
 ## Software
 
-### R and RStudio
+### R and Posit Cloud
 
-We will use the R programming language and the RStudio cloud development environment (now called Posit Cloud).
-For details, please see our Canvas page.
+We will use the [R programming language](https://www.r-project.org) and the [Posit Cloud](https://posit.cloud) (formerly RStudio Cloud). 
+For details on how to get access to your free Posit Cloud account through the university, please see our Canvas page.
 
-### Git
+### Git and GitHub
 
-...
+* Sign up for [GitHub](https://github.com/) using your University of Michigan email address. If you already have a GitHub account tied to another email address, you can [link your UM email address in your account settings](https://github.com/settings/emails).
+* Sign up for [GitHub Education](https://education.github.com/discount_requests/application) for free access to GitHub's Copilot AI programming assistant we will use throughout the course.
 
 ## Materials
 
