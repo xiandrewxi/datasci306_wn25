@@ -1,6 +1,6 @@
 ---
-title: "Stats 306: Lecture 0"
-subtitle: "Introduction to Stats 306"
+subtitle: "Stats 306: Lecture 0"
+title: "Statistical Programming and Data Science"
 output: 
   learnr::tutorial:
     progressive: true
@@ -19,6 +19,14 @@ This course introduces basic concepts in computer programming and statistical co
 
 *Enforced Pre-requisite: [DATASCI 101 or STATS 206 or STATS 250 OR STATS 280 OR STATS 412 or ECON 451 or IOE 265] AND prior or concurrent enrollment in [MATH 116 or MATH 121 or MATH 156 or MATH 176 or MATH 186 or any 200+ level math credit except for MATH 201].*
 
+## Data Science Workflow
+
+When performing data analysis, we often follow a common set of steps.
+
+![Data Science Workflow](images/data-science.png)
+
+During the course, we will learn to use *problem decomposition* to break each of these steps into even smaller tasks.
+
 ## Learning Objectives
 
 By the end of this course, you will
@@ -31,6 +39,7 @@ By the end of this course, you will
 * have thorough familiarity with the R programming language and RStudio development environment
 * be able to load, manipulate, and present data
 * manage development projects using the Git version control package
+* use an AI assistant to help produce working, tested code
 
 ## Overview of Course
 
@@ -182,7 +191,11 @@ You can get the materials using `git` as described on Canvas, but this will not 
 
 ## Final notes
 
+<!-- Notes about logistics go here, .e.g.,
 **No lab this week**. Next activity is lecture on Tuesday.
 
 Join the Stats 306 workspace on Posit (see Canvas). Try out the example module.
+
+-->
+
 

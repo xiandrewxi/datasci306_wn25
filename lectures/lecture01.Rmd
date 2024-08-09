@@ -1,6 +1,6 @@
 ---
-title: "Stats 306: Lecture 1"
-subtitle: "Basic R and RMarkdown"
+suutitle: "Stats 306: Lecture 1"
+title: "Starting R, RMarkdown, and Functions"
 output: 
   learnr::tutorial:
     progressive: true
@@ -13,6 +13,10 @@ runtime: shiny_prerendered
 library(learnr)
 library(tidyverse)
 ```
+
+## Opening up Stats 306 repository
+
+Go to Posit Cloud and open up the `stats306_materials` repository.
 
 ## What's in our repository
 

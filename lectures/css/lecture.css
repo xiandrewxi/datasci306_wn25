@@ -1,34 +1,32 @@
 @media screen and (max-width: 4000px) {
+  .bandContent {
+    margin: 0 auto;
+    max-width: 100%;
+  }
+  .band { padding: 0 1em 0 1em; }
+
   .topics {
-    width: 99%;
+    font-size: 1.5em;
   }
-
-  .topics .tutorialTitle {
-    display: block;
-    cursor: pointer;
+  
+  .topics code {
+    font-size: 1.5em;
   }
-
-  .topicsContainer {
-    width: 1%;
-    min-width: 1px;
-    margin-right: 0;
-  }
-
+  
   .topicsList {
-    padding: 0px 10px 20px 1%;
-    background-color: rgba(255, 255, 255, 0.98);
-
-    box-shadow: 0 5px 25px 0px rgba(0, 0, 0, 0.15);
-    -webkit-box-shadow: 0 5px 25px 0px rgba(0, 0, 0, 0.15);
+    width: 5em;
   }
-
-  .topicsList.hideFloating {
-    display: none;
+  .topicsContainer .tutorialTitle {
+    font-size: 1.5em;
   }
-
-  .paneCloser {
-    display: inline-block;
+  h2.subtitle {
+    font-size: 1.25em;
+  } 
+  .topicsContainer .topic {
+    font-size: 1em;
   }
+  
+
 }
 
 .str_view .match {
