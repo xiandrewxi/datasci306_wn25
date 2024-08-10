@@ -1,6 +1,6 @@
 ---
-title: "Stats 306: Lecture 2"
-subtitle: "Vectors, Lists, and Tables"
+subtitle: "Stats 306: Lecture 2"
+title: "Understanding AI"
 output: 
   learnr::tutorial:
     progressive: true
@@ -14,193 +14,523 @@ library(learnr)
 library(tidyverse)
 ```
 
-## Statistical programming
+# AI Basics
 
-Recall that R is a **statistical** programming language. In statistics we often work with:
+## What is Generative Artificial Intelligence?
 
->* **Samples**, composed of individual units
->* **Variables**, something measured on each unit in the sample
+You have no doubt heard of **generative artificial intelligence** (GenAI) such as ChatGPT.
 
-Tabular data: columns are variables, rows are observations
+![Fig 1.3 from AI Assited Programming](images/aiap_ai_hierarchy.png)
 
-## Lists and Vectors
+* Artificial intelligence: the use of computer programs to mimic human thinking and reasoning (*models*)
+* Machine learning: use of *probabilistic* tools that try to find regular structure in data
+* Deep learning: A specific set of algorithms based on very large *neural networks* designed to mimic human brains
+* Generative AI: AI tools that are used to *generate new material*, not just answer yes/no questions or produce simple numerical values
+* Large language models: Models trained on very large collections of text data that generate text output (usually)
 
-* A **vector** is an ordered collection of the same type of data. Created using the `c` function (concatenate).
-* A **list** is an ordered collection of (potentially) different types of data. Created using the `list` function.
-* Both can have **names** to indicate individual items.
-* Lists can serve a similar role to dictionaries and hash tables in other languages.
+## What Are LLMs good for?
 
-## Vectors, basic
+Because we can interact with LLMs by writing *natural language* prompts (rather than code like R), we have a lot of flexibility in how we can use them to support us when we are doing programming.
+
+* Minimizing Search
+* Advising Solutions for coding problems
+* Interpreting and summarizing existing code
+* Generating documentation
+* Code integrity
+
+We will use UMGPT for these examples. Later we will introduce GitHub Copilot.
+
+## Search
+
+Recall that R functions can have **optional arguments**. Suppose you do not recall how to write an optional argument? Let's ask UMGPT:
+
+**Prompt**
+
+How do use optional arguments in R?
+
+**Response**
+
+In R, you can use optional arguments in functions by specifying default values for those arguments in the function definition. When a default value is provided, the argument becomes optional because the function can still operate even if the caller does not supply a value for that argument.
+
+Here's a basic example to demonstrate how to use optional arguments in an R function:
+
+```
+my_function <- function(x, y = 10, z = 5) {
+  result <- x + y + z
+  return(result)
+}
+
+# Calling the function with all arguments provided
+result1 <- my_function(3, 4, 2)  # x = 3, y = 4, z = 2
+print(result1)  # Output: 9
+```
+... continues.
+
+## Advising solutions
+
+Soon we will be learning more about the `ggplot` library for visualizing data sets, but let's seen an example of it in action.
+
+Let's look at the `diamonds` data set that records information on the cut, quality, and price (among other things) on a sample of diamonds.
 
 ```{r}
-phone_digits <- c(8, 6, 7, 4, 3, 0, 9)
-phone_plus_area_code <- c(7, 3, 4, phone_digits)
-length(phone_plus_area_code)
-sum(phone_plus_area_code)
+library(ggplot2)
+diamonds
 ```
 
-## Vectors, indexing
+Let's ask UMGPT to help us graph some of these variables.
 
-The `runif` function will create randomly generated values in the range (0, 1).
+**Prompt**
+
+Here are a few lines from a data set:
+
+```
+> diamonds
+# A tibble: 53,940 × 10
+   carat cut       color clarity depth table price     x     y     z
+   <dbl> <ord>     <ord> <ord>   <dbl> <dbl> <int> <dbl> <dbl> <dbl>
+ 1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
+ 2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
+ 3  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31
+ 4  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
+ 5  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75
+ 6  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  
+ ```
+
+Using the ggplot library in R, create a plot that shows the relationships between "carat" and "price" grouped by type of "cut".
+
+**Response**
+
+To show the relationship between "carat" and "price" grouped by type of "cut" using the ggplot2 library in R, you can create a scatter plot and use color or facets to differentiate between the types of "cut". Here are a couple of different approaches to achieve this:
+
+Approach 1: Using color to differentiate "cut"
+This approach uses color to distinguish diamonds of different cuts within a single scatter plot.
+
+```
+# Load necessary library
+library(ggplot2)
+
+# Use ggplot to create the plot
+ggplot(diamonds, aes(x = carat, y = price, color = cut)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Relationship between Carat (Size) and Price by Cut Type",
+       x = "Carat",
+       y = "Price (USD)",
+       color = "Cut Type") +
+  theme_minimal()
+```
+
+Approach 2: Using facets to split by "cut"
+This approach creates separate scatter plots for each type of "cut", organized in a grid.
+
+```
+# Load necessary library
+library(ggplot2)
+
+# Use ggplot to create the plot
+ggplot(diamonds, aes(x = carat, y = price)) +
+  geom_point(alpha = 0.6) +
+  facet_wrap(~ cut) +
+  labs(title = "Relationship between Carat (Size) and Price by Cut Type",
+       x = "Carat",
+       y = "Price (USD)") +
+  theme_minimal()
+```
+
+Approach 3: Combining color and facets
+This approach uses color within facets to provide even more visual detail.
+
+```
+# Load necessary library
+library(ggplot2)
+
+# Use ggplot to create the plot
+ggplot(diamonds, aes(x = carat, y = price, color = cut)) +
+  geom_point(alpha = 0.6) +
+  facet_wrap(~ cut) +
+  labs(title = "Relationship between Carat (Size) and Price by Cut Type",
+       x = "Carat",
+       y = "Price (USD)",
+       color = "Cut Type") +
+  theme_minimal()
+  
+```
+
+Explanation of the code: ... trimmed for brevity ...
+
+## Trying Approach 1
+
+Copying and pasting into a code chunk:
 
 ```{r}
-random_u01 <- runif(10) # create 10 values
-print(random_u01)
-random_u01[1] # first item
-random_u01[10] # last item
-random_u01[-1] # all but first
-random_u01[1:3] # first three
-random_u01[3:6] # a "slice" in the middle
-random_u01[c(1, 3, 7, 1)] # arbitrary choices
+# Load necessary library
+library(ggplot2)
+
+# Use ggplot to create the plot
+ggplot(diamonds, aes(x = carat, y = price, color = cut)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Relationship between Carat (Size) and Price by Cut Type",
+       x = "Carat",
+       y = "Price (USD)",
+       color = "Cut Type") +
+  theme_minimal()
 ```
 
+Trying the other approaches is left as an exercise.
+
+## Interpreting code and documentation
+
+Research has shown that programmers spend more time *reading* code than *writing* code. Having quality *documentation* is critical to making this easier. LLMs can help make sense of undocumented code and write outlines for documentation.
+
+Example:
+
+```{r}
+xyz <- function(x, y, z) {
+  
+  if (x > 0) {
+    return(y)
+  } else if (y > 0) {
+    return(z)
+  }
+  
+  w <- x^2
+  return(w)
+}
+
+```
+
+**Prompt**
+
+Explain the code above.
+
+
+**Result**
+
+Certainly! Let's break down the R function xyz step by step:
+
+Function Definition:
+
+```
+xyz <- function(x, y, z) {
+```
+
+ line defines a new function named xyz that takes three arguments: x, y, and z.
+
+Check if x is greater than 0:
+
+```
+if (x > 0) {
+  return(y)
+}
+```
+
+If the value of x is greater than 0, the function immediately returns the value of y. The function execution stops here if this condition is met.
+
+Check if y is greater than 0 (only if x is not greater than 0):
+
+```
+else if (y > 0) {
+  return(z)
+}
+```
+
+If the value of x is not greater than 0, the function then checks if the value of y is greater than 0. If this condition is met, the function returns the value of z. Again, the function execution stops here if this condition is satisfied.
+
+If neither x > 0 nor y > 0:
+
+```
+w <- x^2
+return(w)
+```
+
+If neither of the previous conditions are met (i.e., both x is not greater than 0 and y is not greater than 0), the function calculates the square of x and assigns it to a variable w. Then, it returns the value of w.
+
+Summary:
+
+If x is greater than 0, the function returns y.
+If x is not greater than 0 and y is greater than 0, the function returns z.
+If neither x > 0 nor y > 0, the function returns the square of x.
+This function implements a series of conditional statements to determine what value to return based on the input arguments x, y, and z.
+
+**Prompt (continued)**
+
+Write documentation for this code.
+
+**Result**
+
+Sure, here is a detailed documentation for the xyz function using Roxygen2 style, which is commonly used in R for documenting functions:
+
+```{r}
+#' xyz: A function to return y or z based on conditions or the square of x
+#'
+#' This function takes three arguments: \code{x}, \code{y}, and \code{z}.
+#' It checks the value of \code{x} and \code{y} to decide which value to return.
+#' If \code{x} is greater than 0, it returns \code{y}.
+#' If \code{x} is not greater than 0 but \code{y} is greater than 0, it returns \code{z}.
+#' If neither \code{x} nor \code{y} is greater than 0, it returns the square of \code{x}.
+#'
+#' @param x A numeric value.
+#' @param y A numeric value.
+#' @param z A numeric value.
+#'
+#' @return A numeric value. If \code{x > 0}, it returns \code{y}. If \code{x <= 0} and \code{y > 0}, it returns \code{z}. 
+#'         Otherwise, it returns \code{x} squared.
+#'
+#' @examples
+#' # Example 1: If x is greater than 0
+#' xyz(5, 10, 15)
+#' # [1] 10
+#'
+#' # Example 2: If x is not greater than 0 but y is greater than 0
+#' xyz(-5, 10, 15)
+#' # [1] 15
+#'
+#' # Example 3: If neither x nor y is greater than 0
+#' xyz(-5, -10, 15)
+#' # [1] 25
+#'
+#' @export
+xyz <- function(x, y, z) {
+  if (x > 0) {
+    return(y)
+  } else if (y > 0) {
+    return(z)
+  }
+  
+  w <- x^2
+  return(w)
+}
+```
+
+... explanation trimmed ...
+
+## R's help system
+
+The documentation generated on the previous slide was in a format to be used in R's built in help system.
+
+You can access it using the "Help" tab or directly from the console:
+
+```{r, eval = FALSE}
+?ggplot
+```
+
+Let's take a look at the documentation for the `ggplot` function.
 
 ## Exercise
 
-Pull out the last three items in the vectors `letters`. A little help to get you started:
+* Use the help system to find out about the `presidential` data set.
+* Open up [UMGPT](https://umgpt.umich.edu/). Write a prompt to help you understand this code:
 
-```{r lettersxyz, exercise = TRUE}
-length(letters)
+```{r, eval = FALSE}
+ggplot(data = presidential) + geom_bar(aes(x = party))
+```
+* Use UMGPT to help you create a plot that shows how long each president served in years. Make sure the output is ordered by when the president served.
+
+Here is an R session you can use to test your results:
+
+```{r umgpt-exercise, exercise = TRUE}
+
 ```
 
 
-```{r lettersxyz-solution}
-letters[c(24, 25, 26)]
-letters[-(1:23)]
+## Result from UMGPT
+
+Copying and pasting the prompt from the previous page resulted in:
+```{r}
+# Calculate the duration in years
+presidential <- presidential %>%
+  mutate(duration_years = as.numeric(difftime(end, start, units = "days") / 365.25))
+
+# Create the plot
+ggplot(presidential, aes(x = start, y = duration_years, fill = party)) +
+  geom_col() +
+  labs(title = "Duration of Each President's Term",
+       x = "Term Start Date",
+       y = "Duration in Years") +
+  scale_fill_manual(values=c("Democratic" = "blue", "Republican" = "red")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_x_date(date_labels = "%Y", date_breaks = "4 years")
 ```
 
-## Relational Operators
+Not a bad solution, but I wanted the president's names on the x-axis. Can we improve it?
+
+**Prompt**
+
+**Result**
 
 ```{r}
-x <- 1
-y <- 2
+# Calculate the duration in years
+presidential <- presidential %>%
+  mutate(duration_years = as.numeric(difftime(end, start, units = "days") / 365.25))
 
-x < y
-x > y
-x <= y
-x >= y
-x == y
-x != y
-
-!(x == y) # negation
+# Create the plot
+ggplot(presidential, aes(x = reorder(name, start), y = duration_years, fill = party)) +
+  geom_col() +
+  labs(title = "Duration of Each President's Term",
+       x = "President",
+       y = "Duration in Years") +
+  scale_fill_manual(values = c("Democratic" = "blue", "Republican" = "red")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-## Vectors, subsetting based on qualities
+But wait! How did "Bush" serve twelve years?!
 
-```{r}
-less_than_0.5 <- random_u01 < 0.5
-print(less_than_0.5)
-random_u01[less_than_0.5]
-keep(random_u01, random_u01 < 0.5)
+## Shortcomings of LLMs
+
+The technology is rapidly changing, so these will improve over time, but generally
+
+* Hallucinations: making confident sounding statements that are factually incorrect.
+* Intellectual property: LLMs are trained on existing code written by humans. Who owns the results it generate? 
+* Privacy: Can sensitive data be included in the training set? Can the large training sets be used to infer private details not released in individual data sets?
+* Security: If we accept the results of an AI assistant, do we know it is secure? Could security holes in included?
+* Training data: representation gaps/bias, quality inconsistency, knowledge cutoff date, generalization gap, contextual understanding.
+* Size of problems: limit prompt and results, better for small problems than large problems
+
+# Understanding AI assistants
+
+## A bit of history and terminology
+
+* Since the 1950s and 60s, most computing programming has been done with *programming languages* (as compared to graphical methods, e.g. Scratch).
+* This code needs to be turned from human readable into machine executable instructions, which is done by a *compiler* or *interpreter*.
+* Compilers analyze the program for correctness and structure, and these results can sometimes be used for *autocompletion* (think suggesting "happy" after you type "happ")
+* Various *integrated development envirnoments* (like RStudio/Posit Cloud) have been continuing to create additional features to make programming tasks easier.
+* AI assistants represent the next step of this development.
+
+## Level's of Assistance
+
+Slack's levels of AI assistance:
+
+![Fig 2.1 from AI Assisted Programming](images/aiap_levels_of_ai.png)
+Current best-of-breed tools sit around level 3.
+
+## How do LLMs work?
+
+The explosion of large language models can be traced to three things:
+
+1. Improvements in the *algorithms* (the method by which the models are built)
+2. Faster hardware (GPU servers in cloud based data centers)
+3. Access to very large training data sets (e.g., the whole internet or all of GitHub)
+
+We won't go into the low level details (much more in AAP chapter 2), but at a basic level:
+
+- The training data is turned into *tokens*. E.g., "What is ChatGPT" might become the tokens `What`, `is`, `Chat`, `G`, `P`, `T`.
+- The *model* is built to answer the question, "given the tokens we have seen so far, what tokens most often come next?"
+- Prompts are turned into tokens and the model *predicts* what tokens come next.
+- There are many tuning parameters and the predictions are often randomly generated, so results may vary widely across uses.
+
+
+## Prompt Engineering
+
+The field of *prompt engineering* is an emerging study of how to best write prompts for LLMs.
+
+The skills of propt engineering are very similar to those of computer programming generally: how can you break down large goals into smaller, more digestible pieces? We call this *problem decomposition*.
+
+In doing so, here are some challenges:
+
+* Wordiness: LLMs can spit out very long results. Including the word "concise" can be very helpful!
+* Non-transferability: Skills built for one model (or even version of a model) may not work for other models.
+* Length sensitivity: There are limits to how much input you are allowed. Asking follow up prompts can help.
+* Ambiguity: We need to be specific in what we ask of the LLM to get out the results we need.
+
+## Writing Prompts
+
+Most LLMs have some variation on the following structure:
+
+![Fig 3.1 from AI Assisted Programming](aiap_0301.png)
+
+- System/Context: A short description (in text) to start the session. Popular to write these in the second person: "You are a R programmer."
+- Instructions: What do you want the LLM to do?
+- Input content: Things for the LLM to process, such as a few lines of code or a data set.
+- Format: How do you want the result output? For example, description or documentation?
+
+There will also be parameters that can be manipulated to shorten or length respones, increase or decrease the probability of unusual results, but we will focus using default settings in this course.
+
+## System/Context
+
+Begin by giving the AI a general description of the setting for the problem or a *persona* you want the AI to use. 
+
+For example, you might consider selecting "You are an advanced R user" if you want very terse code or "You are a beginning R programmer" if you want more basics and explanation.
+
+## Instructions
+
+This is the core of the prompt. What should the LLM produce? 
+
+Some common tasks include:
+
+* Summarizing a large body of text/code
+* Explaining text or code in other terms
+* Text classification of documents to infer tone or emotional content
+* Translation of one langauge (natural language or progamming language) into another
+* Completing a function definition or skeleton code
+* Turning pseudo-code into actual code
+* Finding bugs (problems in code) or explaining error messages
+
+## Content
+
+In this part of the prompt, we include some additional context:
+
+* Data for the LLM to operate on
+* An existing function or R expression
+* Documentation
+
+It is often useful to put the content between *delimiters* such as `"""` or `###`.
+
+For example:
+
 ```
+You are an experienced R programmer.
+
+Here is the documentation for the ggplot function. Explain how I can use this function to make a plot of data contained in a variable called `mytable`.
+
+###
+Usage
+
+ggplot(data = NULL, mapping = aes(), ..., environment = parent.frame())
+Arguments
+
+data
+Default dataset to use for plot. If not already a data.frame, will be converted to one by fortify(). If not specified, must be supplied in each layer added to the plot.
+
+mapping
+Default list of aesthetic mappings to use for plot. If not specified, must be supplied in each layer added to the plot.
+
+...
+Other arguments passed on to methods. Not currently used.
+
+environment
+[Deprecated] Used prior to tidy evaluation.
+
+###
+```
+
+## Format
+
+Finally, you may want to get the output formatted in a specific way.
+
+* For text, you might ask for parargaphs or bullet points.
+* For documentation, you might need it in a specific format for automatic documentation generation.
+* For data, you might want it in a particular file type/format
+* You can use this to format things in markdown for your RMarkdown documents
 
 ## Exercise
 
-Use the following hint to keep only the even numbers.
+<!-- Note: this may need to be updated with future releases and/or internet connected models -->
 
-```{r}
-(7 %% 2) == 0 
-(8 %% 2) == 0
-```
+* Our goal will be to summarize [this article about research on different education techniques](https://news.umich.edu/one-size-doesnt-fit-all-u-m-study-reveals-different-educational-models-can-lead-to-college-success/). 
+* Open up [UMGPT](https://umgpt.umich.edu/) and start a *GPT-Turbo* session (the default).
+* Paste in the URL of the article and ask UMGPT to summarize it. Read over this summary.
+* Also ask who the author is and when the article was published. Is this correct?
+* Now try pasting the text of the document. Repeat the previous steps.
+* Try some different contexts/personas and use instructions like "concisely summarize" or "summarize using 5 bullet points" to control the wordiness of the result.
 
+## Best Practices
 
-```{r onlyodd, exercise = TRUE}
-x <- 1:10
-```
+* Be specific: give enough detail that the model can accurately predict what you want
+* Define acronyms and jargon: don't rely on the system to know the definition of every abbreviation or term you use
+* Provide several examples/content blocks ("few-shot learning"): Give multple examples so that system can simultaneously address them
+* Leading words/code: Start the solution using a phrase or short bit of starter code
+* Chain-of-thought: ask a series of smaller questions and follow up to fine tune the results. You can ask the system to ask you questions as well.
+* Avoid *leading questions* that bake in an answer.
 
-```{r onlyodd-solution}
-x <- 1:10
-keep(x, (x %% 2) == 0)
-```
-
-
-## Lists, heterogenous collections
-
-Vectors must be the same type, lists can be **heterogeneous**:
-```{r}
-list("string", 7, 1:4)
-```
-
-## Named collections
-
-Vectors can have names (`c(first = 1, second = 22, third = 333)`), but names for lists are more common.
-```{r}
-named_list <- list(a_string = "A string", a_vector = 1:4)
-named_list[["a_string"]] # note double brackets
-named_list$a_vector
-```
-
-## Tables: Lists of Vectors
-
-* In a **sample**, we suppose we have $k$ variables measured for each of $n$ units.
-* For each variable, place the $n$ values in a vector.
-* Collect all such vectors into a list of length $k$.
-* Result: $n \times k$ table
-
-## Tables in R
-
-There are a few different types of tables in R (`data.frame`, `tibble`). We will treat them interchangeably for the most part.
-
-```{r}
-class(mpg)
-dim(mpg)
-colnames(mpg)
-head(mpg)
-```
-
-## Accessing individual columns
-
-Recall, the `$` operator lets us get items from lists:
-
-```{r}
-mpg$hwy |> mean() # equiv to mean(mpg$hwy)
-```
-
-## Functions for basic descriptive statistics
-
-```{r}
-sum(mpg$hwy)
-mean(mpg$hwy)
-var(mpg$hwy)
-sd(mpg$hwy) 
-median(mpg$hwy)
-IQR(mpg$hwy)
-quantile(mpg$hwy, c(0.25, 0.75))
-```
-
-## Exercise
-
-What is the average `year` of the cars in `mpg`? What is the standard deviation of the city mileage (`cty`)?
-
-```{r mpgsummary, exercise = TRUE}
-
-```
-
-```{r}
-mean(mpg$year)
-mpg$cty |> sd()
-```
-
-
-
-## Dealing with missingness
-
-Here's a vector with some missing values
-```{r}
-v <- c(1, NA, 2, 10, 3, NA)
-mean(v)
-```
-
-To delete the missing values we have some options:
-```{r}
-mean(v, na.rm = TRUE)
-na.omit(v) |> mean()
-v[!is.na(v)] |> mean()
-```
-
-## TODO
-
-* Logical data types and comparisons?
-* More on tables, really basic summaries
-* Other gotchas
-* **Vectorized computations**
+<!-- TODO: Add some more exercises here -->

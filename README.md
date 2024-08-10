@@ -36,6 +36,7 @@ For details on how to get access to your free Posit Cloud account through the un
 * Later in the semester, we will pull additional material from
     * [Advanced R](https://adv-r.hadley.nz/index.html) (AdvR)
     * [Mastering Shiny](https://mastering-shiny.org/) (MS)
+* We will learn about using GenAI tools with [AI-Assisted Programming](https://search.lib.umich.edu/catalog/record/99187979610106381) (AAP) by Tom Taulli.
 * For learning git, we will use [Beginning Git and GitHub](https://search.lib.umich.edu/catalog/record/99187305231206381) (BGG) by
 Mariot Tsitoara.
 * For statistical background, we suggest [Practical Statistics for Data Scientists](https://search.lib.umich.edu/catalog/record/99187344801606381) (PSDS)
@@ -44,9 +45,10 @@ Lectures can be found in the [lectures](./lectures) directory of this repository
 
 | Lecture Title | Materials |
 -------------------------------------------------------
-| [Statistical Programming and Data Science](./lectures/lecture00.Rmd) | RDS 1 - 1.4 |
-| [Starting R, RMarkdown, and Functions](./lectures/lecture01.Rmd) | RDS 1.4 - 1.6 | 
-| 
+| [Statistical Programming and Data Science](./lectures/lecture00.Rmd) | RDS 1 |
+| [Starting R, RMarkdown, and Functions](./lectures/lecture01.Rmd) | RDS 17 - 18| 
+| [Understanding AI](./lectures/lecture02.Rmd) | AAP 1 - 3 | 
+
 ## Grading
 
 ...
