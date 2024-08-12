@@ -92,6 +92,41 @@ We will use exercises in the slides like a REPL. Use the math operations `*`, `\
 
 The "Start Over" button will give you a fresh environment.
 
+## Comments
+
+We can include human readable text in R files and chunks using the `#` character.
+
+This can make code easier to read:
+
+```{r}
+# The geometric mean of a set of numbers is defined as the exponentiation of the (arithmetic) mean of the log values
+geo_mean <- function(x) {
+  mean(log(x)) |> exp()
+}
+
+# Here is an example using the numbers to 1 to 10
+geo_mean(1:10)
+```
+
+Comments can also be used for *documentation* (using a mini-language for documentation):
+```{r}
+#' Compute the geometric mean of a set of numbers.
+#'
+#' @param x A vector of values
+#' @return The geometric mean of the input.
+#' @example geom_mean(1:10)
+geo_mean <- function(x) {
+  mean(log(x)) |> exp()
+}
+```
+
+We will also use comments for interacting with the Copilot AI assistant:
+
+```{r}
+# prompt: write a function that computes the geometric mean of a set of values
+```
+
+
 ## Expressions and Statements
 
 If you stopped a running R program at some point in time, everything about the program is called its **state**.
@@ -352,7 +387,7 @@ head(women2)
 
 Then we want to compute the average BMI:
 
-$$\text{BMI} = \frac{\text{Weight (kg)}}{(\text{Height (kg)})^2}$$
+$$\text{BMI} = \frac{\text{Weight (kg)}}{(\text{Height (m)})^2}$$
 
 ```{r}
 women3 <- mutate(women2, bmi = weight_kg / (height_m)^2)
