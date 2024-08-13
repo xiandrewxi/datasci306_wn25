@@ -245,7 +245,7 @@ In this case, if you want to run the entire chunk, you need to remove or comment
 
 Recall that R is a **statistical** programming language. In statistics we often work with:
 
->* **Samples**, composed of individual units
+>* **Samples**, composed of individual observations
 >* **Variables**, something measured on each unit in the sample
 
 Tabular data: columns are variables, rows are observations

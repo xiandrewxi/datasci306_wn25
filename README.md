@@ -43,11 +43,13 @@ Mariot Tsitoara.
 
 Lectures can be found in the [lectures](./lectures) directory of this repository.
 
-| Lecture Title | Materials |
+| Number | Lecture Title | Materials |
 -------------------------------------------------------
-| [Statistical Programming and Data Science](./lectures/lecture00.Rmd) | RDS 1 |
-| [Starting R, RMarkdown, and Functions](./lectures/lecture01.Rmd) | RDS 17 - 18| 
-| [Understanding AI](./lectures/lecture02.Rmd) | AAP 1 - 3 | 
+| 0 | [Statistical Programming and Data Science](./lectures/lecture00.Rmd) | RDS Introduction, Whole Game |
+| 1 | [Starting R, RMarkdown, and Functions](./lectures/lecture01.Rmd) | | 
+| 2 | [Understanding AI](./lectures/lecture02.Rmd) | AAP 1 - 3 | 
+| 3 | [Copilot and Statistical Programming](./lectures/lecture03.Rmd) | AAP 4 |
+| 4 | [Data Visualization](./lectures/lecture04.Rmd) | RDS 1.1 - 1.3  |
 
 ## Grading
 
