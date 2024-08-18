@@ -50,6 +50,7 @@ Lectures can be found in the [lectures](./lectures) directory of this repository
 | 2 | [Understanding AI](./lectures/lecture02.Rmd) | AAP 1 - 3 | 
 | 3 | [Copilot and Statistical Programming](./lectures/lecture03.Rmd) | AAP 4 |
 | 4 | [Data Visualization](./lectures/lecture04.Rmd) | RDS 1.1 - 1.3  |
+| 5 | [Visualizing Distributions and Relationships](./lectures/lecture05.Rmd) | RDS 1.4 - 1.5 |
 
 ## Grading
 
