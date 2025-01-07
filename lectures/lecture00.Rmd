@@ -74,9 +74,8 @@ Add the values two and three:
 
 The course will be based on the following structure:
 
-* Homework Assignments (40%) (9 assignments, no drops)
-* Quizzes (20%) (13 quizzes, two lowest  dropped)
-* Labs (5%) (two allowed absences)
+* Homework Assignments (50%) (11 assignments, lowest dropped)
+* Quizzes (15%) (13 quizzes, three lowest  dropped)
 * Project 1 (10%)
 * Project 2 (25%) 
 
@@ -84,7 +83,7 @@ Late homework will not be accepted. Please email your GSI if you have circumstan
 
 ## Working in Groups
 
-You are encouraged to work together on **all class material** to discuss
+You are encouraged to work together on **all class material** except quizzes to discuss
 solutions and debug. Each student must submit own work. Ask yourself, "Am I
 avoiding learning something in my actions?" If yes, don't do it.
 
@@ -105,7 +104,9 @@ Mariot Tsitoara.
 
 * Instructor Zoom student hours TBA 
 * GSI office hours: You may attend any GSI's hours
-* Piazza on Canvas
+* Questions:
+  * HW/projects/content: Piazza on Canvas
+  * Personal issues (extensions, grades, etc): Helpdesk ticket on Canvas
 
 ## Other policies
 
@@ -127,7 +128,7 @@ Visit Canvas....
 * R: A statistical programming language
 * Posit Cloud: A development environment for R
 * Git: Version control and collaboration for software projects
-* GitHub Copilo: AI programming assistant
+* GitHub Copilot: AI programming assistant
 
   
 ## R
@@ -169,15 +170,12 @@ Visit [Posit Cloud](https://posit.cloud) for a walkthrough.
 * You don't have to use GitHub if you use git, but it has become very popular (provides free hosting for small projects).
 * Acquired by Microsoft in 2018
 * Released a Large Language Model (LLM) artificial intelligence (AI) assistant Copilot in 2021.
+* We will cover how to connect Posit Cloud to GitHub and use Copilot in a later lecture.
 
 ## GitHub for Education
 
 * Copilot is typically a paid service, but you can sign up for [GitHub Education](https://education.github.com/discount_requests/application) for free.
 * Make sure you use your `umich.edu` email address. You can [link your UM email address in your account settings](https://github.com/settings/emails) if you already have a GitHub account under another email.
-
-## Connecting Posit Cloud and Copilot
-
-**INSTRUCTIONS HERE**
 
 ## RStudio
 
