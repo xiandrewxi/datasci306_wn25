@@ -343,11 +343,11 @@ sin(rad45)
 In R, when we call a function, first the **arguments** are evaluated, then the function is called.
 
 ```{r}
-sin(360/45 * 2 * pi) 
+sin(45 / 360 * 2 * pi) 
 ```
 Equivalent to:
 ```{r}
-value1 <- 360/45
+value1 <- 45 / 360
 value2 <- value1 * 2
 value3 <- value2 * pi
 sin(value3)
@@ -381,7 +381,7 @@ head(women) # first 6 rows of the table
 Suppose we want to change the units into metric:
 
 ```{r}
-women2 <- transmute(women, height_m = height * 0.0254, weight_kg = weight * 2.2)
+women2 <- transmute(women, height_m = height * 0.0254, weight_kg = weight / 2.2)
 head(women2)
 ```
 
@@ -407,7 +407,7 @@ In the previous example, we didn't use the `women2` variable except to create `w
 
 ```{r}
 women |> # style point: create a new line after the pipe character
-  transmute(height_m = height * 0.0254, weight_kg = weight * 2.2) |>
+  transmute(height_m = height * 0.0254, weight_kg = weight / 2.2) |>
   mutate(bmi = weight_kg / (height_m)^2) |>
   ggplot(aes(x = height_m, y = bmi)) + geom_line()
 ```
