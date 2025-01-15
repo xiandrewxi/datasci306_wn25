@@ -1,6 +1,6 @@
 ---
 subtitle: "Stats 306: Lecture 3"
-title: "Copilot and Statistical Programming"
+title: "Statistical Programming"
 output: 
   learnr::tutorial:
     progressive: true
@@ -12,233 +12,6 @@ runtime: shiny_prerendered
 library(learnr)
 library(tidyverse)
 ```
-
-## A programming specific LLM
-
-In the previous lecture we used UMGPT as our AI tool. Going forward, we will use GitHub's Copilot.
-
-* Trained on open source softare projects hosted on GitHub
-* Integrates with IDEs, including RStudio/Posit Cloud
-* Free with GitHub Education (paid services also available)
-
-## Getting Started
-
-Connecting Copilot to your Posit Cloud project is not hard, but *you must connect each new project* you start.
-
-![Select "Global Options"](images/copilot_global_opts.png)
-
-![Install Copilot Extension](images/copilot_install.png)
-
-![Sign in and get code](images/copilot_signin.png)
-
-![Use the new window to enter code](images/copilot_enter_code.png)
-
-<!-- TODO: Create a project that students can use for some examples -->
-
-Open up the "Example HW" project and connect it to Copilot.
-
-## Interacting with Copilot
-
-Copilot will now be running in your project.
-
-When you open a .Rmd or .R file, Copilot will make suggestions in gray text. Hit "Tab" to accept them. Hit "enter" or keep typing to ignore them.
-
-You can use Copilot with both the markdown and R code chunks, but I find it works best in the R chunks.
-
-## Copilot in R code
-
-Using comments (`#` lines) we can instruct Copilot what we want it to do. For example,
-
-```{r}
-# write a function to compute the geometric mean of a set of values
-```
-
-This generated
-
-```{r}
-geometric_mean <- function(x) {
-  n <- length(x)
-  prod(x)^(1/n)
-}
-
-# test the function
-geometric_mean(c(1, 2, 3, 4, 5)) # 2.605171
-```
-
-
-## Exercise
-
-Using the `Example HW` project where we enabled Copilot, open `Example_HW.Rmd`.
-
-Create a new code chunk. Use Copilot to create a graph based on the `diamonds` data set.
-
-## Giving cues to Copilot
-
-While Copilot can often just build off your comments, a few hints can be helpful.
-
-1. Write multiple line comments with more directions.
-2. Write "# prompt:" to differentiate this from other comments.
-3. If you have a question you can write:
-
-```{r}
-# q: What are the arguments to the ggplot function? 
-```
-Hit enter, and Copilot responds:
-```{r}
-# a: The arguments to the ggplot function are data and aesthetics (aes).
-```
-
-* The space between the `#` and `q:` is important.
-* Sometimes you need to add the `# a:` prompt to get Copilot to give you an answer.
-
-## Exercise
-
-Copy this function into a new code chunk in `Example_HW.Rmd`. Use the question and answer feature to find out what it does. 
-```{r}
-xyz <- function(x, y, z) {
-  rep(x, y) |> paste(collapse = z)
-}
-```
-
-## My results
-
-These can vary for individual sessions, but this is what I got:
-
-```{r}
-xyz <- function(x, y, z) {
-  rep(x, y) |> paste(collapse = z)
-}
-
-# q: what does the function xyz do?
-# a: The function xyz repeats the string x y times and concatenates them with the string z.
-
-xyz("hello", 3, " ")
-```
-
-## Copilot Workflow
-
-1. Write a comment with a prompt.
-2. Hit enter to get Copilot's response.
-3. Accept the response by hitting "Tab" or keep typing to ignore it.
-4. Test the result to make sure it works as expected.
-
-## Exercise
-
-Use Copilot to create a function that computes the median absolute deviation of a collection of numbers (R calls this a vector). MAD is defined as:
-
-$$\text{MAD}(X) = \text{median}(|X - \text{median}(X)|)$$
-
-Verify your function works by computing the median absolute deviation of the values 1 to 5. The MAD should be 1. Here is a little code to get you started:
-
-```{r}
-x <- 1:5
-```
-
-Note: Copilot will try to tell you the output of the function you just wrote. This can be helpful, but it is not always correct. Verify it yourself by running the chunk in the Console by pressing "Ctrl + Shift + Enter" or "Cmd + Shift + Enter".
-
-## My Results
-
-```{r}
-# write a function to compute the median absolute deviation of a set of values
-median_abs_dev <- function(x) {
-  median(abs(x - median(x)))
-}
-
-# apply the median_abs_dev function to x
-x <- 1:5
-median_abs_dev(x) # 1
-
-```
-
-## Using Copilot to help you diagnose problems (debugging)
-
-When we write code (or use Copilot to do it), we will encounter errors. Copilot can help us diagnose these errors.
-
-For example, if we write:
-
-```{r, eval = FALSE}
-# write a function to compute the median absolute deviation of a set of values
-median_abs_dev <- function(x) {
-  median(abs(x - median(x))
-}
-```
-
-When we run this chunk we will get the error:
-
-```
-Error: unexpected '}' in:
-"  median(abs(x - median(x))
-}"
-```
-
-If we ask Copilot what the error is, it will tell us (real q/a interaction with Copilot):
-
-
-```{r}
-# q: What is the error in the median_abs_dev function?
-# a: The error in the median_abs_dev function is an unexpected '}'.
-
-# q: where is the error in the median_abs_dev function?
-# a: The error in the median_abs_dev function is on line 3.
-
-# q: how can I fix this error?
-# a: You can fix this error by adding a closing parenthesis to the median function.
-
-# q: rewrite the function to fix the error
-# a: median_abs_dev <- function(x) {
-#   median(abs(x - median(x)))
-# }
-```
-
-This doesn't always work, but often we can get good information on what is going on.
-
-## Exercise
-
-Copy the following code into a new code chunk in `Example_HW.Rmd`. Use Copilot to help you diagnose the error.
-
-```{r, eval = FALSE}
-xyz <- function(x, y) {
-  ratio <- (x + y) / z
-  return(ratio)
-}
-
-xyz(12, 10)
-```
-
-## My results
-
-```{r, eval = FALSE}
-
-xyz <- function(x, y) {
-  ratio <- (x + y) / z
-  return(ratio)
-}
-
-xyz(12, 10)
-# I copied the next line in:
-# Error in xyz(12, 10) : object 'z' not found
-
-# q: What does this error mean?
-# a: The error "object 'z' not found" means that the variable z is not defined in the function.
-
-# q: how can I fix this error?
-# a: You can fix this error by defining the variable z in the function.
-
-# q: how do I do that?
-# a: You can define the variable z by adding it as an argument to the function.
-```
-
-```{r}
-# rewrite the function with the z argument added
-xyz <- function(x, y, z) {
-  ratio <- (x + y) / z
-  return(ratio)
-}
-
-xyz(12, 10, 2)
-```
-
-In this case, if you want to run the entire chunk, you need to remove or comment out the line `xyz(12, 10)`. Or you can use "Ctrl + Enter" or "Cmd + Enter" to run lines one at a time.
 
 
 ## R: a language for samples
@@ -387,11 +160,14 @@ named_list$a_vector
 
 There are a few different types of tables in R (`data.frame`, `tibble`). We will treat them interchangeably for the most part.
 
+Here are some of the most common operations we will run on tables:
+
 ```{r}
 class(mpg)
 dim(mpg)
 colnames(mpg)
 head(mpg)
+summary(mpg)
 ```
 
 ## Accessing individual columns
@@ -449,4 +225,89 @@ mpg$cty_km_l[1:5]
 
 We will see even better ways of doing this soon.
 
+## Operations for Inference
+
+R has many functions built in to perform **inference** (guessing about populations based on our sample).
+
+* Hypothesis testing: state a hypothesis about a population parameter, decide if data are consistent with the hypothesis at given level of confidence (willingness to make a mistake)
+* Estimation: guessing about population values, include uncertainty in the form of confidence intervals
+* Prediction: guess about new data that has not yet been observed
+
+## Wolf and Moose Populations on Isle Royale
+
+The [Wolf-Moose Project] has been cataloging the size of wolf and moose populations on Isle Royale in Lake Superior for 60 years.
+
+Here is a table of their data:
+
+```{r}
+wolf_moose <- read_csv("data/wolf_moose_yearly.csv")
+dim(wolf_moose)
+summary(wolf_moose)
+```
+
+We will treat these data as being a sample from a population of possible yearly observations that we could make.
+
+## Names with invalid identifiers
+
+Recall in R, our variables must start with a letter, `.`, or `_` and consistent of only those and numbers.
+
+Notice that some of the colnames of the `wolf_moose` table do not adhere to that:
+
+```{r}
+wolf_moose |> colnames() |> tail(2)
+```
+
+We can access those using backticks around the names:
+
+```{r}
+wolf_moose$`ice bridges (0=none, 1 = present)` |> mean()
+```
+
+To make our life a little easier, let's change the last column name:
+
+```{r}
+colnames(wolf_moose)[15] <- "ice_bridge"
+wolf_moose |> colnames() |> tail(2)
+```
+
+Notice the use **assigning to a function.** R has some special functions that let you do this. It is not automatic.
+
+## Hypothesis Tests
+
+Many of the built in test functions have `.test` suffixes on their name.
+
+For example, if we wanted to test if the proportion of years (out of all possible years) that had an ice bridge between Isle Royale and the main land was 0.5 (against the alternative that is not 0.5), we can use `binom.test`:
+
+```{r}
+formalArgs(binom.test)
+binom.test(sum(wolf_moose$ice_bridge), dim(wolf_moose)[1])
+```
+
+Many of the hypothesis tests also include confidence intervals for an estimate.
+
+Student's t-test is `t.test`. Let's test the hypothesis that the moose population size is 1000 on average
+
+```{r}
+formalArgs(t.test) # need to get more info!
+t.test(wolf_moose$moose, mu = 1000, conf.level = 0.99)
+```
+
+## Linear Regression
+
+Recall that linear regression models the **conditional mean** of one variable ($Y$) as a linear function of other, conditioning variables ($x_1, x_2, \ldots$):
+
+$$E(Y \mid X_1 = x_1, X_2 = x_2, \ldots) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \ldots$$
+
+We can get estimates for the $\beta$ parameters using the `lm` function. The `lm` function uses R's **formula** interface:
+
+```{r}
+lm(wolves ~ moose + ice_bridge, data = wolf_moose)
+```
+
+
+To get the hypothesis tests for the model, we need to use the `summary` function:
+
+```{r}
+lm(wolves ~ moose + ice_bridge, data = wolf_moose) |> summary()
+```
 
