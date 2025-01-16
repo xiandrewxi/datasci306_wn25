@@ -363,6 +363,7 @@ ggplot(presidential, aes(x = reorder(name, start), y = duration_years, fill = pa
 
 But wait! How did "Bush" serve twelve years?!
 
+**Lesson**: Always check the results when using AI-generated code.
 
 ## A programming specific LLM
 
@@ -591,63 +592,6 @@ xyz(12, 10, 2)
 
 In this case, if you want to run the entire chunk, you need to remove or comment out the line `xyz(12, 10)`. Or you can use "Ctrl + Enter" or "Cmd + Enter" to run lines one at a time.
 
-## Git
-
-Git is going to be an important part of this course, and possibly your future! While it may be intimidating at first, your effort will be well worth it in the long run.
-Git was already discussed in some detail in the first two lectures, so we won't cover it much now. 
-Instead, we will review some of the basic ideas and can provide help where needed. 
-
-## Resources
-
-* [Beginning Git and GitHub](https://search.lib.umich.edu/catalog/record/99187305231206381) by
-Mariot Tsitoara.
-* [Pro Git](https://git-scm.com/book/en/v2), free textbook by the maintainer of the Git homepage. 
-* Your GSIs! 
-
-## Basic Concepts
-
-* **repository**: A representation of the current state of a collection of files, along with its entire history of modifications. 
-* **commit** (noun): A recorded change made to the repository. 
-* **branch**: While we won't do a lot with branches in this course, they are a very useful way of collaborating. Branches are essentially additional versions of the repository that you can create, name, delete, and merge into the main (or master) branch of the repository. 
-
-## Common Git commands
-
-Git is a powerful version control system that allows us to share and edit code, as well as keep track of previous versions of code. 
-
-To get a "local" copy of a repository, you can use: 
-
-```{bash gitClone, eval=FALSE}
-git clone <repository>
-```
-
-For example, if you want to get the course repository on your personal computer, you may run (depending on your section):
-
-```{bash gitCloneEx, eval=FALSE}
-git clone https://github.com/jravi123/stats306-w24
-git clone https://github.com/markmfredrickson/stats306_winter_2024.git
-```
-
-Once you have cloned a "remote" repository on to your personal computer, it's possible that changes to the "remote" repository are made. 
-To keep your "local" repository up to date, you can run:
-
-```{bash gitPull, eval=FALSE}
-git pull
-```
-
-You can also check the status of the repository by running: 
-
-```{bash gitStatus, eval=FALSE}
-git status
-```
-
-This is a very useful command as it provides you with a basic summary about the status of a repository, for example, if any local changes have been made.
-
-Other useful `git` functions include: 
-
-* `git pull`
-* `git add <filename>`
-* `git commit -m "Commit Message"`
-* `git push`
 
 ## Introduction to R
 
@@ -673,9 +617,6 @@ ggplot(sunspots_year, aes(x = year, y = spots)) + geom_line()
 - To load a package (already installed) use the library(<PACKAGE NAME>) command
 
 ```{r package1}
-# run the first two lines if you have not installed the tidyverse and learnr packages
-# install.packages("tidyverse")
-# install.packages("learnr") 
 library(learnr)            
 library(tidyverse)            
 ```
@@ -748,39 +689,22 @@ round(3.1415926535, 3)
 abs(-4)
 ```
 
-You can also write your own functions:
 
-```{r newfunc}
-# writing your own functions
-pow <- function(base, exponent) {
-  # this is a trivial example
-  return (base^exponent)
-}
+Exercise 2: Look up the help documentation for the `mean` function. For the "default s3 method" (we'll talk more about methods later), what arguments are required? What are the optional arguments?
 
-dog <- function() {
-  print("woof") # does not need to return anything
-}
-```
-
-```{r runfunc}
-pow(2,3); dog()
-```
-
-Exercise 2: write a function to print the volume of a cylinder of radius $r$ cm, and height $h$ cm. $h$ and $r$ are the inputs of the function. Also print the volume of a cylinder with $r=3$ and $h=5$
-
-*Hint: volume=$\pi r^2 h$*
+Use the `mean` function to calculate the average value of the vector `x` below. Also calculate a trimmed mean where the top and bottom 10% of the values are removed.
 
 ```{r exercise2, exercise = TRUE}
-## your code here.
+x <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 ```
 
 
-## Vectors
+## Collections
 
-- The vector is the basic data structure in R
-- Two kinds of vectors:
-  + Atomic vectors: each component is of the same type
-  + Lists: components can be atomic vectors or any other type
+Since R is a **statistical programming language**, working with collections of data is fundamental to the language.
+
+- The vector is the basic data structure in R. All components must be the same type (e.g. numeric, string, logical, etc). This property is sometimes referred to as being "atomic."
+- Lists can contain different types of data.
 
 ```{r atomicvec}
 int_vec <- c(2L, 3L, 5L, 8L) # Make an atomic vector containing integers
@@ -887,6 +811,18 @@ Useful: More about base R can be found here: [base R cheat sheet](https://github
 
 
 ## Working with Data
+
+
+## `data.frame`: lists of vectors
+
+We organize our **samples** of $n$ **units/subjects/participants** on whom we have measured **variables** into a **tables.**
+
+- The units are on the rows ($n$ rows)
+- The variables are the columns ($k$ columns)
+
+Tables are orgranized as **lists** of length $k$ composed of vectors of length $n$.
+
+Each variable is a vector that we can operate on.
 
 ### Creating a Tibble
 
