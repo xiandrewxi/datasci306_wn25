@@ -198,12 +198,12 @@ What is the average `year` of the cars in `mpg`? What is the standard deviation 
 
 ```
 
-```{r}
+```{r mpgsummary-solution}
 mean(mpg$year)
 mpg$cty |> sd()
 ```
 
-## Vectorized computations with with columns
+## Vectorized computations with columns
 
 Since the columns of a table are *vectors*, we can perform vectorized computations on them.
 
