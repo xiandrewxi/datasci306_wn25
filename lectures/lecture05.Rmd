@@ -1,6 +1,6 @@
 ---
 subtitle: "Stats 306: Lecture 5"
-title: "Visualizing Distributions and Relationships"
+title: "More on ggplot and Visualization"
 output: 
   learnr::tutorial:
     progressive: true
@@ -11,6 +11,385 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 library(tidyverse)
+library(lubridate)
 ```
+## Review
+
+- *Semiology of Graphics* describes visual variables and relationships
+- The `ggplot` package embraces this idea by providing a **grammar** for graphics
+- General `ggplot` template:
+
+```
+ggplot(data, aes(x = column1, y = column2, ...)) + geom_TYPE(aes(... optional mapping ...), size = 2)
+```
+
+## Other geometries
+
+Points are great for graphing two **quantitative** or **continuous** variables.
+For **discrete** or **qualitative** we need other tools.
+
+```{r}
+ggplot(data = mpg,
+       aes(x = displ, y = class)) + 
+  geom_boxplot() 
+```
+
+## List of geometries
+
+[More ggplot documentation](https://ggplot2.tidyverse.org/reference/index.html#geoms).
+
+
+## Statistical Summaries
+
+* In addition to the raw data (or our calculations), many plots use **data summaries** 
+* `ggplot2` calls these **summary statistics** or `stat_*` functions
+* We already saw a summaries in the boxplot: quantiles, twice IQR bars
+* We can access summaries that geometries compute and add additional summaries.
+
+## Boxplot as statistic
+
+```{r}
+median(mpg$displ)
+quantile(mpg$displ, c(0.25, 0.75))
+```
+
+```{r}
+ggplot(data = mpg,
+       aes(x = displ)) + 
+  geom_boxplot() 
+```
+
+
+## Adding computed summaries
+
+The `stat_summary` function allows you to use any function to summarize 
+
+```{r}
+ggplot(data = mpg,
+       aes(x = displ, y = class)) + 
+  geom_boxplot() +
+  stat_summary(fun = mean, size = 3, color = "red", geom = "point") 
+```
+
+## Trend lines
+
+When using scatter plots, one of the most common summaries is a **trend line**.
+```{r}
+ggplot(data = mpg,
+       aes(x = displ, y = hwy)) + 
+  geom_point(position = "jitter", alpha = 0.25) +
+  stat_smooth() # geom_smooth also works
+```
+
+## More layering
+
+```{r}
+ggplot(data = mpg, aes(x = displ)) +
+  geom_point(aes(y = hwy), color = "orange") +
+  geom_point(aes(y = cty), color = "blue") +
+  stat_smooth(aes(y = hwy), lty = 1, color = "black") +
+  stat_smooth(aes(y = cty), lty = 2, color = "black")
+```
+
+We'll see a better way to make this table when we talk about tall vs. wide format data.
+
+## Overriding defaults of `stat` functions
+
+Each `geom_*` has a default statistic function. We can override this.
+
+```{r}
+ggplot(data = mpg, aes(x = class)) +
+  geom_bar() # default stat is count
+```
+
+## Average highway efficiency by class
+
+```{r}
+ggplot(data = mpg, aes(x = class, y = hwy)) +
+  geom_bar(stat = "summary", fun = "mean") 
+```
+
+## Replacing tables
+
+We often use **tables** in documents to give numerical summaries. But why not
+replace those with a nice graphic?
+```{r}
+ggplot(data = mpg, aes(x = class, y = hwy)) +
+  stat_summary(
+    fun.min = min,
+    fun.max = max,
+    fun = median
+  )
+```
+
+## Exporting Plots
+
+* Automatically included in knitted RMarkdown documents
+* Export from the Plots panel in RStudio/Posit Cloud
+* `ggsave` function to save to file (variety of formats)
+
+
+
+## Quantitative vs. Nominal measurements in R
+
+We have will not overly emphasize the difference between **quantitative** (continuous, numerical) data and **nominal** (discrete, categorical) data *but* it's good to know how R handles these things.
+
+```{r}
+class(c(1.0, 2.2, 3.14159)) # quantitative
+class(mpg$cyl) # quantitative
+class(mpg$class) # nominal
+class(factor(mpg$cyl)) # nominal
+```
+
+## `ggplot` and types of data
+
+Some aesthetic mappings behave differently if they have quantitative or nominal columns.
+
+By default, `cyl` will be treated as quantitative:
+```{r}
+ggplot(data = mpg, aes(x = hwy, y = cty, color = cyl)) +
+  geom_jitter(size = 2)
+```
+
+## Forcing variables to be nominal
+
+```{r}
+ggplot(data = mpg, aes(x = hwy, y = cty, color = factor(cyl))) +
+  geom_jitter(size = 2)
+```
+
+## Geometries that expect nominal mappings
+
+```{r}
+ggplot(data = mpg, aes(x = cyl, y = cty)) +
+  geom_boxplot()
+```
+
+## What we probably wanted
+
+```{r}
+ggplot(data = mpg, aes(x = factor(cyl), y = cty)) +
+  geom_boxplot()
+```
+
+
+## Overprinting revisited
+
+We encountered **overprinting** when we were plotting cars' efficiency ratings. 
+
+Our previous solution used jitter and/or transparency.
+
+New idea: split up the plot by groups.
+
+## Another overplotting example
+
+```{r}
+ggplot(data = mpg, aes(x = cty, y = hwy, color = class)) +
+  geom_jitter()
+```
+
+## Introducing formulas
+
+R has a special syntax for expressing **formulas**
+
+```{r eval = FALSE}
+y ~ x1 + x2 + x3 * x4
+```
+
+>* Used for specifying statistical models for Y given some predictors X
+>* Delayed computation (early versions of `ggplot` used formulas in the `aes` function)
+>* Anonymous functions in `tidyverse` packages
+
+## Facets: "small multiples"
+
+```{r}
+ggplot(data = mpg, aes(x = cty, y = hwy)) +
+  geom_jitter() +
+  facet_wrap(~ class)
+```
+
+## Forcing on one row
+
+```{r}
+ggplot(data = mpg, aes(x = cty, y = hwy)) +
+  geom_jitter() +
+  facet_wrap(~ class, nrow = 1)
+```
+
+## Forcing two columns
+
+```{r}
+ggplot(data = mpg, aes(x = cty, y = hwy)) +
+  geom_jitter() +
+  facet_wrap(~ class, ncol = 2)
+```
+
+## Facets can include everything plots have 
+
+```{r warning = FALSE}
+ggplot(data = mpg, aes(x = cty, y = hwy)) +
+  geom_jitter() +
+  stat_smooth() + 
+  facet_wrap(~ class) 
+```
+
+
+## Multiple factors
+
+```{r warning = FALSE}
+ggplot(data = mpg, aes(x = cty, y = hwy)) +
+  geom_jitter() +
+  stat_smooth() + 
+  facet_wrap(~ class + drv) 
+```
+
+## Two way facets (`facet_grid`)
+
+```{r warning = FALSE}
+ggplot(data = mpg, aes(x = cty, y = hwy)) +
+  geom_jitter() +
+  stat_smooth() + 
+  facet_grid(drv ~ class)
+```
+
+## Exercise
+
+```{r facet-setup}
+set.seed(293939222)
+n <- 3 * 33
+g <- sample(c("high", "medium", "low"), n, replace = TRUE) %>% as.factor()
+xmu <- c(0, 1, 2)[g]
+ymu <- c(0, -1, 2)[g]
+x <- rnorm(n, mean = xmu, sd = sqrt(2)/2)
+y <- rnorm(n, mean = ymu)
+d <- data.frame(x, y, g)
+```
+
+Add facets using the `g` variable.
+```{r facet, exercise = TRUE}
+ggplot(data = d, aes(x = x, y = y, color = g)) +
+  geom_point()
+```
+
+## Controlling the axis in `facet_grid`
+
+We can make `facet_grid` behave like a single row (like a `facet_wrap`)
+
+```{r warning = FALSE}
+ggplot(data = mpg, aes(x = cty, y = hwy)) +
+  geom_jitter() +
+  facet_grid(. ~ class) 
+```
+
+## Going the other direction
+
+Use the formula `class ~ .` to get a single column of facets:
+
+```{r facet-column, exercise = TRUE}
+ggplot(data = mpg, aes(x = cty, y = hwy)) +
+  geom_jitter()
+```
+
+
+## Coordinate Systems
+
+Thus far we have been using the default **Cartesian coordinate system**.
+
+There are many other ways in which we can connect our **position visual variables** to their actual locations on a plane.
+
+This are called **coordinate systems** or **projections**.
+
+## Coordinate systems for presentation
+
+Why use a different coordinate system? One reason to provide a convenient or interesting **presentation**.
+
+Base plot:
+```{r}
+mpg_boxplot <- ggplot(data = mpg, aes(x = class, fill = class)) +
+  geom_bar(width = 1) # width = 1 makes boxes touch
+print(mpg_boxplot)
+```
+
+## Flipping coordinates
+
+```{r}
+mpg_boxplot + coord_flip()
+```
+
+## Coxcomb plots
+
+Polar coordinates: express location as **angle** and **magnitude** from the origin.
+
+```{r}
+mpg_boxplot + coord_polar()
+```
+
+## Temperature data for Ann Arbor, MI
+
+```{r}
+aatemp <- read_csv("data/ann_arbor_weather.csv.gz")
+```
+
+## Plotting temperature vs. time
+
+```{r}
+ggplot(data = aatemp, aes(x = DATE, y = TMAX)) +
+  geom_line()
+```
+
+## Seasonal effects
+
+We can see some variation in temperature over the year. What exactly is the **seasonal effect** of temperature? (Consistent variation over periods of time)
+```{r}
+# remember: tables are LISTS of VECTORS:
+aatemp$month <- month(aatemp$DATE)
+ggplot(data = aatemp, aes(x = factor(month), y = TMAX)) +
+  geom_violin(aes(fill = factor(month)))
+```
+
+## Wrapping around using polar coordinates
+
+```{r polar}
+ggplot(data = aatemp, aes(x = factor(month), y = TMAX)) +
+  geom_violin(aes(fill = factor(month))) +
+  coord_polar()
+```
+
+
+## Days with large temp jumps
+
+```{r}
+temp_diff <- diff(aatemp$TMAX)
+length(temp_diff)
+dim(aatemp)
+aatemp$temp_diff <- abs(c(NA, temp_diff))
+```
+
+## Distributon of differences
+```{r}
+ggplot(data = aatemp, aes(x = temp_diff)) + geom_bar()
+```
+
+## Plotting when large jumps occur during the year
+
+Let's define a large jump in maximum temperature as being when one day is more than 10 degrees different than the subsequent day.
+
+```{r}
+ggplot(data = filter(aatemp, temp_diff > 10), aes(x = yday(DATE))) +
+  geom_histogram() + coord_polar()
+```
+
+## Other misceallaneous `ggplot` items
+
+* Several other coordinate systems possible, in particular for represent geographic data.
+* We saw using the `position` argument to jitter data. Other geometries have more options with jitter. See documentation.
+* We'll revisit more with labels, themes, and other presentation later in the semester.
+
+
+
+
+
+
+
 
 
