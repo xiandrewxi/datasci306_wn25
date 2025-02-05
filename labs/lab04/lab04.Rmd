@@ -24,9 +24,8 @@ library(gapminder)
 ## Today's Content
 
 > -   mutate, transmute, rename
-> -   group_by, summarize
 > -   pipe operator
-> -   writing custom
+> -   writing custom functions
 
 ## Mutate
 
@@ -63,6 +62,9 @@ There are more useful arguments:
 ```{r mutate, exercise=T}
 ?mutate
 ```
+
+the 'mutate' function returns a tibble with the added columns. 
+
 
 ## Creating Multiple Columns
 
@@ -174,7 +176,7 @@ Breaking down the syntax above:
 -   \~ indicates the start of a formula to apply across several columns
 -   . is a dummy variable (a *placeholder*) standing in for each column: it represents the argument passed to the nested `across` function by the outer `mutate` function (in this case).
 
-## transmute
+## Transmute
 
 `transmute` works exactly like `mutate`, the only difference being that only newly created columns will be retained in our new dataset (tibble).
 It is exactly the same as setting .keep = "none".
@@ -230,56 +232,6 @@ head(iris2)
 > -   the `.` inside `str_replace` is, again, a *placeholder* standing for whatever is passed to it by `rename_with`
 > -   We use "\\\\" to escape the `.` since `str_replace` expects a regular expression by default, where `.` stands in for any character.
 
-## Summarize and group_by
-
-`summarize` is used to compute a new dataset (tibble) by using aggregation functions.
-It is usually useful when used with `group_by`, as this helps to compute summaries for each category of a column of a dataset.
-
-Some useful aggregation functions include:
-
-> -   Center: mean(), median()
-> -   Spread: sd(), IQR(), mad()
-> -   Range: \`min(), max(), quantile()
-> -   Position: first(), last(), nth()
-> -   Count: n(), n_distinct()
-> -   Logical: any(), all()
-
-## Summarize for entire dataset
-
-To find the mean of Sepal Width and Sepia Length for the iris dataset:
-
-```{r}
-summarise(iris, mean_sep_width = mean(Sepal.Width), 
-          mean_sep_length = mean(Sepal.Length)
-          )
-
-```
-
-Question: What does the code below do?
-
-```{r}
-summarise(iris, n = n(), 
-             unique= n_distinct(Species),
-             first = first(Species), 
-             last = last(Species),
-             `30th` = nth(Species, 30))
-```
-
-## Summarize by groups
-
-We first group the iris dataset by Species.
-
-```{r}
-by_group <- group_by(iris, Species)
-
-```
-
-Then take the mean for Sepal Length and Width within each group:
-
-```{r}
-summarise(by_group, mean_sep_length = mean(Sepal.Length),
-          mean_sep_width = mean(Sepal.Width))
-```
 
 ## The Pipe Operator
 
