@@ -18,7 +18,7 @@ aatemp <- read_csv("data/ann_arbor_weather.csv.gz")
 
 ## Using functions
 
-So far we have been using functions (sometimes called operators):
+So far we have been using pre-written functions:
 
 ```{r}
 aatemp |>
@@ -82,6 +82,7 @@ function_name <- function(required_argument, optional_argument = 0, ...) {
 Write an R function to transform a vector into a $Z$-score
 ```{r scale, exercise = TRUE}
 x <- c(-1, 2, 1.1)
+y <- c(0, -1, 99, 15, 82)
 ```
 
 ```{r scale-solution}
@@ -90,6 +91,7 @@ z_score <- function(input) {
 }
 
 z_score(x)
+z_score(y)
 ```
 
 
@@ -116,20 +118,20 @@ aatemp |>
 Suppose we want to median center and scale in terms of the IQR. We are going to use this functionality on the original data, but also within years.
 
 ```{r}
-myscale <- function(x) {
+scale_IQR <- function(x) {
   (x - median(x)) / IQR(x)
 }
 ```
 ```{r}
-mutate(aatemp, TMAX_myscale = myscale(TMAX)) |>
+mutate(aatemp, TMAX_myscale = scale_IQR(TMAX)) |>
   ggplot(aes(x = factor(year(DATE)), y = TMAX_myscale)) +
     geom_violin()
 ```
 
 ```{r}
 aat_year <- group_by(aatemp, year(DATE))
-summarize(aat_year, myscale(TMAX)) |>
-  ggplot(aes(x = factor(`year(DATE)`), y = `myscale(TMAX)`)) +
+summarize(aat_year, scale_IQR(TMAX)) |>
+  ggplot(aes(x = factor(`year(DATE)`), y = `scale_IQR(TMAX)`)) +
     geom_violin()
 ```
 
@@ -147,33 +149,7 @@ Let's convert to Celsius ($C = (F - 32) \cdot 5/9$) by first creating a function
 
 ```
 
-## From duplicated code to clean code
 
-How many interquartile ranges above or below the median? (Similar to a Z-score)
-
-```{r}
-mutate(aatemp, TMAX_scale_IQR = (TMAX - median(TMAX)) / IQR(TMAX),
-               TMIN_scale_IQR = (TMIN - median(TMIN)) / IQR(TMIN)) |>
-  group_by(abs(TMAX_scale_IQR) > 1.5, abs(TMIN_scale_IQR) > 1.5) |>
-  summarize(n())
-```
-
-## Writing our own functions: capturing common behavior
-
-```{r}
-scale_IQR <- function(x) {
-  (x - median(x)) / IQR(x)
-}
-
-temp_summary <- function(tbl) {
-  group_by(tbl, abs(TMAX_scale_IQR) > 1.5, abs(TMIN_scale_IQR) > 1.5) |>
-  summarize(n())
-}
-
-mutate(aatemp, TMAX_scale_IQR = scale_IQR(TMAX), 
-               TMIN_scale_IQR = scale_IQR(TMIN)) |>
-  temp_summary()
-```
 
 ## `mutate` helper functions
 
@@ -290,22 +266,6 @@ numbered_table(letters)
 ```
 
 
-## Summarizing with functions that return more than one value
-
-```{r}
-mean_var <- function(x) {
-  tibble(average = mean(x), variance = var(x))
-}
-aat_year <- group_by(aatemp, year(DATE))
-summarize(aat_year, mean_var(TMAX))
-```
-
-Use caution when using this function more than once!
-
-```{r}
-summarize(aat_year, mean_var(TMAX), mean_var(TMIN))
-```
-
 ## Predicates
 
 A **predicate** is a function that returns `TRUE` or `FALSE`.
@@ -393,7 +353,7 @@ Make the default argument be `mean`, but demonstrate using `median` centering as
 myvec <- c(203404, 292, 1010, 3, -10930, 39)
 ```
 
-```{r higher-order-soultion}
+```{r higher-order-solution}
 myvec <- c(203404, 292, 1010, 3, -10930, 39)
 
 center <- function(x, f = mean) {
