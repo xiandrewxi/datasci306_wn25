@@ -20,7 +20,7 @@ library(Lahman) # install.packages("Lahman") if you don't have this
 
 * From duplicated to clean code:
   * Common patterns in function
-  * Use of `mutate_at`
+  * Use of `across`
   * Lists of functions as arguments
 * Return values: only one but can package up in vectors, lists, and tables
 * Predicates: functions that return `TRUE` or `FALSE`; use in `select`
@@ -170,7 +170,7 @@ my_median <- function(x) {
   x_sorted <- sort(x)
   n <- length(x)
   if (n %% 2 == 1) {
-    ## odd numer of observations
+    ## odd number of observations
     return(x_sorted[(n + 1)/2])
   } else {
     return(mean(x_sorted[c(n/2, n/2 + 1)]))
