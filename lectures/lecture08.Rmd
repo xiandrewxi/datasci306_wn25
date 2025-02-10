@@ -1,5 +1,5 @@
 ---
-title: "Stats 306: Lecture 8"
+title: "Data Science 306: Lecture 8"
 subtitle: "Wrapping up functions"
 output: 
   learnr::tutorial:
@@ -43,10 +43,12 @@ We can look up the description of the columns using `?Batting` or the help menu.
 
 ## Getting in the Lahman data
 
+Let's investigate some successful players over the history of baseball:
+
 ```{r}
-summarize(Batting, range(yearID))
+range(Batting$yearID)
 group_by(Batting, playerID) |> 
-  summarize_at(c("G", "HR", "RBI"), sum) |>
+  summarize(across(c(G, HR, RBI), sum)) |>
   arrange(desc(HR)) |> head(5)
 ```
 
@@ -68,28 +70,70 @@ lookupPlayer <- function(pid) {
 lookupPlayer(c("aaronha01", "ruthba01")) |> select(nameFirst, nameLast)
 ```
 
+## Writing functions that take columns as arguments
+
+Many of the tidyverse functions take columns names as arguments. 
+
+This functionality is non-standard for R. Usually arguments are evaluated *before* calling a function.
+
+```{r eval = FALSE}
+# Run this in your console to see the error
+f <- function(tbl, column) {
+  mutate(tbl, column * 2)
+}
+
+f(starwars, mass)
+```
+
+This will cause an error:
+
+```
+Error in `mutate()`:
+ℹ In argument: `column * 2`.
+Caused by error:
+! object 'mass' not found
+```
+
+Such **non-standard evaluation** is quite helpful when doing data analysis directly, but makes writing functions a little more difficult.
+
+## Curly brace syntax
+
+The error is caused by the fact that "mass" was not a variable. To indicate that we should not interpret it as a variable, and instead think of it as a column name we use `{{column}}` syntax:
+
+
+```{r}
+# Run this in your console to see the error
+f <- function(tbl, column) {
+  mutate(tbl, {{column}} * 2)
+}
+
+f(starwars, mass) |> select(mass, `mass * 2`)
+```
+
+
+
 ## Successful players (batting)
 
 Which players had the most home runs? Games played? Stolen bases?
 
+We want to compute the same thing several times, we'll use curly brace synatax to help:
+
 ```{r}
 top_players <- function(stat) {
   group_by(Batting, playerID) |>
-    summarize_at(stat, list(stat_sum = sum)) |>
-    filter(stat_sum == max(stat_sum, na.rm = TRUE)) |>
+    summarize(stat_sum = sum({{stat}})) |>
+    arrange(desc(stat_sum)) |>
+    head(1) |>
     mutate(lookupPlayer(playerID)) |>
-    select(playerID, stat_sum, nameFirst, nameLast) |>
-    mutate(type = stat)
+    select(playerID, stat_sum, nameFirst, nameLast)
 } 
 
-# rbind stacks tables
-rbind(
-  top_players("HR"),
-  top_players("G"),
-  top_players("SB"))
+# stack tables
+bind_rows(
+  top_players(HR),
+  top_players(G),
+  top_players(SB))
 ```
-
-(NB: using the `list(new_col_name = summary_function)` lets us force the name of the column with the results of `summary_function`)
 
 ## Variable number of arguments
 
@@ -107,7 +151,7 @@ The `...` means "any number of additional arguments"
 
 ```{r}
 sum_summary <- function(...) {
-  select(...) |> summarize_all(sum)
+  select(...) |> summarize(across(everything(), sum))
 }
 
 sum_summary(Batting, HR, G, SB)
@@ -116,23 +160,23 @@ sum_summary(Batting, HR, G, SB)
 Notice how all three arguments get passed to `select` automatically.
 
 
-## Exercise
+## Exercise: Creating URLS
 
 The `paste` function will take more than one item to turn into a string using its `...` argument:
 
 ```{r}
-paste("Welcome", "to", "Stats206", "and", "DataSci101")
+paste("Welcome", "to", "DataSci306", "Introduction", "to", "Statistical", "Programming")
 ```
 
 Write a function that takes a `...` argument and passes it along to `paste`. Set the `sep = "+"` when calling `paste`.
 
 ```{r exdots, exercise = TRUE}
 
+##plus_paste("Welcome", "to", "DataSci306", "Introduction", "to", "Statistical", "Programming")
 
-## plus_paste("Welcome", "to", "Stats206", "and", "DataSci101")
 ```
 
-## Common use of `...`: passing optional arguments to called functions
+## Using anonymous functions to pass arguments to called functions
 
 We have seen `na.rm = TRUE` pop up from time to time.
 
@@ -144,18 +188,20 @@ d
 What happens if we try to summarize using `mean`?
 
 ```{r}
-summarize_all(d, mean)
+summarize(d, across(everything(), mean))
 ```
-`summarize` uses `...` to pass additional arguments to the summarizing functions.
+
+We can make a version of the `mean` function with `na.rm = TRUE` using an *anonymous* function:
 
 ```{r}
-summarize_all(d, mean, na.rm = TRUE)
+summarize(d, across(everything(), ~ mean(.x,  na.rm = TRUE)))
 ```
+
 ## Fixing a previous function
 
 ```{r}
 sum_summary <- function(...) {
-  select(...) |> summarize_all(sum, na.rm = TRUE)
+  select(...) |> summarize(across(everything(), ~ sum(.x, na.rm = TRUE)))
 }
 
 sum_summary(Batting, HR, G, SB)
@@ -275,9 +321,9 @@ f <- function(y) {
 }
 f(2)
 ```
-## Small aside: `drop = TRUE`
+## Small aside: `pull` function
 
-Sometimes we get tables, but we actually just want a value.
+Sometimes we get tables, but we actually just want a column.
 
 ```{r}
 ## we want to get the memory for the laptop:
@@ -285,11 +331,11 @@ tbl <- tibble(computer = c("Desktop", "Laptop"), RAM = c(16, 8))
 (lap_mem <- filter(tbl, computer == "Laptop") |> select(RAM))
 ```
 
-When pulling out values setting the `drop = TRUE` argument strips away the table, if possible:
+We can get this value by pulling out the RAM column:
 
 
 ```{r}
-lap_mem[1, 1, drop = TRUE]
+pull(lap_mem, RAM)
 ```
 
 ## Using lexical scope in a function
@@ -299,12 +345,13 @@ This can be convenient if we want to calculate a quantity and then re-use it whe
 Barry Bonds has hit the most homeruns. 
 ```{r}
 filter(Batting, playerID == "bondsba01") |>
-  summarize(sum(HR)) |> 
-  select(`sum(HR)`)  -> tmp 
-(bb_hr <- tmp[1, 1, drop = TRUE])
-```
-```{r}
+  summarize(s = sum(HR)) |> 
+  pull(s) -> bb_hr
 
+bb_hr
+```
+
+```{r}
 at_least_bb <- function(x) { 
   x > bb_hr # x is argument, bb_hr is from environment
 }
@@ -314,9 +361,9 @@ at_least_bb <- function(x) {
 How many players hit at least as many hits, doubles, or triples as Bonds hit HRs?
 ```{r}
 group_by(Batting, playerID) |>
-  summarize_at(c("H", "X2B", "X3B"), sum) |>
-  transmute_at(c("H", "X2B", "X3B"), at_least_bb) |>
-  summarize_all(sum)
+  summarize(across(c(H, X2B, X3B), sum)) |>
+  transmute(across(c(H, X2B, X3B), at_least_bb)) |>
+  summarize(across(everything(), sum))
 ```
 
 ## Plotting hits
