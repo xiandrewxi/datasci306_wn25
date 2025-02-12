@@ -29,86 +29,101 @@ library(nycflights13)
 ```
 
 
-## Overview
+## Overview: Exploratory Data Analysis (EDA)
 
-**Exploratory data analysis (EDA)** can be thought of as a cycle:
+**Exploratory Data Analysis (EDA)** is an iterative process that gives us an initial understanding of the data. Key steps:
 
-> - Generate questions about your data.
-> - Search for answers by visualizing, transforming, and modelling your data.
-> - Use what you learn to refine your questions and/or generate new questions.
+> - **Generate questions** about your data.
+> - **Search for answers** by visualizing, transforming, and modelling your data.
+> - **Refine your questions** based on what you learn, leading to further exploration.
 
-**Variation** refers to a variable's tendency to change in value from measurement to measurement.
+This lab will guide you through key concepts of EDA, focusing on **variation** and **covariance** in data. You will learn how to explore different types of variables using visualizations and statistical summaries.
 
-How variation is visualized depends on the type of the variable
+## Variation 
 
-> - Continuous variables
-  >    - Can take any value in an infinite set of ordered values
-  >    - Typically visualized using histograms and boxplots
+**Variation** refers to a variable's tendency to change in value from measurement to measurement. It even exists  for constant quantities like the speed of light, due to measurement error.  
+
+Both continuous and categorical variables exhibit variation, and understanding their patterns can reveal valuable insights. The best way to understand that pattern is to *visualize the distribution* of the variable’s values:
+
+> - Numerical (Continuous) variables
+  >    - Typically visualized using *histograms* and *boxplots*
 > - Categorical variables
-  >    - Can take any value in a finite set of categories/levels
-  >    - Typically visualized using barplots
-> - Aspects of variation frequently focused on:
-  >    - Typical/atypical values
-  >    - Unusual values
-  >    - Missing values
+  >    - Typically visualized using *barplots*
+  
+We use `diamonds` dataset to show how to visualize the distributions. 
 
-## Typical/Atypical Values
+`diamonds` is a dataset containing the prices and other attributes of almost 54,000 diamonds. This dataset is built in `ggplot2`, so you can look up the introduction document by running:
+
+```{r}
+?diamonds
+```
+
+In this dataset, variable `cut` denotes the quality of the cut (Fair, Good, Very Good, Premium, Ideal). It is *categorical* so we use a *bar chart* to examine its distribution
+
+```{r}
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut))
+```
+
+The height of the bars displays how many observations occurred with each x value. You can compute these values manually with `dplyr::count()`:
+
+```{r}
+diamonds %>% 
+  count(cut)
+```
+
+`carat` is another variable in `diamonds` dataset, it denotes the weight of the diamond (0.2–5.01). It is a continuous variable so we use a histogram.
+```{r}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat), binwidth = 0.5)
+```
+
+ou can compute this by hand by combining `dplyr::count()` and `ggplot2::cut_width()`:
+```{r}
+diamonds %>% 
+  count(cut_width(carat, 0.5))
+```
+
+
+## Variation: typical values
 
 In both barplots and histograms,
 
   > - Tall bars indicate the most typical/common values
   > - Short bars indicate the most atypical/least common values
 
-Questions regarding typical and atypical values that should be considered:
+Questions to consider:
 
   > - Which values are the most common?
   > - Which values are the least common?
-  > - Are there any weird patterns?
   > - Does what we're seeing make sense?
 
-
-`storms` has data on tropical storms. Each row has measurements on a particular storm made at a particular time.
-
-```{r}
-head(storms)
-```
-
-The most common category is 0; the next most common is -1. From weather reports, you might expect 1-5 to be the only categories. The documentation on `storms` says that -1 represents a tropical depression and 0 represents a tropical storm. Also, going from 0 to 5, the count declines, which makes sense, since the higher the category, the higher the severity.
+Now let's zoom in the histogram of `carat`: only looking at diamonds weights less than 3 carats, and make the binwidth of the graph from 0.1 to 0.01.
 
 ```{r}
-storms %>% ggplot() + geom_bar(aes(category))
+diamonds %>% 
+  filter(carat < 3)%>% 
+  ggplot(mapping = aes(x = carat))+geom_histogram(binwidth = 0.01)
 ```
 
-The histogram of `wind`, the maximum windspeed (in knots), looks how we'd expect it to. Most windspeeds are at the low end; a few are at the high end.
+We can see clusters of similar values suggest that subgroups exist in your data. 
 
-```{r}
-storms %>% ggplot(aes(wind)) + geom_histogram(binwidth = 10)
-```
-
-It can be helpful to make histograms with different bin widths, as a bin width that's too small can cause important detail to be obscured. Setting the bin width to 1 reveals that the wind speed is measured to the nearest multiple of 5 knots.
-
-```{r}
-storms %>% ggplot(aes(wind)) + geom_histogram(binwidth = 1)
-```
-
-## Unusual Values
+## Variation: unusual values
 
 Unusual values are values that don't seem to fit any pattern the other values fit.
 
-> - Outliers, values that are unusually high or low, are unusual values
-> - Sometimes unusual values are errors, sometimes they aren't
 
-`diamonds` has data on 54,000 diamonds. `y` represents the width of a diamond in millimeters.
+Variable(column) `y` represents the width of a diamond in millimeters(0–58.9). It is a continuous variable, so we draw a histogram to visualize it.
+
 ```{r}
-head(diamonds)
+ggplot(diamonds) + 
+  geom_histogram(mapping = aes(x = y), binwidth = 0.5)
 ```
 
-The histogram below reveals the presence of an unusually wide diamond, as the width scale goes all the way to 60 mm, but it looks like no diamonds are wider than 10 mm.
-```{r}
-ggplot(diamonds) + geom_histogram(mapping = aes(x = y), binwidth = 0.5)
-```
+The histogram shows that there is an unusually wide diamond: the width scale goes all the way to 60 mm, but it looks like no diamonds are wider than 10 mm.
 
-We can use `coord_cartesian()` to zoom in on an area of a plot. Zooming in a little, just enough that the vertical axis scale only goes to 50 instead of over 12,000, we see that there's a diamond that's a little under 60 mm wide and another that's a little over 30 mm wide. It turns out that there are also several diamonds that are 0 mm wide.
+We can use `coord_cartesian()` to zoom in on an area of a plot: let the vertical axis scale only goes to 50 instead of over 12,000. 
+
 ```{r}
 ggplot(diamonds) + 
   geom_histogram(mapping = aes(x = y), binwidth = 0.5) +
@@ -116,48 +131,19 @@ ggplot(diamonds) +
   coord_cartesian(ylim = c(0, 50))
 ```
 
-The prices in the tibble below suggest that the 0 mm widths are probably mistakes.
+From this zoomed-in graph, we can see  there's a diamond that's a little under 60 mm wide and another that's a little over 30 mm wide. 
+
+The graph also tells us that there are several diamonds that are 0 mm wide. However, when you look up these 0 mm wide diamonds:
 ```{r}
 slice_min(diamonds, y)
 ```
 
-However, based on the data, there doesn't seem to be any reason to think that the widths of the two unusually wide diamonds are mistakes.
-```{r}
-filter(diamonds, y > 30)
-```
+The prices in the tibble below suggest that the 0 mm widths are probably mistakes.
 
-
-Explore the distribution of `price` in the `diamonds` data frame. What's unusual about it? (Hint: Play with `binwidth`)
-```{r problem1, exercise=TRUE}
-
-```
-
-```{r problem1-solution}
-# There's a bar to the left of $2000 that's unusually short
-diamonds %>%
-  ggplot(aes(price)) +
-  geom_histogram(binwidth = 100)
-```
-
-Now, zooming in on the plot over the range $0 to $2000, where is the unusually short bar?
-```{r problem1mod, exercise=TRUE}
-
-```
-
-```{r problem1mod-solution}
-# The unusually short bar appears to be at $1500.
-diamonds %>%
-  ggplot(aes(price)) +
-  geom_histogram(binwidth = 100) +
-  coord_cartesian(xlim = c(0, 2000))
-```
-
-
-
-## Missing Values
+## Variation: missing values
 
 > - Missing values are represented as `NA`'s
-> - In R, missing values never silently go missing - when missing values have been removed, a warning is generated
+> - In R, missing values never silently go missing - when missing values have been removed, a warning is generated.
 > - Setting `na.rm = TRUE` in a geom function suppresses the warning
 
 This code changes `y` so that it equals `NA` when the width is 0 mm or more than 30 mm.
@@ -176,82 +162,52 @@ Set `na.rm = TRUE` in `geom_histogram()` to suppress the warning:
 ggplot(diamonds2, aes(x = y)) + geom_histogram(binwidth = 0.5, na.rm = TRUE)
 ```
 
-Sometimes missing values give us important information. In `flights`, the flight dataset, missing values in `dep_time` indicate that the flight was cancelled:
-```{r}
-flights %>% 
-  mutate(
-    cancelled = is.na(dep_time),
-    sched_hour = sched_dep_time %/% 100,
-    sched_min = sched_dep_time %% 100,
-    sched_dep_time = sched_hour + sched_min / 60
-  ) %>% 
-  ggplot(mapping = aes(sched_dep_time)) +
-  geom_freqpoly(mapping = aes(colour = cancelled), binwidth = 1 / 4)
-```
-
-
-What happens to missing values in a histogram and what happens to them in a barchart? Why is there a difference?
-
-A barchart shows the distribution of a categorical variable. If the category is missing for an observation, then it can still be represented in the plot. An NA bar whose height reflects the number of observations with a missing value can be included.
-```{r}
-starwars %>%
-  group_by(species) %>%
-  filter(n() > 1) %>%
-  ggplot() +
-  geom_bar(mapping = aes(y = species))
-```
-
-A histogram shows the distribution of a numerical variable. If the value is missing for an observation, then it can't be included. There's no way to tell which bin it should be included in since its value isn't known. By default, observations with a missing value are removed.
-```{r}
-ggplot(starwars, aes(height)) + geom_histogram()
-```
 
 ## Covariation
 
-**Covariation** refers to how the value of one variable changes as the value of another variable changes. How to visualize covariation depends on the types of the two variables.
 
-## One Categorical Variable, One Continuous Variable
+If **variation** describes the behavior within a variable, **covariation** describes the behavior between variables. **Covariation** is the tendency for the values of two or more variables to vary together in a related way
 
-> - `geom_freqpoly()` plots one line for each level of a categorical variable
-> - The height of a line over a value of the continuous variable reflects the frequency of that value
-> - Not that useful when there are many levels - the plot gets too cluttered
+The best way to spot covariation is to visualise the relationship between two or more variables. How you do that should again depend on the type of variables involved.
 
-The plot below shows the `price` frequency for each quality (`cut`) level for the `diamonds` dataset. The frequencies are quite different for different quality levels, making it hard to see the pattern for the quality level at the bottom.
-```{r}
-ggplot(data = diamonds, mapping = aes(x = price)) + 
-  geom_freqpoly(mapping = aes(colour = cut), binwidth = 500) +
-  theme_bw()
-```
+## Covariation: one categorical variable, one continuous variable
 
-Plotting densities instead of frequencies can help in a situation like this:
-```{r}
-ggplot(data = diamonds, mapping = aes(x = price, y = after_stat(density))) + 
-  geom_freqpoly(mapping = aes(colour = cut), binwidth = 500) +
-  theme_bw()
-```
+We introduce two methods to visual relationshio of one categorical variable and one continuous variable:
 
-For each level of the categorical variable, `geom_boxplot()` gives a concise summary of the distribution of the continuous variable.
-
-> - Information provided by a boxplot:
+> - `geom_freqpoly()`: plots one frequency line for each level of a categorical variable.
+> - `geom_boxplot()`: gives a concise summary of the continuous variable distribution for each level of the categorical variable. Information provided by a boxplot:
   >    - The minimum
   >    - The first quartile
   >    - The median 
   >    - The third quartile
   >    - The maximum
   >    - Outliers
-> - Because of their simplicity, boxplots can be compared quickly
 
-The boxplot of price below shows that there are many diamonds with very large prices. In a model using `price`, it might be a good idea to take its log.
+
+The plot below shows the `price` frequency for each quality (`cut`) level for the `diamonds` dataset. 
+
+```{r}
+ggplot(data = diamonds, mapping = aes(x = price)) + 
+  geom_freqpoly(mapping = aes(colour = cut), binwidth = 500) +
+  theme_bw()
+```
+
+
+Let’s take a look at the distribution of price by cut using `geom_boxplot()`:
 ```{r}
 ggplot(data = diamonds, mapping = aes(x = cut, y = price)) + geom_boxplot()
 ```
 
-## Two Categorical Variables
+We see much less information about the distribution, but the boxplots are much more compact so we can more easily compare them. 
 
-> - The only way to compare two categorical variables is to count how many observations are in the intersection of each pair of levels
-> - `geom_count()` makes a plot with one circle for each pair of levels
-> - The size of the circle represents the number of observations for the pair
-> - Potential downside: might imply an ordering where none exists
+## Covariantion: two categorical variables
+
+
+Two methods to visualize relationship of two categorical variables:
+
+> - `geom_count()`: makes a plot with one circle for each pair of levels. The size of the circle represents the number of observations for the pair
+> - `geom_tile()`
+
 
 In the plot below, `cut` has an ordering, but `color` doesn't. We might see different patterns if we ordered the colors in a different way.
 ```{r}
@@ -271,22 +227,23 @@ diamonds %>%
   geom_tile(mapping = aes(fill = n))
 ```
 
-## Two Continuous Variables
+## Covariation: two continuous variables
 
-> - `geom_point()` can make it easy to see relationships.
-> - However, the more data you have, the harder it can be to see the trend. There are several ways to address this problem:
+To visualise the covariation between two continuous variables: draw a scatterplot with `geom_point()`.
+
+However, the more data you have, the harder it can be to see the trend. There are several ways to address this problem:
   >    - Changing the point transparency (`alpha`)
   >    - Binning
   >    - Discretizing
 
-The plot below shows the relationship between carat and price. Since there are tens of thousands of points, overplotting may be a problem.
+The plot below shows the relationship between `carat` and `price.` Since there are tens of thousands of points, overplotting may be a problem.
 ```{r}
 ggplot(data = diamonds) +
   geom_point(mapping = aes(x = carat, y = price)) +
   theme_bw()
 ```
 
-If we reduce the transparency (`alpha`), overplotting becomes less of a problem since we can see more clearly which pairs of carat and price are more common than others. We see that many pairs are concentrated along vertical lines, where carat is constant.
+If we reduce the transparency (`alpha`), overplotting becomes less of a problem. We can see more clearly which pairs of carat and price are more common than others. We see that many pairs are concentrated along vertical lines, where `carat` is constant.
 ```{r}
 ggplot(data = diamonds) + 
   geom_point(mapping = aes(x = carat, y = price), alpha = 1 / 100) +
@@ -300,17 +257,12 @@ ggplot(data = diamonds) +
   theme_bw()
 ```
 
-We could discretize `carat` - turn it into a categorical variable. Below `carat` is discretized by turning each range of length 0.1 into a category.
+We could discretize `carat` - turn it into a categorical variable. Below `carat` is discretized by turning each range of length 0.5 into a category.
 ```{r}
 ggplot(data = diamonds, mapping = aes(x = carat, y = price)) + 
-  geom_boxplot(mapping = aes(group = cut_width(carat, 0.1)))
+  geom_boxplot(mapping = aes(group = cut_width(carat, 0.5)))
 ```
 
-We could instead create categories for `carat` that have the same number of values. Below, each category has 20 values:
-```{r}
-ggplot(data = diamonds, mapping = aes(x = carat, y = price)) + 
-  geom_boxplot(mapping = aes(group = cut_number(carat, 20)))
-```
 
 ## Exercise
 
