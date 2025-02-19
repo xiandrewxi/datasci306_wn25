@@ -303,9 +303,6 @@ which(is.na(huron_level))  # Finds (vector) location of missing values.
 # of year and see if you can notice missing values. 
 unique(huron_level$year)
 
-# Implicit missing values are harder. Look at the unique values 
-# of year and see if you can notice missing values. 
-
 strange_diff <- which(diff(huron_level$year) != 1)
 huron_level$year[strange_diff]
 huron_level$year[strange_diff + 1]
@@ -328,10 +325,15 @@ missing_df[, 'year'] <- c(1897, 1973)
 huron_level <- bind_rows(huron_level, as.data.frame(missing_df))
 ```
 
-**Exercise**: Let's use some of the skills that we learned with *Dates* and *pivoting* to create a *long* version of this dataset, with a column `time` containing a `Date` object for the first day of the specified month, and a `level` column representing the water level in meters. 
+**Exercise**: Let's use some of the skills that we learned with *Dates* and *pivoting* (will be discussed later) to create a *long* version of this dataset, with a column `time` containing a `Date` object for the first day of the specified month, and a `level` column representing the water level in meters. 
 
 ```{r cleanHuron, exercise=TRUE, exercise.blanks = "\\.\\.\\.+",  exercise.setup="loadHuron"}
-cleanHuron <- huron_level |> ...
+cleanHuron <- huron_level |>
+  pivot_longer(
+    cols = -year,
+    names_to = "month_name",
+    values_to = "level"
+  ) |> ...
 ```
 
 ```{r cleanHuron-solution}
