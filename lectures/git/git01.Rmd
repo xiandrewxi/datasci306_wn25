@@ -1,0 +1,144 @@
+---
+title: "Git Version Control System"
+subtitle: "Git Lectures 1"
+output: 
+  learnr::tutorial:
+    progressive: true
+    css: css/lecture.css
+runtime: shiny_prerendered
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(learnr)
+library(tidyverse)
+```
+
+## Git
+
+* Git is a **version control system** manages changes from multiple sources simultaneously.
+* A reasonable analogy: Google Docs with track changes turned on
+* Useful for groups working together to track changes to the software package and document why changes were made
+
+## How does git work?
+
+* Creates a **repository** (a hidden directory/folder) to information about the history of files
+* When you make changes, you may **add** them to a **staging area**
+* When you like your staging area, you **commit** your changes.
+* Git stores the **differences** ("diffs") from the previous version to your new version.
+* You can **push** your changes to a shared repository for others to use
+* You can **pull** from a shared repository and **merge** the changes of others.
+* If there are **conflicts**, git will let you know and make you resolve them.
+* If you ever need to see what changed, you have the entire **history** of all changes to look at.
+
+## Command line interfaces
+
+While git has graphical interfaces, we will teach using a **command line interface** (CLI) for git.
+
+In an CLI you have an **interactive** prompt where you type a command. It might look something like this:
+
+```
+$ command -o --options argument1 argument2
+```
+
+* `$` is the prompt
+* `command` is what we want to do (e.g., `git`)
+* Optional flags have `-` or `--` in front and change behavior
+* We can tell what do with `argument1` and `argument2`. Some commands have no arguments.
+
+## Some basic CLI commands
+
+* `cd`: Change directory. 
+* `ls`: List files in current directory
+* `pwd`: Print working directory
+* `mkdir`: Make a new directory (folder)
+* `rm -r`: Recursively delete directories and everything inside (use carefully!)
+
+**Exercise: visit the Terminal tab to use the CLI**.
+
+- What is the name of the directory where you start?
+- List the files in this directory.
+- Change directory into the `lectures` directory. Confirm you location with `pwd`.
+- Run the following in the terminal:
+    - `echo "hello"`
+    - `echo "hello" > hello.txt`
+- Open the file `hello.txt` you created, what does the `>` do?
+
+
+## Git and the CLI
+
+When interacting with git, we will use commands like this:
+
+```
+$ git SUBCOMMAND -o --options ARG1 ARG2 ...
+```
+
+Some example subcommands will be `pull` to get updates, `log` to see the history, `add` to stage files, and `commit` to commit changes.
+
+## Git presentation
+
+[Let's use an existing presentation to see how git works](https://courses.cs.washington.edu/courses/cse403/13au/lectures/git.ppt.pdf).
+
+## Starting a new project with git
+
+When creating a new project using git on Posit cloud we have two options:
+
+1. Create a project as usual, then `git init` to start the repository.
+2. Clone directly from a git repository
+
+
+## Running Exercise
+
+Open posit cloud in a new tab to while we work on a series of exercises.
+
+Start a new project on Posit Cloud either as an R Project or using our standard template (includes tidyverse packages).
+
+
+## Let git know who you are
+
+```
+$ git config --global user.name "YOUR NAME"
+$ git config --global user.email "YOUR EMAIL"
+```
+
+
+
+## Saving changes to our local repo
+
+If you have made changes to your repository, you will be prompted to commit them before pulling:
+
+```
+$ git status
+$ git add FILENAME
+$ ... perhaps other files ...
+$ git commit -m "a note explaining changes"
+```
+## Exercise
+
+In your running exercise, edit a file. Then add your changes and use `git commit -m "message"` to record the changes it.
+
+## Getting future updates
+
+When we make changes to the course materials (this will be frequent! We like to tinker!), you can get updates:
+
+```
+$ git pull
+```
+
+## Graphical interface
+
+We teach the command line interface for git because
+
+* It is convenient to show in slides
+* It is transferable to any environment where you would use git
+* It matches our recommended text book
+* It exposes the full power of git
+
+But, you can also use a graphical interface in Posit Cloud
+
+
+
+
+
+
