@@ -41,6 +41,7 @@ vignettes/*.pdf
 *.html
 
 lectures/lecture*_files
+lectures/git/*_files
 
 # DS_store files
 *.DS_Store
