@@ -144,7 +144,6 @@ Each team member should create a new Posit Cloud project in the Stats 306 worksp
 In your Terminal tab, run the following commands:
 
 ```
-rm project.Rproj
 git init .
 git config user.name "Your Name"
 git config user.email "Your Email Address"
@@ -180,8 +179,8 @@ This will bring the Project 1 materials into the shared team repository on GitHu
 Now all members can run the following:
 
 ```
-git branch -M main
 git pull --set-upstream origin main
+git branch -M main
 ```
 
 They will now get copies of the shared repository. Later, after adding and committing changes, you can use
