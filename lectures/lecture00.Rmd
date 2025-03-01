@@ -13,7 +13,7 @@ runtime: shiny_prerendered
 library(learnr)
 ```
 
-## Dat 306: Introduction to Statistical Computing
+## DatStats 306: Introduction to Statistical Computing, Goose
 
 This course introduces basic concepts in computer programming and statistical computing techniques as they are applied to data extraction and manipulation, statistical processing and visualization. It is aimed primarily at undergraduate majors and minors in Statistics.
 
