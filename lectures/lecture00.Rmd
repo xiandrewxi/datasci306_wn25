@@ -185,7 +185,7 @@ This is the name a desktop version of the editor we are using (formerly it was c
 
 If you wish, you can [install R and RStudio](https://posit.co/download/rstudio-desktop/) on your own computer. 
 
-You can get the the materials using `git` as described on Canvas, but this will not be directly supported during the course. You will need to download the assignments on Posit cloud.
+If you wish, you can [install R and RStudio](https://posit.co/download/rstudio-desktop/) on your own computer. 
 
 ## Final notes
 
