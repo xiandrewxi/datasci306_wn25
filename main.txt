@@ -1,0 +1,866 @@
+commit 95420fda4b0bdf832768aa6d2373ba159527ef5b
+Author: xiandrewxi <xiandrew@umich.edu>
+Date:   Sat Mar 1 01:57:55 2025 +0000
+
+    Revert "change materials"
+    
+    This reverts commit 0865f3eae9fcec9dd44917acbb088ef61dd82685.
+
+commit 0865f3eae9fcec9dd44917acbb088ef61dd82685
+Author: xiandrewxi <xiandrew@umich.edu>
+Date:   Sat Mar 1 01:53:28 2025 +0000
+
+    change materials
+
+commit e54b3e6d1de35185c27ec057cada5aaaac87ad1f
+Merge: c56c5b7 67f9e00
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Fri Feb 28 15:58:08 2025 -0500
+
+    Merge pull request #10 from Stats-306-Fredrickson/datasci306_wn25
+    
+    Datasci306 wn25
+
+commit 67f9e00c7e5e0bfac28532c3c3c925ba661400a0
+Merge: d4a9159 984d7f7
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Fri Feb 28 15:52:49 2025 -0500
+
+    Merge branch 'main' into datasci306_wn25
+
+commit 984d7f7c9e54e7274d230e41c0e3f97121032503
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Fri Feb 28 15:52:13 2025 -0500
+
+    correcting git set up instructions
+
+commit c56c5b7b902b41ca7659807c287c1dcce122fb69
+Merge: c6d2855 d4a9159
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Feb 26 11:47:05 2025 -0500
+
+    Merge pull request #9 from Stats-306-Fredrickson/datasci306_wn25
+    
+    Datasci306 wn25
+
+commit d4a9159a5a430650010b1a3841b5d2a15fac3dfd
+Merge: c6d2855 76c3920
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Feb 26 11:44:11 2025 -0500
+
+    Merge branch 'main' into datasci306_wn25
+
+commit 76c39205f537c00629d88619077517221e38dbaa
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Feb 26 11:43:53 2025 -0500
+
+    ignoring more temp files
+
+commit f3300b805194b592464e7d15a581d560c3c1c194
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Feb 26 11:43:09 2025 -0500
+
+    git lecture on how to get connected to github
+
+commit c6d2855ee982abe63868b7a774e79db27c762432
+Merge: efbe0ca 5794b02
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Feb 24 13:25:22 2025 -0500
+
+    Merge branch 'main' into datasci306_wn25
+
+commit 5794b029deb89f1f1875a1d35dcd5ccc65d4b6cc
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Feb 24 13:25:04 2025 -0500
+
+    adding separate git module
+
+commit efbe0ca95cf25aafc03daf87ac6b7fade59e49fb
+Merge: 46731f5 6eb22ae
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Feb 19 18:08:05 2025 -0500
+
+    Merge branch 'main' into datasci306_wn25
+
+commit 6eb22ae30cccffedda69577e5dff76ffc8d0fa68
+Author: Junting-Wang <49424241+Junting-Wang@users.noreply.github.com>
+Date:   Wed Feb 19 17:06:36 2025 -0500
+
+    add image
+
+commit 36c5633ee2295b8ac2ede45a6d58576c41b7c257
+Author: Junting-Wang <juntingw@umich.edu>
+Date:   Mon Feb 17 13:59:23 2025 -0500
+
+    delete duplicated sentences
+
+commit 46731f5726d2e77a009a3d6d81513616a4d83787
+Merge: 9d80232 4d96195
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Feb 12 11:48:36 2025 -0500
+
+    Merge branch 'main' of github.com:Stats-306-Fredrickson/datasci306_wn25 into datasci306_wn25
+
+commit 9d80232cc5320abdf376c260cae62795226963aa
+Merge: 0554d91 fdc99f1
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Feb 12 11:47:01 2025 -0500
+
+    Merge branch 'main' into datasci306_wn25
+
+commit fdc99f1389b52e5223bbe71a63b0850c1735d6bb
+Author: Jiuqian Shang <jiuqian@stat-jiuqian-mba.local>
+Date:   Tue Feb 11 18:47:58 2025 -0500
+
+    2025 winter modification
+
+commit 4d96195e5511fe03b14c5e0b8fa034dbf8a4094f
+Merge: 8542b20 0554d91
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Feb 10 14:19:58 2025 -0500
+
+    Merge pull request #8 from Stats-306-Fredrickson/datasci306_wn25
+    
+    Datasci306 wn25
+
+commit 0554d91278c50cfe93d7f20b708d7e0c0f64cf14
+Merge: 3191608 0bde2e6
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Feb 10 14:19:08 2025 -0500
+
+    Merge branch 'main' into datasci306_wn25
+
+commit 0bde2e6bb6470c220f4711daa41a03a0d6d1b6c5
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Feb 10 14:18:50 2025 -0500
+
+    updating syntax in lec8
+
+commit 8542b203d063ff271247a0dcb8ff35c061538b22
+Merge: e46e6d9 3191608
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Feb 5 13:54:42 2025 -0500
+
+    Merge pull request #7 from Stats-306-Fredrickson/datasci306_wn25
+    
+    Datasci306 wn25
+
+commit 3191608da3c09f94e54942c20b8ca8fb021f462b
+Merge: a12cae3 e46e6d9
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Feb 5 13:50:47 2025 -0500
+
+    Merge branch 'main' of github.com:Stats-306-Fredrickson/datasci306_wn25 into datasci306_wn25
+
+commit e1fa4cc63cab3b47ae42a88147d9bb7068e8ac58
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Feb 5 13:49:32 2025 -0500
+
+    lab04 edits -- thanks Gabriel
+
+commit a12cae35c816a0a3b43e04320c627e4cced6ad8e
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Feb 5 13:49:32 2025 -0500
+
+    lab04 edits -- thanks Gabriel
+
+commit e46e6d94c7d96505c9d124529b86bfc78bf6d5c7
+Merge: 6677795 63dd879
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Feb 5 11:18:08 2025 -0500
+
+    Merge pull request #6 from Stats-306-Fredrickson/datasci306_wn25
+    
+    small fixes for lec7 and lec8
+
+commit 63dd87987373882bf7fc62fe258c61bbf20b120d
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Feb 5 11:16:59 2025 -0500
+
+    small fixes for lec7 and lec8
+
+commit 66777953d059727080c9f135e0f067e4daf927ea
+Merge: 64836ba 42f8da9
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Jan 28 06:15:01 2025 -0500
+
+    Merge pull request #5 from Stats-306-Fredrickson/datasci306_wn25
+    
+    bringing back mutate/filter lecture notes
+
+commit 42f8da9c6ae850a5c1f33b1422be54f0bd7397cf
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Jan 28 06:12:24 2025 -0500
+
+    bringing back mutate/filter lecture notes
+
+commit 64836ba95c3ec0d03e21b561347c18490697ca7b
+Merge: 1e9efae dd8b1c1
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Jan 27 06:10:49 2025 -0500
+
+    Merge pull request #4 from Stats-306-Fredrickson/datasci306_wn25
+    
+    Datasci306 wn25
+
+commit dd8b1c14075d45a0f96a24c0919ea720c1515f4d
+Merge: 5b3da24 bd55057
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Jan 27 06:09:58 2025 -0500
+
+    Merge branch 'main' into datasci306_wn25
+
+commit bd55057f82b2f4b7caa684439899f7ca00a83b00
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Jan 27 06:09:23 2025 -0500
+
+    bringing back second ggplot lecture
+
+commit 1e9efae54bf406c920643bed4d7960881f0d1541
+Merge: f20bda8 5b3da24
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 22 13:28:09 2025 -0500
+
+    Merge pull request #3 from Stats-306-Fredrickson/datasci306_wn25
+    
+    Datasci306 wn25
+
+commit 5b3da24ba903e99d636c2d14b279abde573e7cdc
+Merge: 41fa963 f20bda8
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 22 13:24:57 2025 -0500
+
+    Merge branch 'datasci306_wn25' of github.com:Stats-306-Fredrickson/stats306_materials into datasci306_wn25
+
+commit 41fa963a0c5c1c1f96a012404943273cd7097438
+Merge: 57d342d 8f9f320
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 22 13:19:04 2025 -0500
+
+    Merge branch 'main' into datasci306_wn25
+
+commit 8f9f320b7c0d379fe313f70d195c62d5ae1af915
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 22 13:18:47 2025 -0500
+
+    small edits to lec3
+
+commit 99cc94710fd6af0ef38fcfbdacb9e379edca1ad4
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 15 21:22:33 2025 -0500
+
+    moving over copilot setup images to lab1
+
+commit f20bda812f41575378de6a3e21b90c8ee658241d
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 15 21:22:33 2025 -0500
+
+    moving over copilot setup images to lab1
+
+commit 806bac62db07a659f990737b72b3dc0492e4971b
+Merge: 8d2b391 80e131d
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 15 21:14:06 2025 -0500
+
+    Merge branch 'main' of github.com:Stats-306-Fredrickson/datasci306_wn25 into datasci306_wn25
+
+commit 8d2b391d6baf3d7e2b89be5f42f068d02a1e28af
+Merge: 2ef8c44 2be1e41
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 15 21:08:42 2025 -0500
+
+    Merge branch 'main' into datasci306_wn25
+
+commit 2be1e41922362730473fcb28addad09ed99528dc
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 15 21:07:42 2025 -0500
+
+    edits to lab01 to focus on current topics
+
+commit 2ef8c443e2eff9f4d9c2c920024d0e8f851ea22f
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 15 21:07:42 2025 -0500
+
+    edits to lab01 to focus on current topics
+
+commit 80e131dc47415e6fce71ddf17ee66bf280ff1f9c
+Merge: ab756a1 57d342d
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 15 13:49:18 2025 -0500
+
+    Merge pull request #2 from Stats-306-Fredrickson/datasci306_wn25
+    
+    Datasci306 wn25
+
+commit 57d342dc98fe6dae44550840e961666284b7d9c1
+Merge: d0ee94b ab756a1
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 15 13:47:59 2025 -0500
+
+    Merge branch 'main' of github.com:Stats-306-Fredrickson/datasci306_wn25 into datasci306_wn25
+
+commit d0ee94bfbe109846a504bae54209dd968b870811
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 15 13:44:21 2025 -0500
+
+    moving some lecture material to the lab, concentrating the AI into lec2, adding more programming examples
+
+commit 2c292e8fdcb48d28c268de487a6cc5ba8d44fd1d
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 15 12:57:40 2025 -0500
+
+    projectid changed for some reason
+
+commit ab756a1ad11f0270ee2afa4dae0d655dfe4bad6a
+Merge: ef03de0 0089eb6
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Jan 14 08:18:51 2025 -0500
+
+    Merge pull request #1 from Stats-306-Fredrickson/datasci306_wn25
+    
+    cleaning up some errors in lecture01
+
+commit 0089eb678c239947ad34bbcd95b093557d46226d
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Jan 14 07:59:41 2025 -0500
+
+    cleaning up some errors in lecture01
+
+commit ef03de07ea677443ee7e4b15f0bff5421c063cec
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Jan 7 16:28:18 2025 -0500
+
+    editing lec 1
+
+commit 0cc24fbe1322422a8846fc2b4a5a6015105645e0
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Sun Aug 18 11:22:40 2024 -0400
+
+    Lec5: getting more in line with R4DS, simplifying
+
+commit b79d12988b6808ade021e5514dc00395b282c63b
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Aug 12 20:14:54 2024 -0400
+
+    lec3: making language more similar to book, lec4: focusing on visualiztion, keeping it simpler
+
+commit 3108bea1ecf12c7ed84fdec699d64323d8047392
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Aug 12 19:14:28 2024 -0400
+
+    lec03: starts with copilot, then vectors and tables
+
+commit 5207b4137d430c41dcb56383caf8fb08ea2ebc84
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Sat Aug 10 10:45:48 2024 -0400
+
+    lec02: now about AI, prompt engineering
+
+commit 6a763347e0a081ed9462520b079dee1dc2719fb9
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Fri Aug 9 14:21:19 2024 -0400
+
+    updating format of slides with small ToC, Lec00, Lec01 integrated into README table of contents
+
+commit 41ded82095f060201757a237ef355f39181628fb
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Aug 7 18:23:57 2024 -0400
+
+    Lec01: shortening to focus a little more on just assignment, function calling, and pipes
+
+commit 5d4e077abcaf9c04fa1930e6953c45056854bd42
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Aug 7 18:23:07 2024 -0400
+
+    updating intro lecture to mention AI tools
+
+commit d952158799a4cab442f350c5f365debd7810ca07
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Aug 7 14:15:46 2024 -0400
+
+    removing authorship
+
+commit 22e03116d254b08f08b9553eeee282e9ec440427
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Aug 7 13:56:18 2024 -0400
+
+    small modifications to directions in README
+
+commit 55c346faa775eb6de2f300f926a976ac324e19dc
+Merge: ee1583b f976395
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Aug 7 13:16:02 2024 -0400
+
+    Merge branch 'stats306_100_wn24'
+
+commit ee1583bed9d7c50b29488495f6a5b3ed986bb388
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed May 22 08:33:50 2024 -0400
+
+    lec7: using across instead of _at/_all
+
+commit 553ea7edcb218d808fcca7cb9b781f9eda2654a0
+Merge: 7d88926 c25419d
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed May 8 08:02:10 2024 -0400
+
+    Merge branch 'future'
+
+commit f9763954756c84883441395435168689fbc3e412
+Merge: ce3e042 7d88926
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Apr 15 22:57:15 2024 -0400
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit 7d889262b787b5cfda4bef4117b4710559cbe31d
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Apr 15 22:56:55 2024 -0400
+
+    more shiny exercises
+
+commit ce3e042611b5f35190767fbd74dba0d39bd6020e
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Apr 11 20:35:08 2024 -0400
+
+    changing lab13 to lab11
+
+commit 8e240945695e4aab2c40e71a00a3b0e4e8356e98
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Apr 2 08:17:37 2024 -0400
+
+    lec21: parallel programming
+
+commit 2c1266a2de8fe47a808781877f63ec9fb8c5a516
+Merge: f3b97cb 6e1d356
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Apr 2 07:16:40 2024 -0400
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit 6e1d3569f049c004caedbf6be2ad96ed958c9dd3
+Author: Yichao Chen <yichaoc@umich.edu>
+Date:   Thu Mar 28 23:48:16 2024 -0400
+
+    add optional exercise for lab 10
+
+commit f3b97cb291583ed777bd41225a1b25c723d16127
+Merge: c00ce7a 9286358
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Mar 28 18:44:10 2024 -0400
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit 9286358c0c11841e9403ff70fc64d72ee5ac375d
+Author: Yichao Chen <yichaoc@umich.edu>
+Date:   Wed Mar 27 22:35:31 2024 -0400
+
+    minor modification based on previous lab12
+
+commit 3c459bd4d79032ae61c6b4a8f2ccb5b1252500e9
+Author: Kevin Jin <kejin@umich.edu>
+Date:   Fri Mar 22 09:47:33 2024 -0400
+
+    Fixed bug of df not working
+
+commit c00ce7a4d94d74645f14ad972f9591ade135d544
+Merge: 0c86414 0d4da61
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Mar 21 20:08:38 2024 -0400
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit 0d4da617ae1c75b05e624e648e677a467f32548f
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Mar 21 20:07:37 2024 -0400
+
+    moving old lab11 to lab09
+
+commit 3872690dcbdceeb269fda5abd9d0b450479a47bf
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Mar 19 07:51:08 2024 -0400
+
+    started lab09 on factors
+
+commit 0c86414fa4008d3f659068c1fd17a4379b7b6965
+Merge: cef3bb3 ea32dea
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Mar 14 20:25:32 2024 -0400
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit ea32dea180a9203848b0da26fe02b740674691d5
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Mar 14 20:25:05 2024 -0400
+
+    moving some duplicate lab material to the 'old' folder, promoting lab10 to lab08
+
+commit cef3bb3f12b716e9dd2ff5ddde1819a6cd7e793c
+Merge: 20a9d77 e0ecc0c
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Mar 14 06:55:59 2024 -0400
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit e0ecc0c252f811f9e05c15b6e8350fe8e6a1bb0c
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Mar 14 06:55:41 2024 -0400
+
+    updating str_view_all to str_view
+
+commit eaeb41a62235c420905af3bcca4941f1893d103d
+Author: Kevin Jin <kejin@umich.edu>
+Date:   Wed Mar 13 14:08:59 2024 -0400
+
+    Updated Lab 7 materais to discuss  data sets
+
+commit 20a9d776b7305ad79b6b928b2ee3b751876bdc25
+Merge: 8bb86cd 2c3ae5e
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Mar 7 21:04:19 2024 -0500
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit 2c3ae5ec7b98d9bf574e2a88cb2a0af6f62cd3ec
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Mar 5 08:03:39 2024 -0500
+
+    solutions for lec13 exercises
+
+commit 8bb86cda72eb91829ccfbbd478da7db6adf42728
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Mar 5 08:03:39 2024 -0500
+
+    solutions for lec13 exercises
+
+commit 0b04a20073d7c5d8285301a1a1ffa98a12815ec3
+Author: Paolo Borello <142054184+paoloborello@users.noreply.github.com>
+Date:   Mon Mar 4 14:31:08 2024 -0500
+
+    Update lab06.Rmd
+    
+    Updated solutions, included correct dataset for huron_level
+
+commit 03cb663e18720bc1b107c54375a1c01da306784e
+Merge: 95bcee6 b6b61f7
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Feb 20 08:09:28 2024 -0500
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit b6b61f7cf8cc18d0db2fc585862aaede01180de1
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Feb 20 08:09:07 2024 -0500
+
+    lec12: more on working with Date columns, exercises
+
+commit 95bcee6369823cbe21595a7a24ea3844912e7759
+Merge: e49fc08 e438a63
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Feb 15 17:13:58 2024 -0500
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit e438a63d97b18f18b362a45ce1618241b84df5ce
+Author: Yichao Chen <yichaoc@umich.edu>
+Date:   Wed Feb 14 22:11:51 2024 -0500
+
+    modify lab05(which is the previous lab06)
+
+commit 0f2ef14003df6916a61c1fb81e59ee4b1bf8481a
+Author: Your Name <Your Email>
+Date:   Wed Feb 14 22:08:35 2024 -0500
+
+    add lab05
+
+commit e49fc08259eea686913429344cb475e2e02fa862
+Merge: e9a24da 91e31ac
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Feb 8 08:20:52 2024 -0500
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit 91e31ac3df3b3803ecfd69eeff425284bffff2e5
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Feb 8 08:20:29 2024 -0500
+
+    lec9: ecdf exercise
+
+commit abd075473b3480e7e4a242a782efa663786c47ef
+Merge: 3565261 7220c7d
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Feb 8 08:05:51 2024 -0500
+
+    Merge branch 'main' of github.com:Stats-306-Fredrickson/stats306_materials
+
+commit 3565261b6c78b7f81e4f64d15cd6138465ce520e
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Feb 8 08:05:43 2024 -0500
+
+    lec08: cleaning up lexical scope example
+
+commit 7220c7d109b5d73083a55ccbe227dbcf4e37e8ed
+Author: Andrej Leban <andrejleban@gmail.com>
+Date:   Wed Feb 7 12:22:23 2024 -0500
+
+    Cherry-picked lab4_candidate onto main
+
+commit e9a24da205a36e010c792b33229583a90ef14413
+Merge: aaba21b e0c79df
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Feb 7 08:08:50 2024 -0500
+
+    Merge pull request #1 from Stats-306-Fredrickson/lab4_candidate
+    
+    Bringing in Andrej's Lab 4 materials
+
+commit aaba21b4a263c9791b4bf35ff1606f0b4a82d7e9
+Merge: 9bce5fa 9984797
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Feb 7 07:40:52 2024 -0500
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit e0c79dfff6d31badd31f9a5af93d783a4c3e8ece
+Author: Andrej Leban <andrejleban@gmail.com>
+Date:   Sun Feb 4 23:43:07 2024 -0500
+
+    Functions examples
+
+commit 00b612a1ab025ae3803a97e83153cd13aa431493
+Author: Andrej Leban <andrejleban@gmail.com>
+Date:   Sun Feb 4 22:59:59 2024 -0500
+
+    Some examples
+
+commit c8e15d9a857d8cc94dd1a8ac09b0bd2fd160466d
+Author: Andrej Leban <andrejleban@gmail.com>
+Date:   Sun Feb 4 22:17:46 2024 -0500
+
+    Solutions inline
+
+commit 00f3aa19eb7c78f3330260ec99ed64f026778c38
+Author: Andrej Leban <andrejleban@gmail.com>
+Date:   Sun Feb 4 21:56:33 2024 -0500
+
+    wip
+
+commit e4ab337ad5c97996442128b9c5473e6a0903ce64
+Author: Andrej Leban <andrejleban@gmail.com>
+Date:   Sun Feb 4 21:01:00 2024 -0500
+
+    Added some more explanations/examples
+
+commit 2df7aa0894f1a2790c5ea4c7fd6cb503be0fc069
+Author: Andrej Leban <andrejleban@gmail.com>
+Date:   Sun Feb 4 19:42:21 2024 -0500
+
+    fix typo
+
+commit 9bce5fae38f411cc7b4e236e8758b9aff0f75820
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Fri Feb 2 14:56:18 2024 -0500
+
+    lec06: added word function
+
+commit 9984797a5bf46d764d2502072b7246df8f35c07d
+Author: Paolo Borello <142054184+paoloborello@users.noreply.github.com>
+Date:   Fri Feb 2 10:41:54 2024 -0500
+
+    Update lab03.Rmd
+
+commit e710065c3fe3470b60c78e99c42fc322930b6802
+Author: Paolo Borello <142054184+paoloborello@users.noreply.github.com>
+Date:   Thu Feb 1 20:17:15 2024 -0500
+
+    Update lab03.Rmd
+    
+    Added 2 missing solutions
+
+commit 2e90539f5bc751efe8cc10a8c0aebd44a4c715ef
+Author: Kevin Jin <kejin@umich.edu>
+Date:   Wed Jan 31 18:55:13 2024 -0500
+
+    Added one more example with the normalizing columns with group_by and mutate
+
+commit 1615738f23f24ce261f706751bc3040f11b17cc0
+Merge: ea5eed3 1ca4a0a
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Jan 30 16:05:32 2024 -0500
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit 1ca4a0ab7bcf74ae1c6b96f84e2cf6b8411052f9
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Jan 30 16:03:26 2024 -0500
+
+    cherry-pick of af2cebe7 to keep solutions available
+
+commit ea5eed349e0711f29bc8f21aeb5feebcb9ff555d
+Merge: ff991b0 1e42b67
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Jan 30 07:40:22 2024 -0500
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit 1e42b67af02b120b813a0a58d4c5701d945225fe
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Jan 30 07:39:55 2024 -0500
+
+    solution to top coding exercise
+
+commit ff991b0b0cc106ef3d897e751d2ed2ac30479555
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Jan 30 07:34:23 2024 -0500
+
+    separating out filter/select from group_by/summarize
+
+commit c25419d669816546743dad24dc64e042213ff769
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Jan 30 07:34:23 2024 -0500
+
+    separating out filter/select from group_by/summarize
+
+commit a554cf57015416f34375bc131c9aa71c289e7eab
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Fri Jan 26 14:19:25 2024 -0500
+
+    lec1: using single tick for inline r code
+
+commit 13422767d97bcff3e17b8bbbd0151ef3d24acba4
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Jan 23 07:59:30 2024 -0500
+
+    lec3: some additional notes on vectorized computations and logicals
+
+commit 2c00cdd863d0b370383d51749293d4022ec57f36
+Merge: 7ceb59f 7426a75
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Jan 23 07:47:40 2024 -0500
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit c86a2fc563b01a8673344bff3e36025a122b2b1b
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Jan 23 07:41:44 2024 -0500
+
+    moving ggplot to just be lec3, writing some todos for how to extend initial vectors, lists, tables lecture
+
+commit 7426a7508bb5ae41bd4699421e28712668536e25
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Tue Jan 23 07:38:52 2024 -0500
+
+    deduplicating lec3 from lec2
+
+commit c87fc3a301fee9a4ea0b77a125540f1517bae604
+Author: Paolo Borello <142054184+paoloborello@users.noreply.github.com>
+Date:   Fri Jan 19 09:22:10 2024 -0500
+
+    Update lab02.Rmd
+    
+    Minor typo and file header correction.
+
+commit 7ceb59ff73187de4ab7cf511d39a7cb9a27351f8
+Merge: 1fb6aaf e6e5d40
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Jan 18 10:16:20 2024 -0500
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit e6e5d404304ad40e9871f04ebafb5442cbec33e4
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Jan 18 10:15:59 2024 -0500
+
+    lec2: adding solution to GL water level exercise
+
+commit 1fb6aaf554e1c86e1adbcc2045bdb07e216c332b
+Merge: 68ca2e9 36d97db
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Jan 18 08:18:37 2024 -0500
+
+    Merge branch 'stats306_100_wn24' of github.com:markmfredrickson/stats306_winter_2024 into stats306_100_wn24
+
+commit 68ca2e9dde845e064b6062c79f5045f18b18cec9
+Merge: 39ed990 fd8f58b
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Jan 18 08:14:11 2024 -0500
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit fd8f58bc2e63cc93a0a385c7b2e6b0beff4294bf
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Thu Jan 18 08:13:55 2024 -0500
+
+    lec2: adding some exercises, small edits
+
+commit 36d97dbb1920869619f62d307b02753c3188e243
+Merge: 39ed990 b0c7d22
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 17 20:29:11 2024 -0500
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit b0c7d22039464fcc5d99dd672138388d92977572
+Merge: 2915ffe f35afeb
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 17 20:27:51 2024 -0500
+
+    Merge branch 'main' of github.com:Stats-306-Fredrickson/stats306_materials
+
+commit 2915ffe635b0493e5034c84d2c9395af6830b93e
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 17 20:26:29 2024 -0500
+
+    updated lab01
+
+commit f35afeb4c10507ef88e68385fa61b3742a30f6da
+Author: Paolo Borello <142054184+paoloborello@users.noreply.github.com>
+Date:   Wed Jan 17 12:40:45 2024 -0500
+
+    Update to lab02.Rmd - Included solutions
+    
+    Changed header of file to be a learnr tutorial. Included solutions to all exercises
+
+commit 39ed990eae2ec01d15cb6e14eb9b7c4a453914ce
+Merge: 0173a77 d4d51c4
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Jan 15 22:22:12 2024 -0500
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit d4d51c4fe64d1c9acd6f1771f5b6102005201f6a
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Jan 15 22:21:41 2024 -0500
+
+    lec01: adding solutionsfor exercises, a few other notes
+
+commit 0173a77d5e114919aa2f49d53d54f565301706df
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 10 19:49:26 2024 -0500
+
+    grading policies
+
+commit 6ce915e9707d2b27e148ed6c5f81246abe84685e
+Merge: 5fff114 f18264d
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 10 19:49:02 2024 -0500
+
+    Merge branch 'main' into stats306_100_wn24
+
+commit f18264d75673fbd56c732c567307f750dd7b482d
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Wed Jan 10 19:48:28 2024 -0500
+
+    lec0: adding an exampleexericse, more on posit cloud
+
+commit 5fff114a9a09bc825691e29e3fe9d690e4c5a8de
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Jan 8 19:41:50 2024 -0500
+
+    branch for section 100, wn24
+
+commit 626422ea40b33e7cc004696e86ad13ba7fabd697
+Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+Date:   Mon Jan 8 19:37:29 2024 -0500
+
+    fresh commit of materials only
